@@ -1,0 +1,44 @@
+{
+  "name": "forunik",
+  "version": "0.0.1",
+  "description": "Zhe-Ke-Ha simulator",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "Linih Rimira, linih.rimira@yandex.ru",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.0",
+    "body-parser": "^1.17.2",
+    "bower": "^1.8.0",
+    "connect": "^3.6.3",
+    "connect-mongo": "^1.3.2",
+    "cookie": "^0.3.1",
+    "cookie-parser": "^1.4.3",
+    "crypto": "0.0.3",
+    "dialog-polyfill": "^0.4.9",
+    "ejs": "^2.5.7",
+    "ejs-locals": "^1.0.2",
+    "errorhandler": "^1.5.0",
+    "express": "^4.15.4",
+    "express-session": "^1.15.5",
+    "mongoose": "^4",
+    "nconf": "^0.8.4",
+    "serve-favicon": "^2.4.3",
+    "socket.io": "^2.0.3",
+    "winston": "^2.3.1"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adegeminas/forUnik.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Adegeminas/forUnik/issues"
+  },
+  "homepage": "https://github.com/Adegeminas/forUnik#readme"
+}

@@ -1,0 +1,36 @@
+<% layout('layout/page') -%>
+<% block('title', "Location") -%>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+  document.addEventListener('mousedown', event => event.preventDefault());
+
+  var socket = io.connect();
+  socket
+      .on('connect', function() {})
+      .on('initConnection', (handshake) => {
+        socket.handshake = handshake;
+        if (!socket.handshake.user) {
+
+          location.href = "/";
+          return;
+        }
+      })
+      .on('disconnect', function() {
+        location.href = "/";
+       })
+      .on('logout', function(text) {
+        if (text) alert(text);
+        location.href = "/";
+      })
+      .on('error', function(reason) {
+        if (reason == "handshake unauthorized") {
+          alert("вы вышли из сайта");
+        } else {
+          setTimeout(function() {
+            socket.socket.connect();
+          }, 500);
+        }
+      })
+
+</script>
