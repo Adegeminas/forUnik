@@ -1,5 +1,11 @@
 <% layout('layout/page') -%>
-<% block('title', "Location") -%>
+<% block('title', "Построение отчетов") -%>
+
+<button id="showBase" type="button" name="Показать базу">Показать базу</button>
+<ul id="showField">
+
+</ul>
+
 <script src="/socket.io/socket.io.js"></script>
 
 <script>
@@ -23,6 +29,20 @@
         if (text) alert(text);
         location.href = "/";
       })
+      .on('getBase', function(data) {
+
+        if (!data) return;
+
+        let field = document.getElementById('showField');
+        field.innerHTML = '';
+
+        data.forEach((elem) => {
+          let li = document.createElement('li');
+          li.innerHTML = houseToHTML(elem);
+          field.append(li);
+        });
+
+      })
       .on('error', function(reason) {
         if (reason == "handshake unauthorized") {
           alert("вы вышли из сайта");
@@ -31,6 +51,18 @@
             socket.socket.connect();
           }, 500);
         }
-      })
+      });
 
+    document.getElementById('showBase').onclick = () => {
+      socket.emit('showBase');
+    }
+
+
+
+    function houseToHTML(house) {
+      if (!house) return;
+      let html = '';
+      html = html + house.address + ': ' + house.square;
+      return html;
+    }
 </script>

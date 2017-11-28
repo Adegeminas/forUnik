@@ -5,5 +5,6 @@ module.exports = function(app) {
   app.get('/login', require('./login').get);
   app.post('/login', require('./login').post);
   app.post('/logout', require('./logout').post);
-  app.get('/location', checkAuth, require('./location').get);
+  app.get('/entries', checkAuth, require('./entries').get);
+  app.get('/reports', checkAuth, require('./reports').get);
 };

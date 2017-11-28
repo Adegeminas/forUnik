@@ -8,6 +8,7 @@ var sessionStore = require('../lib/sessionStore');
 var User = require('../lib/mongoose').models.users;
 var HttpError = require('../error').HttpError;
 var cookieParser = require('cookie-parser');
+var baseApiLogic = require('../lib/baseApiLogic');
 
 function loadSession(sid, callback) {
   sessionStore.load(sid, function(err, session) {
@@ -90,6 +91,20 @@ module.exports = function(server) {
   });
   io.sockets.on('connection', function(socket) {
     socket.emit('initConnection', socket.handshake);
+
+    socket.on('showBase', function() {
+      baseApiLogic.showBase(socket);
+    });
+
+    socket.on('addNewHouse', function(form) {
+      if (!form) return;
+      baseApiLogic.addNewHouse(form);
+    });
+
+    socket.on('selectHouse', function(address) {
+      baseApiLogic.selectHouse(address, socket);
+    });
+
     socket.on('disconnect', function() {
       log.info(socket.id, ' disconnected');
     });

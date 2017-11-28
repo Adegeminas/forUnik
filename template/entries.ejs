@@ -1,0 +1,166 @@
+<% layout('layout/page') -%>
+<% block('title', "Введение данных") -%>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<button id="addNewHouse" type="button">Добавить новый дом</button>
+<button id="selectHouse" type="button">Выбрать дом</button>
+<br>
+<br>
+<!-- Город	Тип улицы	Название улицы	Номер дома	Общая площадь	Управляющая организация -->
+
+<form id="addNewHouseForm" hidden="true">
+  Город: <input type="text" name="town" value="Пермь">
+  Тип улицы: <select name="streetType">
+                <option>улица</option>
+                <option>проспект</option>
+                <option>проезд</option>
+                <option>аллея</option>
+             </select>
+  Название улицы: <input type="text" name="streetName" value="">
+  Номер дома: <input type="text" name="houseNumber" value="">
+  Площадь: <input type="text" name="square" value="">
+  Управляющая компания <input type="text" name="company" value="">
+  <button id="saveNewHouse" type="button">Сохранить</button>
+</form>
+<br>
+<form id="findHouseForm" hidden="true">
+  Город: <input type="text" name="town" value="Пермь">
+  Тип улицы: <select name="streetType">
+                <option>улица</option>
+                <option>проспект</option>
+                <option>проезд</option>
+                <option>аллея</option>
+             </select>
+  Название улицы: <input type="text" name="streetName" value="">
+  Номер дома: <input type="text" name="houseNumber" value="">
+
+  <button id="findHouse" type="button">Найти</button>
+</form>
+
+<div id="result">
+
+</div>
+
+<script>
+
+  var socket = io.connect();
+  socket
+      .on('connect', function() {})
+      .on('initConnection', (handshake) => {
+        socket.handshake = handshake;
+        if (!socket.handshake.user) {
+
+          location.href = "/";
+          return;
+        }
+      })
+      .on('disconnect', function() {
+        location.href = "/";
+       })
+      .on('logout', function(text) {
+        if (text) alert(text);
+        location.href = "/";
+      })
+      .on('getBase', function(data) {
+        alert(data);
+      })
+      .on('getHouse', function(data) {
+        let id = document.getElementById('result');
+        id.innerHTML = '';
+        if (!data) {
+          id.innerHTML = 'Ничего не найдено.';
+          return;
+        }
+        id.append(houseToHTML(data));
+      })
+      .on('error', function(reason) {
+        if (reason == "handshake unauthorized") {
+          alert("вы вышли из сайта");
+        } else {
+          setTimeout(function() {
+            socket.socket.connect();
+          }, 500);
+        }
+      });
+
+    // добавление нового дома
+
+    document.getElementById('addNewHouse').onclick = () => {
+      document.getElementById('addNewHouseForm').hidden = !document.getElementById('addNewHouseForm').hidden;
+      document.getElementById('findHouseForm').hidden = true;
+      document.getElementById('result').innerHTML = '';
+    }
+
+    document.getElementById('saveNewHouse').onclick = () => {
+      socket.emit('addNewHouse', $("#addNewHouseForm").serializeArray());
+      document.getElementById('findHouseForm').hidden = true;
+      document.getElementById('addNewHouseForm').hidden = true;
+    }
+
+    // выбор дома
+
+    document.getElementById('selectHouse').onclick = () => {
+      document.getElementById('findHouseForm').hidden = !document.getElementById('findHouseForm').hidden;
+      document.getElementById('addNewHouseForm').hidden = true;
+      document.getElementById('result').innerHTML = '';
+    }
+
+    document.getElementById('findHouse').onclick = () => {
+      let form = $("#findHouseForm").serializeArray();
+
+      let address = form.reduce((acc, field, index, arr) => {
+        return acc = (index === arr.length - 1) ? acc + field.value : acc + field.value + ',';
+      }, '');
+
+      socket.emit('selectHouse', address);
+
+      document.getElementById('findHouseForm').hidden = true;
+      document.getElementById('addNewHouseForm').hidden = true;
+    }
+
+
+    function houseToHTML(house) {
+      let ul = document.createElement('ul');
+      ul.innerHTML = `<p>Адрес: ${house.address}</p>
+                      <p>Площадь: ${house.square}</p>
+                      <p>Управляющая компания: ${house.company}</p>
+                      <p>Контрольные значения: ${house.basicPeriod}</p>`;
+      if (!house.data.length) {
+        let li = document.createElement('li');
+        li.innerHTML = 'Нет отчетных периодов';
+        ul.append(li);
+      } else {
+        house.data.forEach((op) => {
+          let li = document.createElement('li');
+          li.innerHTML = op.toString();
+          ul.append(li);
+        });
+      }
+      let panel = document.createElement('div');
+      panel.innerHTML = `<button id="addNewPeriod" type="button">Добавить отчетный период</button>
+                         <form id="addNewPeriodForm">
+                           Месяц: <input type="text" name="town" value="Пермь">
+                           Год: <select name="streetType">
+                                         <option>улица</option>
+                                         <option>проспект</option>
+                                         <option>проезд</option>
+                                         <option>аллея</option>
+                                      </select>
+                           Название улицы: <input type="text" name="streetName" value="">
+                           Номер дома: <input type="text" name="houseNumber" value="">
+                           Площадь: <input type="text" name="square" value="">
+                           Управляющая компания <input type="text" name="company" value="">
+                           <button id="saveNewPeriod" type="button">Сохранить</button>
+                        </form>`;
+
+
+      ul.append(panel);
+
+      document.getElementById('addNewPeriod').onclick = () => {
+        document.getElementById('addNewPeriodForm').hidden = !document.getElementById('addNewPeriodForm').hidden;
+      }
+
+      return ul;
+    }
+</script>
