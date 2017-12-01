@@ -1,179 +1,213 @@
 var log = require('../lib/log')(module);
 var mongoose = require('mongoose');
 var util = require('util');
-var async = require('async');
 var AuthError = require('../error').AuthError;
 var config = require('../config');
 
-//Город	Тип улицы	Название улицы	Номер дома	Общая площадь	Управляющая организация
-
-let Houses = {
-  address : {
+let House = {
+  address: {
     type: String,
     require: true,
-    default: 'defaultAddress',
     unique: true,
+    default: 'NoAddress',
   },
-
   square: {
     type: Number,
     require: true,
     default: 1000,
   },
-
   company: {
     type: String,
     require: true,
     default: 'Сторм',
   },
-
   basicPeriod: {
     type: String,
     require: true,
-    default: '1-12-2015/1-12-2016',
+    default: '10-15:05-16/10-16:05-17',
   },
-
-  data: [{
-      date: {
+  RC1: {
+    type: String,
+    require: true,
+    default: 'ИРЦ',
+  },
+  RC2: {
+    type: String,
+    require: true,
+    default: 'ИРЦ',
+  },
+  tarif: {
+    type: Number,
+    require: true,
+    default: 1800,
+  },
+  data: {
+    type: [{
+      month: {
         type: String,
         require: true,
-        default: '1-2015',
+        default: '01-15',
       },
-      wasSold: {
+      isBasic: {
         type: Boolean,
         require: true,
         default: true,
       },
-      wasWorking: {
+      shouldCount: {
         type: Boolean,
         require: true,
         default: true,
       },
-      RCteplo: {
-        type: String,
-        require: true,
-        default: 'defaultRCteplo',
-      },
-      RCenergo: {
-        type: String,
-        require: true,
-        default: 'defaultRCenergo',
-      },
-      isCommon: {
+      sameCounter: {
         type: Boolean,
         require: true,
         default: true,
       },
-      _O: {
+      O: {
         type: Number,
+        default: 0,
       },
-      _P: {
+      P: {
         type: Number,
+        default: 0,
       },
-      _Q: {
+      Q: {
         type: Number,
+        default: 0,
       },
-      _R: {
+      R: {
         type: Number,
-      },
-      cost: {
-        type: Number,
-        require: true,
-        default: 3000,
+        default: 0,
       },
     }],
+    require: true,
+    default: [],
+  },
+};
+
+let housesSchema = mongoose.Schema(House);
+
+housesSchema.methods.getBasicAmount = function(month, priority) {
+  let basicMonths = this.data.filter((monthData) => {
+    return (monthData.isBasic && monthData.month.split('-')[0] === month);
+  });
+  let totalAmount = basicMonths.reduce((acc, month) => {
+    return acc += month[priority];
+  }, 0);
+
+  return totalAmount / basicMonths.length;
+};
+housesSchema.methods.getEconomy = function(period, priority) {
+  let economyPeriod = this.data.filter((monthData) => {
+    return (!monthData.isBasic && monthData.month === period);
+  });
+  if (!economyPeriod.length) return;
+  let basicAmount = this.getBasicAmount(period.split('-')[0], priority);
+  return (economyPeriod[0][priority] - basicAmount)/basicAmount > 0.05 ? economyPeriod[0][priority] - basicAmount : 0;
+};
+
+housesSchema.statics.addNewHouse = function(parameters, callback) {
+  let House = this;
+  let newHouse = new House(parameters);
+  newHouse.save((err) => {
+    if (err) {
+      callback(false);
+      log.error(err);
+    } else {
+      callback(true);
+    }
+  });
+};
+housesSchema.statics.findOneHouse = function(parameters, callback) {
+  let House = this;
+  this.findOne({address: parameters.address}, (err, house) => {
+    if (err || !house) {
+      log.error(err);
+      callback(false);
+    } else {
+      callback(house);
+    }
+  });
+};
+housesSchema.statics.changeHouse = function(parameters, callback) {
+  let House = this;
+  this.findOne({address: parameters.address}, (err, house) => {
+    if (err || !house) {
+      log.error(err);
+      callback(false);
+      return;
+    }
+    Object.keys(parameters).forEach((key) => {
+      house[key] = parameters[key];
+    });
+    house.save((err) => {
+      if (err) {
+        log.error(err);
+        callback(false);
+        return;
+      }
+      callback(true);
+    })
+  });
+};
+housesSchema.statics.deleteHouse = function(parameters, callback) {
+  let House = this;
+  this.findOne({address: parameters.address}, (err, house) => {
+    if (err || !house) {
+      log.error(err);
+      callback(false);
+      return;
+    }
+    house.remove((err) => {
+      if (err) {
+        log.error(err);
+        callback(false);
+        return;
+      }
+      callback(true);
+    });
+  });
+};
+housesSchema.statics.addNewPeriod = function(parameters, period, callback) {
+  let House = this;
+  this.findOne({address: parameters.address}).sort('data.month').exec((err, house) => {
+    if (err || !house) {
+      log.error(err);
+      callback(false);
+    } else {
+      house.data.push(period);
+      house.save((err) => {
+        if (err) {
+          log.error(err);
+          callback(false);
+        } else {
+          callback(house);
+        }
+      });
+    }
+  });
 }
 
-let housesSchema = mongoose.Schema(Houses);
-
-housesSchema.statics.showBase = function(callback) {
-  this.find((err, data) => {
-    if (err) {
-      log.error(err);
-      log.error('Error in showBase');
-      callback(null);
-      return;
-    }
-    callback(data);
-  })
-};
-
-housesSchema.statics.selectHouse = function(address, callback) {
-  this.findOne({'address' : address}, (err, data) => {
-    if (err) {
-      log.error(err);
-      log.error('Error in selectHouse');
-      callback(null);
-      return;
-    }
-    callback(data);
-  })
-};
-
-housesSchema.statics.addElem = function() {
+housesSchema.statics.deletePeriod = function(address, period, callback) {
   let House = this;
-  let address = Date.now().toString();
-  let house = new House({address: address});
-
-  house.save((err) => {
-    if (err) {
+  this.findOne({address: address}).exec((err, house) => {
+    if (err || !house) {
       log.error(err);
+      callback(false);
+    } else {
+      house.data = house.data.filter((elem) => {
+        return elem.month !== period;
+      });
+      house.save((err) => {
+        if (err) {
+          log.error(err);
+          callback(false);
+        } else {
+          callback(house);
+        }
+      });
     }
-  })
+  });
 };
-
-housesSchema.statics.addNewHouse = function(data) {
-
-  let House = this;
-  let house = new House(data);
-
-  house.save((err) => {
-    if (err) {
-      log.error(err);
-    }
-  })
-};
-
-housesSchema.post('save', function(location) {
-
-});
 
 module.exports = housesSchema;
-
-// Логгируемые функции
-
-// housesSchema.statics.adventure = function(callback, userid, activity) {
-//   this.findOne({'parties.userid' : userid}, (err, location) => {
-//     if (err) {
-//       log.error('Some error in aventure');
-//       return;
-//     }
-//     if (!location) {
-//       log.error('error in adventure, no location');
-//       return;
-//     }
-//     if (callback) callback(location.getNewAdventure, activity);
-//   });
-// }
-
-// housesSchema.statics.addParty = function(party, x, y, z) {
-//   var x = ((config.get("MAP_RADIUS") + x) % config.get("MAP_RADIUS")) || false;
-//   var y = ((config.get("MAP_RADIUS") + y) % config.get("MAP_RADIUS")) || false;
-//   var World = this;
-//   if (!party) return;
-//   if (!party.userid) return;
-//   World.findOne({'x': x, 'y': y, 'z': z}, (err, location) => {
-//     if (err) {
-//       log.error(err);
-//       return;
-//     }
-//     if (!location) {
-//       var location = new World(new Location(x || 0, y || 0, z || 0, [new Party('npcenemy'), new Party('npcwild'), new Party('npctavern')]));
-//     }
-//     addLog(party, `Вы переходите в локацию ${location.info.name}`);
-//     location.parties.push(party);
-//     location.save((err) => {
-//       if (err) log.error(err);
-//     })
-//   });
-// }

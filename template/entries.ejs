@@ -3,54 +3,113 @@
 
 <script src="/socket.io/socket.io.js"></script>
 
-<button id="addNewHouse" type="button">Добавить новый дом</button>
-<button id="selectHouse" type="button">Выбрать дом</button>
-<br>
-<br>
-<!-- Город	Тип улицы	Название улицы	Номер дома	Общая площадь	Управляющая организация -->
+<div id="addNewHouseDiv">
+  <button type="button" name="button" onclick="
+    document.getElementById('addNewHouseForm').hidden = !document.getElementById('addNewHouseForm').hidden;
+  ">Добавить новый дом</button>
 
-<form id="addNewHouseForm" hidden="true">
-  Город: <input type="text" name="town" value="Пермь">
-  Тип улицы: <select name="streetType">
-                <option>улица</option>
-                <option>проспект</option>
-                <option>проезд</option>
-                <option>аллея</option>
-             </select>
-  Название улицы: <input type="text" name="streetName" value="">
-  Номер дома: <input type="text" name="houseNumber" value="">
-  Площадь: <input type="text" name="square" value="">
-  Управляющая компания <input type="text" name="company" value="">
-  <button id="saveNewHouse" type="button">Сохранить</button>
-</form>
-<br>
-<form id="findHouseForm" hidden="true">
-  Город: <input type="text" name="town" value="Пермь">
-  Тип улицы: <select name="streetType">
-                <option>улица</option>
-                <option>проспект</option>
-                <option>проезд</option>
-                <option>аллея</option>
-             </select>
-  Название улицы: <input type="text" name="streetName" value="">
-  Номер дома: <input type="text" name="houseNumber" value="">
+  <form id="addNewHouseForm" hidden="true">
 
-  <button id="findHouse" type="button">Найти</button>
-</form>
+    Город: <input type="text" name="town" value="Пермь"><br>
+    Тип улицы: <select name="streetType">
+                  <option>улица</option>
+                  <option>проспект</option>
+                  <option>проезд</option>
+                  <option>аллея</option>
+               </select><br>
+    Название улицы: <input type="text" name="streetName" value="Александрова"><br>
+    Номер дома: <input type="text" name="houseNumber" value="6"><br>
+    Площадь: <input type="text" name="square" value="1000"><br>
+    Управляющая компания <input type="text" name="company" value="ЖСК"><br>
+    РЦ тепло <input type="text" name="RC1" value="ИРЦ"><br>
+    РЦ вода <input type="text" name="RC2" value="ИРЦ"><br>
+    Тариф <input type="text" name="tarif" value="2000"><br>
+    <button type="button" onclick="
+      let form = document.getElementById('addNewHouseForm');
+      let flag = form.elements.town.value.length > 0 &&
+                 form.elements.streetType.value.length > 0 &&
+                 form.elements.streetName.value.length > 0 &&
+                 form.elements.houseNumber.value.length > 0 &&
+                 form.elements.square.value.length > 0 &&
+                 form.elements.company.value.length > 0 &&
+                 form.elements.RC1.value.length > 0 &&
+                 form.elements.RC2.value.length > 0 &&
+                 form.elements.tarif.value.length > 0;
+      if (!flag) {
+        alert('Заполните все поля!');
+      } else {
+        form.hidden = true;
+        let house = {
+          address: form.elements.town.value + ',' +
+                   form.elements.streetType.value + ',' +
+                   form.elements.streetName.value + ',' +
+                   form.elements.houseNumber.value,
+          square: form.elements.square.value,
+          company: form.elements.company.value,
+          RC1: form.elements.RC1.value.length,
+          RC2: form.elements.RC2.value.length,
+          tarif: form.elements.tarif.value,
+        };
+        socket.emit('addNewHouse', house);
+      }
+    ">Сохранить</button>
 
-<div id="result">
+  </form>
+</div>
+
+<div id="findOneHouseDiv">
+  <button type="button" name="button" onclick="
+    document.getElementById('findOneHouseForm').hidden = !document.getElementById('findOneHouseForm').hidden;
+  ">Найти дом по адресу</button>
+
+  <form id="findOneHouseForm" hidden="true">
+
+    Город: <input type="text" name="town" value="Пермь"><br>
+    Тип улицы: <select name="streetType">
+                  <option>улица</option>
+                  <option>проспект</option>
+                  <option>проезд</option>
+                  <option>аллея</option>
+               </select><br>
+    Название улицы: <input type="text" name="streetName" value="Александрова"><br>
+    Номер дома: <input type="text" name="houseNumber" value="6"><br>
+    Площадь: <input type="text" name="square" value="1000"><br>
+
+    <button type="button" onclick="
+      let form = document.getElementById('findOneHouseForm');
+      let flag = form.elements.town.value.length > 0 &&
+                 form.elements.streetType.value.length > 0 &&
+                 form.elements.streetName.value.length > 0 &&
+                 form.elements.houseNumber.value.length > 0;
+      if (!flag) {
+        alert('Заполните все поля!');
+      } else {
+        form.hidden = true;
+        let house = {
+          address: form.elements.town.value + ',' +
+                   form.elements.streetType.value + ',' +
+                   form.elements.streetName.value + ',' +
+                   form.elements.houseNumber.value
+        };
+        socket.emit('findOneHouse', house);
+      }
+    ">Найти</button>
+
+  </form>
+</div>
+
+<div id="findingResultDiv">
 
 </div>
 
 <script>
-
   var socket = io.connect();
+  var currentHouse = null;
   socket
       .on('connect', function() {})
-      .on('initConnection', (handshake) => {
+      .on('initConnection', function(handshake) {
         socket.handshake = handshake;
         if (!socket.handshake.user) {
-
           location.href = "/";
           return;
         }
@@ -62,18 +121,6 @@
         if (text) alert(text);
         location.href = "/";
       })
-      .on('getBase', function(data) {
-        alert(data);
-      })
-      .on('getHouse', function(data) {
-        let id = document.getElementById('result');
-        id.innerHTML = '';
-        if (!data) {
-          id.innerHTML = 'Ничего не найдено.';
-          return;
-        }
-        id.append(houseToHTML(data));
-      })
       .on('error', function(reason) {
         if (reason == "handshake unauthorized") {
           alert("вы вышли из сайта");
@@ -82,85 +129,192 @@
             socket.socket.connect();
           }, 500);
         }
+      })
+      .on('addNewHouseResult', function(result) {
+        if (result) {
+          alert('Успех');
+        } else {
+          alert('Неудача');
+        }
+      })
+      .on('findOneHouseResult', function(result) {
+        let resultDiv = document.getElementById('findingResultDiv');
+        resultDiv.innerHTML = '';
+        if (!result) {
+          alert('Ничего не найдено');
+          return;
+        } else {
+          currentHouse = result;
+          resultDiv.innerHTML = oneHouseToHTML(result);
+        }
+      })
+      .on('addNewPeriodResult', function(result) {
+        let resultDiv = document.getElementById('findingResultDiv');
+        if (result) {
+          resultDiv.innerHTML = oneHouseToHTML(result);
+        } else {
+          alert('Неудача');
+        }
       });
 
-    // добавление нового дома
+    function oneHouseToHTML(house) {
+      let html = '<br>';
 
-    document.getElementById('addNewHouse').onclick = () => {
-      document.getElementById('addNewHouseForm').hidden = !document.getElementById('addNewHouseForm').hidden;
-      document.getElementById('findHouseForm').hidden = true;
-      document.getElementById('result').innerHTML = '';
-    }
+      html += `<p id='address'>${house.address}</p>`;
 
-    document.getElementById('saveNewHouse').onclick = () => {
-      socket.emit('addNewHouse', $("#addNewHouseForm").serializeArray());
-      document.getElementById('findHouseForm').hidden = true;
-      document.getElementById('addNewHouseForm').hidden = true;
-    }
+      html += `<p>Отчетные периоды:</p>`;
 
-    // выбор дома
-
-    document.getElementById('selectHouse').onclick = () => {
-      document.getElementById('findHouseForm').hidden = !document.getElementById('findHouseForm').hidden;
-      document.getElementById('addNewHouseForm').hidden = true;
-      document.getElementById('result').innerHTML = '';
-    }
-
-    document.getElementById('findHouse').onclick = () => {
-      let form = $("#findHouseForm").serializeArray();
-
-      let address = form.reduce((acc, field, index, arr) => {
-        return acc = (index === arr.length - 1) ? acc + field.value : acc + field.value + ',';
-      }, '');
-
-      socket.emit('selectHouse', address);
-
-      document.getElementById('findHouseForm').hidden = true;
-      document.getElementById('addNewHouseForm').hidden = true;
-    }
-
-
-    function houseToHTML(house) {
-      let ul = document.createElement('ul');
-      ul.innerHTML = `<p>Адрес: ${house.address}</p>
-                      <p>Площадь: ${house.square}</p>
-                      <p>Управляющая компания: ${house.company}</p>
-                      <p>Контрольные значения: ${house.basicPeriod}</p>`;
-      if (!house.data.length) {
-        let li = document.createElement('li');
-        li.innerHTML = 'Нет отчетных периодов';
-        ul.append(li);
-      } else {
-        house.data.forEach((op) => {
-          let li = document.createElement('li');
-          li.innerHTML = op.toString();
-          ul.append(li);
+      if (house.data.length) {
+        html += `<table>
+                  <tr>
+                    <td>
+                      Период
+                    </td>
+                    <td>
+                      Базовый
+                    </td>
+                    <td>
+                      Прибор работал
+                    </td>
+                    <td>
+                      Общий счетчик
+                    </td>
+                    <td>
+                      O
+                    </td>
+                    <td>
+                      P
+                    </td>
+                    <td>
+                      Q
+                    </td>
+                    <td>
+                      R
+                    </td>
+                    <td>
+                      Действия
+                    </td>
+                  </tr>`;
+        house.data.forEach((period) => {
+          html += periodToHTML(period, house);
         });
-      }
-      let panel = document.createElement('div');
-      panel.innerHTML = `<button id="addNewPeriod" type="button">Добавить отчетный период</button>
-                         <form id="addNewPeriodForm">
-                           Месяц: <input type="text" name="town" value="Пермь">
-                           Год: <select name="streetType">
-                                         <option>улица</option>
-                                         <option>проспект</option>
-                                         <option>проезд</option>
-                                         <option>аллея</option>
-                                      </select>
-                           Название улицы: <input type="text" name="streetName" value="">
-                           Номер дома: <input type="text" name="houseNumber" value="">
-                           Площадь: <input type="text" name="square" value="">
-                           Управляющая компания <input type="text" name="company" value="">
-                           <button id="saveNewPeriod" type="button">Сохранить</button>
-                        </form>`;
-
-
-      ul.append(panel);
-
-      document.getElementById('addNewPeriod').onclick = () => {
-        document.getElementById('addNewPeriodForm').hidden = !document.getElementById('addNewPeriodForm').hidden;
+        html += `</table>`;
+      } else {
+        html += `Не найдены <br>`;
       }
 
-      return ul;
+      html += `<button type="button" onclick="
+            document.getElementById('newPeriod').hidden = !document.getElementById('newPeriod').hidden;
+          ">Добавить отчетный период</button>`;
+
+      html += `
+          <form id='newPeriod' hidden='true'>
+            Год: <select name="year">
+                          <option>2014</option>
+                          <option>2015</option>
+                          <option>2016</option>
+                          <option>2017</option>
+                          <option>2018</option>
+                       </select><br>
+            Месяц: <select name="month">
+                          <option>01</option>
+                          <option>02</option>
+                          <option>03</option>
+                          <option>04</option>
+                          <option>05</option>
+                          <option>06</option>
+                          <option>07</option>
+                          <option>08</option>
+                          <option>09</option>
+                          <option>10</option>
+                          <option>11</option>
+                          <option>12</option>
+                       </select><br>
+            Базовый: <select name="isBasic">
+                          <option>true</option>
+                          <option>false</option>
+                       </select><br>
+            Прибор учета работал: <select name="shouldCount">
+                          <option>true</option>
+                          <option>false</option>
+                       </select><br>
+            Общий счетчик: <select name="sameCounter">
+                          <option>true</option>
+                          <option>false</option>
+                       </select><br>
+            O: <input type="text" name="O" value=""><br>
+            P: <input type="text" name="P" value=""><br>
+            Q: <input type="text" name="Q" value=""><br>
+            R: <input type="text" name="R" value=""><br>
+
+            <button type="button" onclick="
+              let form = document.getElementById('newPeriod');
+              let flag = form.elements.O.value.length > 0 ||
+                         form.elements.P.value.length > 0 ||
+                         form.elements.Q.value.length > 0 ||
+                         form.elements.R.value.length > 0;
+              if (!flag) {
+                alert('Заполните все поля!');
+              } else {
+                form.hidden = true;
+                let newPeriod = {
+                  month: form.elements.month.value + '-' + form.elements.year.value,
+                  isBasic: form.elements.isBasic.value,
+                  shouldCount: form.elements.shouldCount.value,
+                  sameCounter: form.elements.sameCounter.value,
+                  O: form.elements.O.value,
+                  P: form.elements.P.value,
+                  Q: form.elements.Q.value,
+                  R: form.elements.R.value,
+                };
+                socket.emit('addNewPeriod', {
+                  address: document.getElementById('address').innerHTML,
+                }, newPeriod);
+              }
+            ">Сохранить</button>
+          </form>
+      `;
+
+      return html;
+    }
+
+    function periodToHTML(period, house) {
+      let html = '';
+
+      html += `
+          <tr>
+            <td>
+              ${period.month}
+            </td>
+            <td>
+              ${period.isBasic ? 'Да' : 'Нет'}
+            </td>
+            <td>
+              ${period.shouldCount ? 'Да' : 'Нет'}
+            </td>
+            <td>
+              ${period.sameCounter ? 'Да' : 'Нет'}
+            </td>
+            <td>
+              ${period.O ? period.O : '---'}
+            </td>
+            <td>
+              ${period.P ? period.P : '---'}
+            </td>
+            <td>
+              ${period.Q ? period.Q : '---'}
+            </td>
+            <td>
+              ${period.R ? period.R : '---'}
+            </td>
+            <td>
+              <button id = '${period.month}/${house.address}' type="button" onclick="
+                socket.emit('deletePeriod', this.id);
+              ">Удалить</button>
+            </td>
+          </tr>
+      `;
+
+      return html;
     }
 </script>

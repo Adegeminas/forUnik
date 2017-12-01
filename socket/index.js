@@ -92,22 +92,31 @@ module.exports = function(server) {
   io.sockets.on('connection', function(socket) {
     socket.emit('initConnection', socket.handshake);
 
-    socket.on('showBase', function() {
-      baseApiLogic.showBase(socket);
+    socket.on('addNewHouse', function(house) {
+      baseApiLogic.addNewHouse(house, (result) => {
+        socket.emit('addNewHouseResult', result)
+      });
     });
 
-    socket.on('addNewHouse', function(form) {
-      if (!form) return;
-      baseApiLogic.addNewHouse(form);
+    socket.on('findOneHouse', function(house) {
+      baseApiLogic.findOneHouse(house, (result) => {
+        socket.emit('findOneHouseResult', result)
+      });
     });
 
-    socket.on('selectHouse', function(address) {
-      baseApiLogic.selectHouse(address, socket);
+    socket.on('addNewPeriod', function(house, newPeriod) {
+      baseApiLogic.addNewPeriod(house, newPeriod, (result) => {
+        socket.emit('addNewPeriodResult', result)
+      })
     });
 
-    socket.on('disconnect', function() {
-      log.info(socket.id, ' disconnected');
+    socket.on('deletePeriod', function(str) {
+      let [period, address] = str.split('/');
+      baseApiLogic.deletePeriod(address, period, (result) => {
+        socket.emit('addNewPeriodResult', result)
+      });
     });
+
   });
   return io;
 };

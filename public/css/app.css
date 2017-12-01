@@ -3,6 +3,12 @@ body {
   color: #dddddd;
 }
 
+td {
+  width: 120px;
+  padding: 2px;
+  border: 1px solid white;
+  text-align: center;
+}
 
 .navbar {
   background: #0E0E0E;
