@@ -110,16 +110,16 @@ housesSchema.statics.findOneHouse = function(parameters, callback) {
     }
   });
 };
-housesSchema.statics.changeHouse = function(parameters, callback) {
+housesSchema.statics.editHouse = function(address, request, callback) {
   let House = this;
-  this.findOne({address: parameters.address}, (err, house) => {
+  this.findOne({address: address}, (err, house) => {
     if (err || !house) {
       log.error(err);
       callback(false);
       return;
     }
-    Object.keys(parameters).forEach((key) => {
-      house[key] = parameters[key];
+    Object.keys(request).forEach((key) => {
+      house[key] = request[key];
     });
     house.save((err) => {
       if (err) {
@@ -127,13 +127,13 @@ housesSchema.statics.changeHouse = function(parameters, callback) {
         callback(false);
         return;
       }
-      callback(true);
+      callback(house);
     })
   });
 };
-housesSchema.statics.deleteHouse = function(parameters, callback) {
+housesSchema.statics.deleteHouse = function(address, callback) {
   let House = this;
-  this.findOne({address: parameters.address}, (err, house) => {
+  this.findOne({address: address}, (err, house) => {
     if (err || !house) {
       log.error(err);
       callback(false);
@@ -142,10 +142,10 @@ housesSchema.statics.deleteHouse = function(parameters, callback) {
     house.remove((err) => {
       if (err) {
         log.error(err);
-        callback(false);
+        callback(house);
         return;
       }
-      callback(true);
+      callback(false);
     });
   });
 };
@@ -154,13 +154,25 @@ housesSchema.statics.addNewPeriod = function(parameters, period, callback) {
   this.findOne({address: parameters.address}).sort('data.month').exec((err, house) => {
     if (err || !house) {
       log.error(err);
-      callback(false);
+      callback(false, 'Непредвиденная ошибка');
+      return;
     } else {
+      let flag = true;
+      house.data.forEach((data) => {
+        if (data.month === period.month) {
+          flag = false;
+        }
+      });
+      if (!flag) {
+        callback(false, 'Период уже существует');
+        return;
+      }
       house.data.push(period);
       house.save((err) => {
         if (err) {
           log.error(err);
-          callback(false);
+          callback(false, 'Ошибка при сохранении периода');
+          return;
         } else {
           callback(house);
         }
@@ -179,9 +191,6 @@ housesSchema.statics.findHouses = function(query, callback) {
     }
   });
 }
-
-
-
 housesSchema.statics.deletePeriod = function(address, period, callback) {
   let House = this;
   this.findOne({address: address}).exec((err, house) => {

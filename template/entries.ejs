@@ -5,7 +5,7 @@
 
 <div id="addNewHouseDiv">
 
-  <button type="button" name="button" onclick="
+  <button class="mainbutton" type="button" name="button" onclick="
     document.getElementById('addNewHouseForm').hidden = !document.getElementById('addNewHouseForm').hidden;
     document.getElementById('findingResultDiv').innerHTML = '';
   ">Добавить новый дом</button>
@@ -131,7 +131,7 @@
 </div>
 <br>
 <div id="findOneHouseDiv">
-  <button type="button" name="button" onclick="
+  <button class="mainbutton" type="button" name="button" onclick="
     document.getElementById('findOneHouseForm').hidden = !document.getElementById('findOneHouseForm').hidden;
   ">Найти дом по адресу</button>
 
@@ -247,19 +247,19 @@
         let resultDiv = document.getElementById('findingResultDiv');
         resultDiv.innerHTML = '';
         if (!result) {
-          alert('Ничего не найдено');
+          alert('Нет такого дома!');
           return;
         } else {
           currentHouse = result;
           resultDiv.innerHTML = oneHouseToHTML(result);
         }
       })
-      .on('addNewPeriodResult', function(result) {
+      .on('addNewPeriodResult', function([result, text]) {
         let resultDiv = document.getElementById('findingResultDiv');
         if (result) {
           resultDiv.innerHTML = oneHouseToHTML(result);
         } else {
-          alert('Неудача');
+          alert('Неудача', text);
         }
       });
 
@@ -275,6 +275,88 @@
       html += `<i>РЦ тепло: ${house.RC1}. </i>`;
       html += `<i>РЦ вода: ${house.RC2}. </i><br><br>`;
 
+      html += `<button onclick="
+        document.getElementById('editHouse').hidden = !document.getElementById('editHouse').hidden;
+      ">Редактировать дом</button>`;
+
+      html += `
+        <form id='editHouse' hidden='true'>
+          <table>
+            <tr>
+              <td>
+                Площадь
+              </td>
+              <td>
+                <input type="text" name="square" value="1000">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Общий счетчик
+              </td>
+              <td>
+                <select name="sameCounter" style="width: 100%">
+                  <option>true</option>
+                  <option>false</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                РЦ тепло
+              </td>
+              <td>
+                <input type="text" name="RC1" value="ИРЦ">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                РЦ вода
+              </td>
+              <td>
+                <input type="text" name="RC2" value="ИРЦ">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Тариф
+              </td>
+              <td>
+                <input type="text" name="tarif" value="2000">
+              </td>
+            </tr>
+          </table>
+          <button onclick="
+            let form = document.getElementById('editHouse');
+            let flag = form.elements.square.value.length > 0 &&
+                       form.elements.RC1.value.length > 0 &&
+                       form.elements.RC2.value.length > 0 &&
+                       form.elements.tarif.value.length > 0;
+            if (!flag) {
+              alert('Заполните все поля!');
+            } else {
+              form.hidden = true;
+              let request = {
+                square: form.elements.square.value,
+                sameCounter: form.elements.sameCounter.value,
+                RC1: form.elements.RC1.value,
+                RC2: form.elements.RC2.value,
+                tarif: form.elements.tarif.value,
+              };
+              socket.emit('editHouse', request, currentHouse);
+            }
+          ">Сохранить редактирование</button>
+        </form>
+
+      `;
+
+
+      html += `<button onclick="
+        let address = document.getElementById('address').innerHTML;
+        if (confirm('Это действие удалит дом со всеми отчетными периодами. Вы уверены?')) {
+          socket.emit('deleteHouse', address);
+        }
+      ">Удалить дом</button><br><br>`;
 
       html += `<legend>Отчетные периоды</legend>`;
 
@@ -323,36 +405,101 @@
 
       html += `
           <form id='newPeriod' hidden='true'>
-            Год: <select name="year">
-                          <option>2014</option>
-                          <option>2015</option>
-                          <option>2016</option>
-                          <option>2017</option>
-                          <option>2018</option>
-                       </select><br>
-            Месяц: <select name="month">
-                          <option>01</option>
-                          <option>02</option>
-                          <option>03</option>
-                          <option>04</option>
-                          <option>05</option>
-                          <option>10</option>
-                          <option>11</option>
-                          <option>12</option>
-                       </select><br>
-            Продано энергосбережение: <select name="isBasic">
-                          <option value="true">Нет</option>
-                          <option value="false">Да</option>
-                       </select><br>
-            Прибор учета работал: <select name="shouldCount">
-                          <option>true</option>
-                          <option>false</option>
-                       </select><br>
-            УК: <input type="text" name="company" value="Сторм"><br>
-            O: <input type="text" name="O" value=""><br>
-            P: <input type="text" name="P" value=""><br>
-            Q: <input type="text" name="Q" value=""><br>
-            R: <input type="text" name="R" value=""><br>
+            <table>
+              <tr>
+                <td>
+                  Год
+                </td>
+                <td>
+                  <select name="year">
+                    <option>2014</option>
+                    <option>2015</option>
+                    <option>2016</option>
+                    <option>2017</option>
+                    <option>2018</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Месяц
+                </td>
+                <td>
+                  <select name="month">
+                    <option>01</option>
+                    <option>02</option>
+                    <option>03</option>
+                    <option>04</option>
+                    <option>05</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Продано энергосбережение
+                </td>
+                <td>
+                  <select name="isBasic">
+                    <option value="true">Нет</option>
+                    <option value="false">Да</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Прибор учета работал
+                </td>
+                <td>
+                  <select name="shouldCount">
+                    <option value="true">Да</option>
+                    <option value="false">Нет</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  УК
+                </td>
+                <td>
+                  <input type="text" name="company" value="Сторм">
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Данные РЦ без вычета ГВС
+                </td>
+                <td>
+                  <input type="text" name="O" value="">
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Данные РЦ с вычетом ГВС
+                </td>
+                <td>
+                  <input type="text" name="P" value="">
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Данные ОДПУ без вычета ГВС
+                </td>
+                <td>
+                  <input type="text" name="Q" value="">
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Данные по нормативу
+                </td>
+                <td>
+                  <input type="text" name="R" value="">
+                </td>
+              </tr>
+            </table>
 
             <button type="button" onclick="
               let form = document.getElementById('newPeriod');

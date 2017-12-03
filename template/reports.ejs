@@ -3,26 +3,26 @@
 
 <script src="/socket.io/socket.io.js"></script>
 
-<button type="button" name="button" onclick="
+<button class="mainbutton" type="button" name="button" onclick="
   document.getElementById('resultDiv').innerHTML = '';
   document.getElementById('allHousesReportForm').hidden = 'true';
   document.getElementById('ukReportForm').hidden = 'true';
   document.getElementById('singleHouseReportForm').hidden = !document.getElementById('singleHouseReportForm').hidden;
-">Новый отчет по одному дому</button>
+">Новый отчет по одному дому</button><br><br>
 
-<button type="button" name="button" onclick="
+<button class="mainbutton" type="button" name="button" onclick="
   document.getElementById('resultDiv').innerHTML = '';
   document.getElementById('singleHouseReportForm').hidden = 'true';
   document.getElementById('allHousesReportForm').hidden = 'true';
   document.getElementById('ukReportForm').hidden = !document.getElementById('ukReportForm').hidden;
-">Новый по управляющей компании</button>
+">Новый отчет по управляющей компании</button><br><br>
 
-<button type="button" name="button" onclick="
+<button class="mainbutton" type="button" name="button" onclick="
   document.getElementById('resultDiv').innerHTML = '';
   document.getElementById('singleHouseReportForm').hidden = 'true';
   document.getElementById('ukReportForm').hidden = 'true';
   document.getElementById('allHousesReportForm').hidden = !document.getElementById('allHousesReportForm').hidden;
-">Новый отчет по всем домам</button>
+">Новый отчет по всем домам</button><br><br>
 
 <form id="singleHouseReportForm" hidden="true">
   <h3>Адрес</h3>
@@ -151,8 +151,8 @@
       </td>
       <td>
         <select name="kotel">
-          <option>false</option>
-          <option>true</option>
+          <option value="false">Нет</option>
+          <option value="true">Да</option>
         </select>
       </td>
     </tr>
@@ -173,8 +173,8 @@
       </td>
       <td>
         <select name="useR">
-          <option>true</option>
-          <option>false</option>
+          <option value="true">Да</option>
+          <option value="false">Нет</option>
         </select>
       </td>
     </tr>
@@ -201,6 +201,10 @@
         kotel: form.elements.kotel.value,
         method: form.elements.method.value,
         useR: form.elements.useR.value,
+        header: 'Адрес: ' + form.elements.town.value + ',' +
+                 form.elements.streetType.value + ',' +
+                 form.elements.streetName.value + ',' +
+                 form.elements.houseNumber.value,
       };
       socket.emit('oneHouseRequest', request);
     }
@@ -291,8 +295,8 @@
       </td>
       <td>
         <select name="kotel">
-          <option>false</option>
-          <option>true</option>
+          <option value="false">Нет</option>
+          <option value="true">Да</option>
         </select>
       </td>
     </tr>
@@ -313,8 +317,8 @@
       </td>
       <td>
         <select name="useR">
-          <option>true</option>
-          <option>false</option>
+          <option value="true">Да</option>
+          <option value="false">Нет</option>
         </select>
       </td>
     </tr>
@@ -335,6 +339,7 @@
         kotel: form.elements.kotel.value,
         method: form.elements.method.value,
         useR: form.elements.useR.value,
+        header: 'Управляющая компания: ' + form.elements.company.value,
       };
       socket.emit('ukRequest', request);
     }
@@ -423,8 +428,8 @@
       </td>
       <td>
         <select name="kotel">
-          <option>false</option>
-          <option>true</option>
+          <option value="false">Нет</option>
+          <option value="true">Да</option>
         </select>
       </td>
     </tr>
@@ -445,8 +450,8 @@
       </td>
       <td>
         <select name="useR">
-          <option>true</option>
-          <option>false</option>
+          <option value="true">Да</option>
+          <option value="false">Нет</option>
         </select>
       </td>
     </tr>
@@ -462,6 +467,7 @@
       kotel: form.elements.kotel.value,
       method: form.elements.method.value,
       useR: form.elements.useR.value,
+      header: 'Все дома',
     };
     socket.emit('allHousesRequest', request);
   ">Рассчитать</button>
@@ -515,7 +521,7 @@ let oneHouseRequestResultToHTML = function (result, error) {
     return error;
   }
   let html = '';
-  html += `<legend>${result.house.address}: ${result.purposeMonth.month}</legend>`;
+  html += `<legend>${result.house.address}: <i style="color:blue">${result.purposeMonth.month}</i></legend>`;
   html += `<legend>Использованы отчетные периоды:</legend>`;
   html += `<table>
             <tr>
@@ -596,6 +602,8 @@ function requestHeader(response) {
   html += `
     <legend>Параметры запроса</legend>
 
+    <h4 style="color: blue">${response.header}<h4>
+
     <h4>Начальный период: ${response.query.startPeriod}<h4>
     <h4>Конечный период: ${response.query.endPeriod}<h4>
     <h4>Метод расчета: ${response.query.kotel ? 'котловой' : 'некотловой'}<h4>
@@ -628,6 +636,11 @@ function resultToHTML(response) {
       let ul = document.createElement('ul');
       ul.innerHTML = `<h3>${report[0].house.address}</h3>`;
       ul.onclick = function() {
+        if (this.style.border) {
+          this.style.border = '';
+        } else {
+          this.style.border = '1px solid red';
+        }
         this.childNodes.forEach((node) => {
           node.hidden = !node.hidden;
         })

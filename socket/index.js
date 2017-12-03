@@ -98,6 +98,18 @@ module.exports = function(server) {
       });
     });
 
+    socket.on('deleteHouse', function(address) {
+      baseApiLogic.deleteHouse(address, (result) => {
+        socket.emit('findOneHouseResult', result)
+      });
+    });
+
+    socket.on('editHouse', function(request, house) {
+      baseApiLogic.editHouse(house.address, request, (result) => {
+        socket.emit('findOneHouseResult', result)
+      });
+    });
+
     socket.on('findOneHouse', function(house) {
       baseApiLogic.findOneHouse(house, (result) => {
         socket.emit('findOneHouseResult', result)
@@ -105,8 +117,8 @@ module.exports = function(server) {
     });
 
     socket.on('addNewPeriod', function(house, newPeriod) {
-      baseApiLogic.addNewPeriod(house, newPeriod, (result) => {
-        socket.emit('addNewPeriodResult', result)
+      baseApiLogic.addNewPeriod(house, newPeriod, (result, text) => {
+        socket.emit('addNewPeriodResult', [result, text])
       })
     });
 
