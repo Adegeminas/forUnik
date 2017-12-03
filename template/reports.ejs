@@ -1,15 +1,477 @@
 <% layout('layout/page') -%>
 <% block('title', "Построение отчетов") -%>
 
-<button id="showBase" type="button" name="Показать базу">Показать базу</button>
-<ul id="showField">
-
-</ul>
-
 <script src="/socket.io/socket.io.js"></script>
 
+<button type="button" name="button" onclick="
+  document.getElementById('resultDiv').innerHTML = '';
+  document.getElementById('allHousesReportForm').hidden = 'true';
+  document.getElementById('ukReportForm').hidden = 'true';
+  document.getElementById('singleHouseReportForm').hidden = !document.getElementById('singleHouseReportForm').hidden;
+">Новый отчет по одному дому</button>
+
+<button type="button" name="button" onclick="
+  document.getElementById('resultDiv').innerHTML = '';
+  document.getElementById('singleHouseReportForm').hidden = 'true';
+  document.getElementById('allHousesReportForm').hidden = 'true';
+  document.getElementById('ukReportForm').hidden = !document.getElementById('ukReportForm').hidden;
+">Новый по управляющей компании</button>
+
+<button type="button" name="button" onclick="
+  document.getElementById('resultDiv').innerHTML = '';
+  document.getElementById('singleHouseReportForm').hidden = 'true';
+  document.getElementById('ukReportForm').hidden = 'true';
+  document.getElementById('allHousesReportForm').hidden = !document.getElementById('allHousesReportForm').hidden;
+">Новый отчет по всем домам</button>
+
+<form id="singleHouseReportForm" hidden="true">
+  <h3>Адрес</h3>
+  <table>
+    <tr>
+      <td>
+        Город
+      </td>
+      <td>
+        <input type="text" name="town" value="Пермь">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Тип улицы
+      </td>
+      <td>
+        <select name="streetType">
+          <option>улица</option>
+          <option>проспект</option>
+          <option>проезд</option>
+          <option>аллея</option>
+          <option>площадь</option>
+          <option>переулок</option>
+          <option>линия</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Название улицы
+      </td>
+      <td>
+        <input type="text" name="streetName" value="Александрова">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Номер дома
+      </td>
+      <td>
+        <input type="text" name="houseNumber" value="6">
+      </td>
+    </tr>
+  </table>
+
+
+  <h3>Отчетный период</h3>
+  <h4>Начало:</h4>
+  <table>
+    <tr>
+      <td>
+        Год
+      </td>
+      <td>
+        <select name="startYear">
+          <option>2014</option>
+          <option>2015</option>
+          <option>2016</option>
+          <option>2017</option>
+          <option>2018</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      </tr>
+      <td>
+        Месяц
+      </td>
+      <td>
+        <select name="startMonth">
+          <option>01</option>
+          <option>02</option>
+          <option>03</option>
+          <option>04</option>
+          <option>05</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+  <h4>Конец:</h4>
+  <table>
+    <tr>
+      <td>
+        Год
+      </td>
+      <td>
+        <select name="endYear">
+          <option>2018</option>
+          <option>2017</option>
+          <option>2016</option>
+          <option>2015</option>
+          <option>2014</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      </tr>
+      <td>
+        Месяц
+      </td>
+      <td>
+        <select name="endMonth">
+          <option>01</option>
+          <option>02</option>
+          <option>03</option>
+          <option>04</option>
+          <option>05</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+
+
+  <h3>Приоритеты</h3>
+  <table>
+    <tr>
+      <td>
+        Котловой метод
+      </td>
+      <td>
+        <select name="kotel">
+          <option>false</option>
+          <option>true</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Показания
+      </td>
+      <td>
+        <select name="method">
+          <option>РЦ</option>
+          <option>ОДПУ</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Ручной ввод
+      </td>
+      <td>
+        <select name="useR">
+          <option>true</option>
+          <option>false</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+
+  <br><br><br>
+  <button type="button" onclick="
+    let form = document.getElementById('singleHouseReportForm');
+    let flag = form.elements.town.value.length > 0 &&
+               form.elements.streetType.value.length > 0 &&
+               form.elements.streetName.value.length > 0 &&
+               form.elements.houseNumber.value.length > 0;
+    if (!flag) {
+      alert('Заполните все поля!');
+    } else {
+      form.hidden = true;
+      let request = {
+        address: form.elements.town.value + ',' +
+                 form.elements.streetType.value + ',' +
+                 form.elements.streetName.value + ',' +
+                 form.elements.houseNumber.value,
+        startPeriod: form.elements.startMonth.value + '-' + form.elements.startYear.value,
+        endPeriod: form.elements.endMonth.value + '-' + form.elements.endYear.value,
+        kotel: form.elements.kotel.value,
+        method: form.elements.method.value,
+        useR: form.elements.useR.value,
+      };
+      socket.emit('oneHouseRequest', request);
+    }
+  ">Рассчитать</button>
+
+</form>
+<form id="ukReportForm" hidden="true">
+  <h3>Управляющая компания:</h3><input type="text" name="company" value="Сторм">
+
+  <h3>Отчетный период</h3>
+  <h4>Начало:</h4>
+  <table>
+    <tr>
+      <td>
+        Год
+      </td>
+      <td>
+        <select name="startYear">
+          <option>2014</option>
+          <option>2015</option>
+          <option>2016</option>
+          <option>2017</option>
+          <option>2018</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      </tr>
+      <td>
+        Месяц
+      </td>
+      <td>
+        <select name="startMonth">
+          <option>01</option>
+          <option>02</option>
+          <option>03</option>
+          <option>04</option>
+          <option>05</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+  <h4>Конец:</h4>
+  <table>
+    <tr>
+      <td>
+        Год
+      </td>
+      <td>
+        <select name="endYear">
+          <option>2018</option>
+          <option>2017</option>
+          <option>2016</option>
+          <option>2015</option>
+          <option>2014</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      </tr>
+      <td>
+        Месяц
+      </td>
+      <td>
+        <select name="endMonth">
+          <option>01</option>
+          <option>02</option>
+          <option>03</option>
+          <option>04</option>
+          <option>05</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+
+
+  <h3>Приоритеты</h3>
+  <table>
+    <tr>
+      <td>
+        Котловой метод
+      </td>
+      <td>
+        <select name="kotel">
+          <option>false</option>
+          <option>true</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Показания
+      </td>
+      <td>
+        <select name="method">
+          <option>РЦ</option>
+          <option>ОДПУ</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Ручной ввод
+      </td>
+      <td>
+        <select name="useR">
+          <option>true</option>
+          <option>false</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+
+  <br><br><br>
+  <button type="button" onclick="
+    let form = document.getElementById('ukReportForm');
+    let flag = form.elements.company.value.length > 0 ;
+    if (!flag) {
+      alert('Заполните все поля!');
+    } else {
+      form.hidden = true;
+      let request = {
+        company: form.elements.company.value,
+        startPeriod: form.elements.startMonth.value + '-' + form.elements.startYear.value,
+        endPeriod: form.elements.endMonth.value + '-' + form.elements.endYear.value,
+        kotel: form.elements.kotel.value,
+        method: form.elements.method.value,
+        useR: form.elements.useR.value,
+      };
+      socket.emit('ukRequest', request);
+    }
+  ">Рассчитать</button>
+
+</form>
+<form id="allHousesReportForm" hidden="true">
+
+  <h3>Отчетный период</h3>
+  <h4>Начало:</h4>
+  <table>
+    <tr>
+      <td>
+        Год
+      </td>
+      <td>
+        <select name="startYear">
+          <option>2014</option>
+          <option>2015</option>
+          <option>2016</option>
+          <option>2017</option>
+          <option>2018</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      </tr>
+      <td>
+        Месяц
+      </td>
+      <td>
+        <select name="startMonth">
+          <option>01</option>
+          <option>02</option>
+          <option>03</option>
+          <option>04</option>
+          <option>05</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+  <h4>Конец:</h4>
+  <table>
+    <tr>
+      <td>
+        Год
+      </td>
+      <td>
+        <select name="endYear">
+          <option>2018</option>
+          <option>2017</option>
+          <option>2016</option>
+          <option>2015</option>
+          <option>2014</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      </tr>
+      <td>
+        Месяц
+      </td>
+      <td>
+        <select name="endMonth">
+          <option>01</option>
+          <option>02</option>
+          <option>03</option>
+          <option>04</option>
+          <option>05</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+
+  <h3>Приоритеты</h3>
+  <table>
+    <tr>
+      <td>
+        Котловой метод
+      </td>
+      <td>
+        <select name="kotel">
+          <option>false</option>
+          <option>true</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Показания
+      </td>
+      <td>
+        <select name="method">
+          <option>РЦ</option>
+          <option>ОДПУ</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Ручной ввод
+      </td>
+      <td>
+        <select name="useR">
+          <option>true</option>
+          <option>false</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+
+  <br><br><br>
+  <button type="button" onclick="
+    let form = document.getElementById('allHousesReportForm');
+    form.hidden = true;
+    let request = {
+      startPeriod: form.elements.startMonth.value + '-' + form.elements.startYear.value,
+      endPeriod: form.elements.endMonth.value + '-' + form.elements.endYear.value,
+      kotel: form.elements.kotel.value,
+      method: form.elements.method.value,
+      useR: form.elements.useR.value,
+    };
+    socket.emit('allHousesRequest', request);
+  ">Рассчитать</button>
+</form>
+
+<div id="resultDiv">
+
+</div>
+
 <script>
-  document.addEventListener('mousedown', event => event.preventDefault());
 
   var socket = io.connect();
   socket
@@ -29,20 +491,6 @@
         if (text) alert(text);
         location.href = "/";
       })
-      .on('getBase', function(data) {
-
-        if (!data) return;
-
-        let field = document.getElementById('showField');
-        field.innerHTML = '';
-
-        data.forEach((elem) => {
-          let li = document.createElement('li');
-          li.innerHTML = houseToHTML(elem);
-          field.append(li);
-        });
-
-      })
       .on('error', function(reason) {
         if (reason == "handshake unauthorized") {
           alert("вы вышли из сайта");
@@ -51,18 +499,146 @@
             socket.socket.connect();
           }, 500);
         }
+      })
+      .on('oneHouseResponse', function(result) {
+        resultToHTML(result);
+      })
+      .on('ukResponse', function(result) {
+        resultToHTML(result);
+      })
+      .on('allHousesResponse', function(result) {
+        resultToHTML(result);
       });
 
-    document.getElementById('showBase').onclick = () => {
-      socket.emit('showBase');
-    }
+let oneHouseRequestResultToHTML = function (result, error) {
+  if (!result) {
+    return error;
+  }
+  let html = '';
+  html += `<legend>${result.house.address}: ${result.purposeMonth.month}</legend>`;
+  html += `<legend>Использованы отчетные периоды:</legend>`;
+  html += `<table>
+            <tr>
+              <td>
+                Период
+              </td>
+              <td>
+                Прибор работал
+              </td>
+              <td>
+                УК
+              </td>
+              <td>
+                Объём по данным РЦ без вычета ГВС
+              </td>
+              <td>
+                Объём по данным РЦ с вычетом ГВС
+              </td>
+              <td>
+                Объём по первичным данным ОДПУ без вычета ГВС
+              </td>
+              <td>
+                Объём при неработающем приборе учёта
+              </td>
+            </tr>`;
 
+  result.basicMonths.forEach((month) => {
+    html += periodToHTML(month);
+  });
 
+  html += '</table><br>';
+  html += `<legend>Результаты энергосбережения:</legend>`;
+  html += `<h4>Контрольное значение потребления: ${result.basicAmount.toFixed(2)} Гкал</h4>`;
+  html += `<h4>Отчетное значение потребления: ${result.purposeAmount.toFixed(2)} Гкал</h4>`;
+  html += `<h4>Экономия составила: ${result.gigsEconomy.toFixed(2)} Гкал / ${result.rublesEconomy.toFixed(2)} рублей / ${result.procentEconomy.toFixed(2)}%</h4>`;
+  html += `<h4>Экономия на квадратный метр: ${result.economyPerMeter.toFixed(2)} рублей</h4>`;
+  html += `<h4>Итого в счет оплаты энергосбережения: ${result.profit.toFixed(2)} рублей или ${result.profitPerMeter.toFixed(2)} рублей/кв.м</h4>`;
 
-    function houseToHTML(house) {
-      if (!house) return;
+  html += `<legend>Показатели при отсутствии экономии (справочно):</legend>`;
+  html += `<h4>Экономия: ${result.realGigsEconomy.toFixed(2)} Гкал</h4>`;
+
+  return html;
+}
+
+function periodToHTML(period) {
       let html = '';
-      html = html + house.address + ': ' + house.square;
+      html += `
+          <tr>
+            <td>
+              ${period.month}
+            </td>
+            <td>
+              ${period.shouldCount ? 'Да' : 'Нет'}
+            </td>
+            <td>
+              ${period.company}
+            </td>
+            <td>
+              ${period.O ? period.O : '---'}
+            </td>
+            <td>
+              ${period.P ? period.P : '---'}
+            </td>
+            <td>
+              ${period.Q ? period.Q : '---'}
+            </td>
+            <td>
+              ${period.R ? period.R : '---'}
+            </td>
+          </tr>
+      `;
       return html;
     }
+
+function requestHeader(response) {
+  let html = '';
+
+  html += `
+    <legend>Параметры запроса</legend>
+
+    <h4>Начальный период: ${response.query.startPeriod}<h4>
+    <h4>Конечный период: ${response.query.endPeriod}<h4>
+    <h4>Метод расчета: ${response.query.kotel ? 'котловой' : 'некотловой'}<h4>
+    <h4>Базовые значения: ${response.query.method}<h4>
+    <h4>Учитывать неработающий счетчик: ${response.query.useR == 'true' ? 'да' : 'нет'}<h4>
+
+    <legend>Суммарная информация</legend>
+
+    <h4>Суммарная экономия: ${response.summary.gigsEconomy} Гкал<h4>
+    <h4>Суммарная экономия: ${response.summary.rublesEconomy} рублей<h4>
+    <h4>Плата за энергосбережение: ${response.summary.profit} рублей<h4>
+
+    <legend>Информация по отдельным домам (нажать на дом для просмотра)</legend>
+  `;
+
+  return html;
+}
+
+function resultToHTML(response) {
+  let resultDiv = document.getElementById('resultDiv');
+
+  if (!response.reports.length) {
+    resultDiv.innerHTML = 'Отсутствуют базовые данные для указанного запроса';
+    return;
+  }
+
+  resultDiv.innerHTML = requestHeader(response);
+
+  response.reports.forEach((report) => {
+      let ul = document.createElement('ul');
+      ul.innerHTML = `<h3>${report[0].house.address}</h3>`;
+      ul.onclick = function() {
+        this.childNodes.forEach((node) => {
+          node.hidden = !node.hidden;
+        })
+      };
+      report.forEach((period) => {
+        let li = document.createElement('li');
+        li.hidden = 'true';
+        li.innerHTML = oneHouseRequestResultToHTML(period);
+        ul.append(li);
+      });
+      resultDiv.append(ul);
+  });
+}
 </script>

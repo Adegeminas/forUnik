@@ -4,26 +4,100 @@
 <script src="/socket.io/socket.io.js"></script>
 
 <div id="addNewHouseDiv">
+
   <button type="button" name="button" onclick="
     document.getElementById('addNewHouseForm').hidden = !document.getElementById('addNewHouseForm').hidden;
+    document.getElementById('findingResultDiv').innerHTML = '';
   ">Добавить новый дом</button>
 
   <form id="addNewHouseForm" hidden="true">
-
-    Город: <input type="text" name="town" value="Пермь"><br>
-    Тип улицы: <select name="streetType">
-                  <option>улица</option>
-                  <option>проспект</option>
-                  <option>проезд</option>
-                  <option>аллея</option>
-               </select><br>
-    Название улицы: <input type="text" name="streetName" value="Александрова"><br>
-    Номер дома: <input type="text" name="houseNumber" value="6"><br>
-    Площадь: <input type="text" name="square" value="1000"><br>
-    Управляющая компания <input type="text" name="company" value="ЖСК"><br>
-    РЦ тепло <input type="text" name="RC1" value="ИРЦ"><br>
-    РЦ вода <input type="text" name="RC2" value="ИРЦ"><br>
-    Тариф <input type="text" name="tarif" value="2000"><br>
+    <legend>Добавление нового дома</legend>
+      <table>
+        <tr>
+          <td>
+            Город
+          </td>
+          <td>
+            <input type="text" name="town" value="Пермь">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Тип улицы
+          </td>
+          <td>
+             <select name="streetType" style="width: 100%">
+               <option>улица</option>
+               <option>проспект</option>
+               <option>проезд</option>
+               <option>аллея</option>
+               <option>площадь</option>
+               <option>переулок</option>
+               <option>линия</option>
+             </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Название улицы
+          </td>
+          <td>
+            <input type="text" name="streetName" value="Александрова">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Номер дома
+          </td>
+          <td>
+            <input type="text" name="houseNumber" value="6">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Площадь
+          </td>
+          <td>
+            <input type="text" name="square" value="1000">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Общий счетчик
+          </td>
+          <td>
+            <select name="sameCounter" style="width: 100%">
+              <option>true</option>
+              <option>false</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            РЦ тепло
+          </td>
+          <td>
+            <input type="text" name="RC1" value="ИРЦ">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            РЦ вода
+          </td>
+          <td>
+            <input type="text" name="RC2" value="ИРЦ">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Тариф
+          </td>
+          <td>
+            <input type="text" name="tarif" value="2000">
+          </td>
+        </tr>
+      </table>
+    <br>
     <button type="button" onclick="
       let form = document.getElementById('addNewHouseForm');
       let flag = form.elements.town.value.length > 0 &&
@@ -31,7 +105,6 @@
                  form.elements.streetName.value.length > 0 &&
                  form.elements.houseNumber.value.length > 0 &&
                  form.elements.square.value.length > 0 &&
-                 form.elements.company.value.length > 0 &&
                  form.elements.RC1.value.length > 0 &&
                  form.elements.RC2.value.length > 0 &&
                  form.elements.tarif.value.length > 0;
@@ -45,9 +118,9 @@
                    form.elements.streetName.value + ',' +
                    form.elements.houseNumber.value,
           square: form.elements.square.value,
-          company: form.elements.company.value,
-          RC1: form.elements.RC1.value.length,
-          RC2: form.elements.RC2.value.length,
+          sameCounter: form.elements.sameCounter.value,
+          RC1: form.elements.RC1.value,
+          RC2: form.elements.RC2.value,
           tarif: form.elements.tarif.value,
         };
         socket.emit('addNewHouse', house);
@@ -56,25 +129,58 @@
 
   </form>
 </div>
-
+<br>
 <div id="findOneHouseDiv">
   <button type="button" name="button" onclick="
     document.getElementById('findOneHouseForm').hidden = !document.getElementById('findOneHouseForm').hidden;
   ">Найти дом по адресу</button>
 
+
   <form id="findOneHouseForm" hidden="true">
-
-    Город: <input type="text" name="town" value="Пермь"><br>
-    Тип улицы: <select name="streetType">
-                  <option>улица</option>
-                  <option>проспект</option>
-                  <option>проезд</option>
-                  <option>аллея</option>
-               </select><br>
-    Название улицы: <input type="text" name="streetName" value="Александрова"><br>
-    Номер дома: <input type="text" name="houseNumber" value="6"><br>
-    Площадь: <input type="text" name="square" value="1000"><br>
-
+    <legend>Поиск дома</legend>
+    <table>
+      <tr>
+        <td>
+          Город
+        </td>
+        <td>
+          <input type="text" name="town" value="Пермь">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Тип улицы
+        </td>
+        <td>
+          <select name="streetType">
+            <option>улица</option>
+            <option>проспект</option>
+            <option>проезд</option>
+            <option>аллея</option>
+            <option>площадь</option>
+            <option>переулок</option>
+            <option>линия</option>
+           </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Название улицы
+        </td>
+        <td>
+          <input type="text" name="streetName" value="Александрова">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Номер дома
+        </td>
+        <td>
+          <input type="text" name="houseNumber" value="6">
+        </td>
+      </tr>
+    </table>
+    <br>
     <button type="button" onclick="
       let form = document.getElementById('findOneHouseForm');
       let flag = form.elements.town.value.length > 0 &&
@@ -97,7 +203,7 @@
 
   </form>
 </div>
-
+<br>
 <div id="findingResultDiv">
 
 </div>
@@ -160,9 +266,17 @@
     function oneHouseToHTML(house) {
       let html = '<br>';
 
-      html += `<p id='address'>${house.address}</p>`;
+      html += `<legend>Общие сведения</legend>`;
 
-      html += `<p>Отчетные периоды:</p>`;
+      html += `<h4 id='address'>${house.address}</h4>`;
+      html += `<i>Площадь: ${house.square}. </i>`;
+      html += `<i>Тариф: ${house.tarif}. </i>`;
+      html += `<i>Общий счетчик: ${house.sameCounter ? 'Да' : 'Нет'}. </i><br>`;
+      html += `<i>РЦ тепло: ${house.RC1}. </i>`;
+      html += `<i>РЦ вода: ${house.RC2}. </i><br><br>`;
+
+
+      html += `<legend>Отчетные периоды</legend>`;
 
       if (house.data.length) {
         html += `<table>
@@ -171,25 +285,25 @@
                       Период
                     </td>
                     <td>
-                      Базовый
+                      Продано энергосбережение
                     </td>
                     <td>
                       Прибор работал
                     </td>
                     <td>
-                      Общий счетчик
+                      Управляющая компания
                     </td>
                     <td>
-                      O
+                      Объём по данным РЦ без вычета ГВС
                     </td>
                     <td>
-                      P
+                      Объём по данным РЦ с вычетом ГВС
                     </td>
                     <td>
-                      Q
+                      Объём по первичным данным ОДПУ без вычета ГВС
                     </td>
                     <td>
-                      R
+                      Объём при неработающем приборе учёта
                     </td>
                     <td>
                       Действия
@@ -200,7 +314,7 @@
         });
         html += `</table>`;
       } else {
-        html += `Не найдены <br>`;
+        html += `Отчетные периоды еще не заполнены. <br><br>`;
       }
 
       html += `<button type="button" onclick="
@@ -222,26 +336,19 @@
                           <option>03</option>
                           <option>04</option>
                           <option>05</option>
-                          <option>06</option>
-                          <option>07</option>
-                          <option>08</option>
-                          <option>09</option>
                           <option>10</option>
                           <option>11</option>
                           <option>12</option>
                        </select><br>
-            Базовый: <select name="isBasic">
-                          <option>true</option>
-                          <option>false</option>
+            Продано энергосбережение: <select name="isBasic">
+                          <option value="true">Нет</option>
+                          <option value="false">Да</option>
                        </select><br>
             Прибор учета работал: <select name="shouldCount">
                           <option>true</option>
                           <option>false</option>
                        </select><br>
-            Общий счетчик: <select name="sameCounter">
-                          <option>true</option>
-                          <option>false</option>
-                       </select><br>
+            УК: <input type="text" name="company" value="Сторм"><br>
             O: <input type="text" name="O" value=""><br>
             P: <input type="text" name="P" value=""><br>
             Q: <input type="text" name="Q" value=""><br>
@@ -253,6 +360,7 @@
                          form.elements.P.value.length > 0 ||
                          form.elements.Q.value.length > 0 ||
                          form.elements.R.value.length > 0;
+              flag = flag && form.elements.company.value.length > 0;
               if (!flag) {
                 alert('Заполните все поля!');
               } else {
@@ -261,7 +369,7 @@
                   month: form.elements.month.value + '-' + form.elements.year.value,
                   isBasic: form.elements.isBasic.value,
                   shouldCount: form.elements.shouldCount.value,
-                  sameCounter: form.elements.sameCounter.value,
+                  company: form.elements.company.value,
                   O: form.elements.O.value,
                   P: form.elements.P.value,
                   Q: form.elements.Q.value,
@@ -287,13 +395,13 @@
               ${period.month}
             </td>
             <td>
-              ${period.isBasic ? 'Да' : 'Нет'}
+              ${period.isBasic ? 'Нет' : 'Да'}
             </td>
             <td>
               ${period.shouldCount ? 'Да' : 'Нет'}
             </td>
             <td>
-              ${period.sameCounter ? 'Да' : 'Нет'}
+              ${period.company}
             </td>
             <td>
               ${period.O ? period.O : '---'}

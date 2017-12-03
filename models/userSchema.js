@@ -52,7 +52,7 @@ userSchema.statics.authorize = function(username, password, callback) {
     function(user, callback) {
       if (user) {
         if (user.checkPassword(password)) {
-          log.info(user.id + ' connected');
+          log.info(user.id + ' connected ' + new Date());
           callback(null, user);
         } else {
           callback(new AuthError("Пароль неверен"));
@@ -61,7 +61,7 @@ userSchema.statics.authorize = function(username, password, callback) {
         var user = new userSchema({username: username, password: password, salt: Math.random() + ''});
         user.save(function(err) {
           if (err) return callback(err);
-          log.info(user.id + ' connected');
+          log.info(user.id + ' connected ' + new Date());
           callback(null, user);
         });
       }

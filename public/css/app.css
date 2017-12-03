@@ -3,11 +3,19 @@ body {
   color: #dddddd;
 }
 
+select {
+  width: 100%;
+}
+
 td {
   width: 120px;
   padding: 2px;
   border: 1px solid white;
   text-align: center;
+}
+
+.inputName {
+  width: 200px;
 }
 
 .navbar {

@@ -117,6 +117,23 @@ module.exports = function(server) {
       });
     });
 
+    socket.on('oneHouseRequest', function(request) {
+      baseApiLogic.oneHouseRequest(request, (result) => {
+        socket.emit('oneHouseResponse', result);
+      });
+    });
+
+    socket.on('ukRequest', function(request) {
+      baseApiLogic.ukRequest(request, (result) => {
+        socket.emit('ukResponse', result);
+      });
+    });
+
+    socket.on('allHousesRequest', function(request) {
+      baseApiLogic.allHousesRequest(request, (result) => {
+        socket.emit('allHousesResponse', result);
+      });
+    });
   });
   return io;
 };

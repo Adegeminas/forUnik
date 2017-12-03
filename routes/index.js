@@ -7,5 +7,4 @@ module.exports = function(app) {
   app.post('/logout', require('./logout').post);
   app.get('/entries', checkAuth, require('./entries').get);
   app.get('/reports', checkAuth, require('./reports').get);
-  app.get('/react', checkAuth, require('./react').get);
 };

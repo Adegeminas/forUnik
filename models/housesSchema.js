@@ -16,10 +16,10 @@ let House = {
     require: true,
     default: 1000,
   },
-  company: {
-    type: String,
+  sameCounter: {
+    type: Boolean,
     require: true,
-    default: 'Сторм',
+    default: true,
   },
   basicPeriod: {
     type: String,
@@ -58,10 +58,10 @@ let House = {
         require: true,
         default: true,
       },
-      sameCounter: {
-        type: Boolean,
+      company: {
+        type: String,
         require: true,
-        default: true,
+        default: 'Сторм',
       },
       O: {
         type: Number,
@@ -86,25 +86,6 @@ let House = {
 };
 
 let housesSchema = mongoose.Schema(House);
-
-housesSchema.methods.getBasicAmount = function(month, priority) {
-  let basicMonths = this.data.filter((monthData) => {
-    return (monthData.isBasic && monthData.month.split('-')[0] === month);
-  });
-  let totalAmount = basicMonths.reduce((acc, month) => {
-    return acc += month[priority];
-  }, 0);
-
-  return totalAmount / basicMonths.length;
-};
-housesSchema.methods.getEconomy = function(period, priority) {
-  let economyPeriod = this.data.filter((monthData) => {
-    return (!monthData.isBasic && monthData.month === period);
-  });
-  if (!economyPeriod.length) return;
-  let basicAmount = this.getBasicAmount(period.split('-')[0], priority);
-  return (economyPeriod[0][priority] - basicAmount)/basicAmount > 0.05 ? economyPeriod[0][priority] - basicAmount : 0;
-};
 
 housesSchema.statics.addNewHouse = function(parameters, callback) {
   let House = this;
@@ -187,6 +168,19 @@ housesSchema.statics.addNewPeriod = function(parameters, period, callback) {
     }
   });
 }
+housesSchema.statics.findHouses = function(query, callback) {
+  let House = this;
+  this.find(query, (err, houses) => {
+    if (err || !houses.length) {
+      log.error(err);
+      callback(false);
+    } else {
+      callback(houses);
+    }
+  });
+}
+
+
 
 housesSchema.statics.deletePeriod = function(address, period, callback) {
   let House = this;
