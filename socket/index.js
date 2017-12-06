@@ -124,8 +124,8 @@ module.exports = function(server) {
 
     socket.on('deletePeriod', function(str) {
       let [period, address] = str.split('/');
-      baseApiLogic.deletePeriod(address, period, (result) => {
-        socket.emit('addNewPeriodResult', result)
+      baseApiLogic.deletePeriod(address, period, (result, text) => {
+        socket.emit('addNewPeriodResult', [result, text])
       });
     });
 

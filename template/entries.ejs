@@ -8,6 +8,7 @@
   <button class="mainbutton" type="button" name="button" onclick="
     document.getElementById('addNewHouseForm').hidden = !document.getElementById('addNewHouseForm').hidden;
     document.getElementById('findingResultDiv').innerHTML = '';
+    document.getElementById('findOneHouseForm').hidden = true;
   ">Добавить новый дом</button>
 
   <form id="addNewHouseForm" hidden="true">
@@ -67,8 +68,8 @@
           </td>
           <td>
             <select name="sameCounter" style="width: 100%">
-              <option>true</option>
-              <option>false</option>
+              <option value="false">Нет</option>
+              <option value="true">Да</option>
             </select>
           </td>
         </tr>
@@ -126,13 +127,17 @@
         socket.emit('addNewHouse', house);
       }
     ">Сохранить</button>
-
+    <button type="button" onclick="
+       document.getElementById('addNewHouseForm').hidden = true;
+    ">Отмена</button>
   </form>
 </div>
 <br>
 <div id="findOneHouseDiv">
   <button class="mainbutton" type="button" name="button" onclick="
     document.getElementById('findOneHouseForm').hidden = !document.getElementById('findOneHouseForm').hidden;
+    document.getElementById('findingResultDiv').innerHTML = '';
+    document.getElementById('addNewHouseForm').hidden = true;
   ">Найти дом по адресу</button>
 
 
@@ -200,7 +205,9 @@
         socket.emit('findOneHouse', house);
       }
     ">Найти</button>
-
+    <button type="button" onclick="
+       document.getElementById('findOneHouseForm').hidden = true;
+    ">Отмена</button>
   </form>
 </div>
 <br>
@@ -273,7 +280,7 @@
       html += `<i>Тариф: ${house.tarif}. </i>`;
       html += `<i>Общий счетчик: ${house.sameCounter ? 'Да' : 'Нет'}. </i><br>`;
       html += `<i>РЦ тепло: ${house.RC1}. </i>`;
-      html += `<i>РЦ вода: ${house.RC2}. </i><br><br>`;
+      html += `<i>РЦ энергосбережение: ${house.RC2}. </i><br><br>`;
 
       html += `<button onclick="
         document.getElementById('editHouse').hidden = !document.getElementById('editHouse').hidden;
@@ -412,7 +419,6 @@
                 </td>
                 <td>
                   <select name="year">
-                    <option>2014</option>
                     <option>2015</option>
                     <option>2016</option>
                     <option>2017</option>

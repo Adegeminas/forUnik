@@ -196,7 +196,7 @@ housesSchema.statics.deletePeriod = function(address, period, callback) {
   this.findOne({address: address}).exec((err, house) => {
     if (err || !house) {
       log.error(err);
-      callback(false);
+      callback(false, "Дом не найден");
     } else {
       house.data = house.data.filter((elem) => {
         return elem.month !== period;
@@ -204,9 +204,9 @@ housesSchema.statics.deletePeriod = function(address, period, callback) {
       house.save((err) => {
         if (err) {
           log.error(err);
-          callback(false);
+          callback(false, 'Серверная ошибка');
         } else {
-          callback(house);
+          callback(house, 'Успех');
         }
       });
     }
