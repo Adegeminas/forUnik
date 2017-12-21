@@ -1,219 +1,17 @@
 <% layout('layout/page') -%>
 <% block('title', "Введение данных") -%>
 
-<script src="/socket.io/socket.io.js"></script>
+<script src="/js/HouseAdder.js"></script>
+<script src="/js/HouseFinder.js"></script>
 
-<div id="addNewHouseDiv">
+<div id="addNewHouseDiv"></div>
+<div id="findOneHouseDiv"></div>
+<div id="findingResultDiv"></div>
 
-  <button class="mainbutton" type="button" name="button" onclick="
-    document.getElementById('addNewHouseForm').hidden = !document.getElementById('addNewHouseForm').hidden;
-    document.getElementById('findingResultDiv').innerHTML = '';
-    document.getElementById('findOneHouseForm').hidden = true;
-  ">Добавить новый дом</button>
-
-  <form id="addNewHouseForm" hidden="true">
-    <legend>Добавление нового дома</legend>
-      <table>
-        <tr>
-          <td>
-            Город
-          </td>
-          <td>
-            <input type="text" name="town" value="Пермь">
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Тип улицы
-          </td>
-          <td>
-             <select name="streetType" style="width: 100%">
-               <option>улица</option>
-               <option>проспект</option>
-               <option>проезд</option>
-               <option>аллея</option>
-               <option>площадь</option>
-               <option>переулок</option>
-               <option>линия</option>
-             </select>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Название улицы
-          </td>
-          <td>
-            <input type="text" name="streetName" value="Александрова">
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Номер дома
-          </td>
-          <td>
-            <input type="text" name="houseNumber" value="6">
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Площадь
-          </td>
-          <td>
-            <input type="text" name="square" value="1000">
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Общий счетчик
-          </td>
-          <td>
-            <select name="sameCounter" style="width: 100%">
-              <option value="false">Нет</option>
-              <option value="true">Да</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            РЦ тепло
-          </td>
-          <td>
-            <input type="text" name="RC1" value="ИРЦ">
-          </td>
-        </tr>
-        <tr>
-          <td>
-            РЦ вода
-          </td>
-          <td>
-            <input type="text" name="RC2" value="ИРЦ">
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Тариф
-          </td>
-          <td>
-            <input type="text" name="tarif" value="2000">
-          </td>
-        </tr>
-      </table>
-    <br>
-    <button type="button" onclick="
-      let form = document.getElementById('addNewHouseForm');
-      let flag = form.elements.town.value.length > 0 &&
-                 form.elements.streetType.value.length > 0 &&
-                 form.elements.streetName.value.length > 0 &&
-                 form.elements.houseNumber.value.length > 0 &&
-                 form.elements.square.value.length > 0 &&
-                 form.elements.RC1.value.length > 0 &&
-                 form.elements.RC2.value.length > 0 &&
-                 form.elements.tarif.value.length > 0;
-      if (!flag) {
-        alert('Заполните все поля!');
-      } else {
-        form.hidden = true;
-        let house = {
-          address: form.elements.town.value + ',' +
-                   form.elements.streetType.value + ',' +
-                   form.elements.streetName.value + ',' +
-                   form.elements.houseNumber.value,
-          square: form.elements.square.value,
-          sameCounter: form.elements.sameCounter.value,
-          RC1: form.elements.RC1.value,
-          RC2: form.elements.RC2.value,
-          tarif: form.elements.tarif.value,
-        };
-        socket.emit('addNewHouse', house);
-      }
-    ">Сохранить</button>
-    <button type="button" onclick="
-       document.getElementById('addNewHouseForm').hidden = true;
-    ">Отмена</button>
-  </form>
-</div>
-<br>
-<div id="findOneHouseDiv">
-  <button class="mainbutton" type="button" name="button" onclick="
-    document.getElementById('findOneHouseForm').hidden = !document.getElementById('findOneHouseForm').hidden;
-    document.getElementById('findingResultDiv').innerHTML = '';
-    document.getElementById('addNewHouseForm').hidden = true;
-  ">Найти дом по адресу</button>
-
-
-  <form id="findOneHouseForm" hidden="true">
-    <legend>Поиск дома</legend>
-    <table>
-      <tr>
-        <td>
-          Город
-        </td>
-        <td>
-          <input type="text" name="town" value="Пермь">
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Тип улицы
-        </td>
-        <td>
-          <select name="streetType">
-            <option>улица</option>
-            <option>проспект</option>
-            <option>проезд</option>
-            <option>аллея</option>
-            <option>площадь</option>
-            <option>переулок</option>
-            <option>линия</option>
-           </select>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Название улицы
-        </td>
-        <td>
-          <input type="text" name="streetName" value="Александрова">
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Номер дома
-        </td>
-        <td>
-          <input type="text" name="houseNumber" value="6">
-        </td>
-      </tr>
-    </table>
-    <br>
-    <button type="button" onclick="
-      let form = document.getElementById('findOneHouseForm');
-      let flag = form.elements.town.value.length > 0 &&
-                 form.elements.streetType.value.length > 0 &&
-                 form.elements.streetName.value.length > 0 &&
-                 form.elements.houseNumber.value.length > 0;
-      if (!flag) {
-        alert('Заполните все поля!');
-      } else {
-        form.hidden = true;
-        let house = {
-          address: form.elements.town.value + ',' +
-                   form.elements.streetType.value + ',' +
-                   form.elements.streetName.value + ',' +
-                   form.elements.houseNumber.value
-        };
-        socket.emit('findOneHouse', house);
-      }
-    ">Найти</button>
-    <button type="button" onclick="
-       document.getElementById('findOneHouseForm').hidden = true;
-    ">Отмена</button>
-  </form>
-</div>
-<br>
-<div id="findingResultDiv">
-
-</div>
+<script>
+  let houseAdder = new HouseAdder(document.getElementById('addNewHouseDiv', {}));
+  let houseFinder = new HouseFinder(document.getElementById('findOneHouseDiv', {}));
+</script>
 
 <script>
   var socket = io.connect();
@@ -252,7 +50,6 @@
       })
       .on('findOneHouseResult', function(result) {
         let resultDiv = document.getElementById('findingResultDiv');
-        resultDiv.innerHTML = '';
         if (!result) {
           alert('Нет такого дома!');
           return;
@@ -277,7 +74,6 @@
 
       html += `<h4 id='address'>${house.address}</h4>`;
       html += `<i>Площадь: ${house.square}. </i>`;
-      html += `<i>Тариф: ${house.tarif}. </i>`;
       html += `<i>Общий счетчик: ${house.sameCounter ? 'Да' : 'Нет'}. </i><br>`;
       html += `<i>РЦ тепло: ${house.RC1}. </i>`;
       html += `<i>РЦ энергосбережение: ${house.RC2}. </i><br><br>`;
@@ -535,7 +331,6 @@
             ">Сохранить</button>
           </form>
       `;
-
       return html;
     }
 

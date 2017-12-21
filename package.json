@@ -1,6 +1,6 @@
 {
   "name": "forunik",
-  "version": "0.0.1",
+  "version": "0.8.0",
   "description": "Zhe-Ke-Ha simulator",
   "main": "app.js",
   "scripts": {
@@ -42,5 +42,6 @@
   "bugs": {
     "url": "https://github.com/Adegeminas/forUnik/issues"
   },
-  "homepage": "https://github.com/Adegeminas/forUnik#readme"
+  "homepage": "https://github.com/Adegeminas/forUnik#readme",
+  "devDependencies": {}
 }
