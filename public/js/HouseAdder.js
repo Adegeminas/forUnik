@@ -42,7 +42,6 @@ class HouseAdder {
               </td>
               <td>
                 <input name="streetName" list="streetList1">
-
               </td>
             </tr>
             <tr>

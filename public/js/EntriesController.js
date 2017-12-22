@@ -20,7 +20,7 @@ let controller = {
 
   },
   updateCatalogue: function() {
-    alert(this.catalogue);
+    cataloger.render(this.catalogue);
   }
 };
 
@@ -28,11 +28,6 @@ houseAdder = new HouseAdder(document.getElementById('addNewHouseDiv', {}, contro
 houseFinder = new HouseFinder(document.getElementById('findOneHouseDiv', {}, controller));
 resulter = new Resulter(document.getElementById('findingResultDiv', {}, controller));
 cataloger = new Cataloger(document.getElementById('catalogue', {}, controller));
-
-// <datalist id="streetList1">
-//   <option value="Ленина"></option>
-//   <option value="Сталина"></option>
-// </datalist>
 
 socket
     .on('connect', function() {
@@ -63,7 +58,7 @@ socket
     })
     .on('addNewHouseResult', function(result) {
       if (result) {
-        alert('Успех');
+        socket.emit('getCatalogue');
       } else {
         alert('Неудача');
       }

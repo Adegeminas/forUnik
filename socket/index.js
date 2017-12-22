@@ -147,16 +147,10 @@ module.exports = function(server) {
       });
     });
 
-    var catalogue = {
-      streets: [
-        'Александрова',
-        'Гагарина',
-        'Халатина'
-      ],
-    };
-
     socket.on('getCatalogue', function() {
-      socket.emit('getCatalogueResult', catalogue);
+      baseApiLogic.getCatalogue((result) => {
+        socket.emit('getCatalogueResult', result);
+      });
     });
   });
   return io;

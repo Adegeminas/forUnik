@@ -41,7 +41,7 @@ class HouseFinder {
               Название улицы
             </td>
             <td>
-              <input type="text" name="streetName" value="Александрова">
+              <input type="text" name="streetName" list="streetList1">
             </td>
           </tr>
           <tr>
@@ -49,7 +49,7 @@ class HouseFinder {
               Номер дома
             </td>
             <td>
-              <input type="text" name="houseNumber" value="6">
+              <input type="text" name="houseNumber">
             </td>
           </tr>
         </table>
