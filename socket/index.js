@@ -146,6 +146,18 @@ module.exports = function(server) {
         socket.emit('allHousesResponse', result);
       });
     });
+
+    var catalogue = {
+      streets: [
+        'Александрова',
+        'Гагарина',
+        'Халатина'
+      ],
+    };
+
+    socket.on('getCatalogue', function() {
+      socket.emit('getCatalogueResult', catalogue);
+    });
   });
   return io;
 };

@@ -162,7 +162,6 @@ housesSchema.statics.addNewPeriod = function(parameters, period, callback) {
 
   let House = this;
   this.findOne({address: parameters.address}).exec((err, house) => {
-    log.info('Старт');
     if (err || !house) {
       log.error(err, 'Непредвиденная ошибка');
       callback(false, 'Непредвиденная ошибка');

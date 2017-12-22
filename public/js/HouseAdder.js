@@ -1,6 +1,6 @@
-;class HouseAdder {
+class HouseAdder {
 
-  constructor(element, options = {}) {
+  constructor(element, options = {}, controller) {
     this._element = element;
     this.render();
     this.initialize();
@@ -42,10 +42,7 @@
               </td>
               <td>
                 <input name="streetName" list="streetList1">
-                <datalist id="streetList1">
-                  <option value="Ленина"></option>
-                  <option value="Сталина"></option>
-                </datalist>
+
               </td>
             </tr>
             <tr>
@@ -103,8 +100,9 @@
     this._saveButton = this._formDiv.getElementsByTagName('button')[0];
     this._cancelButton = this._formDiv.getElementsByTagName('button')[1];
 
-    this._toogleButton.onclick = () => {
+    this._toogleButton.onclick = (e) => {
       this._formDiv.hidden = !this._formDiv.hidden;
+      controller.showAdder();
     }
     this._toogleButton.classList.add('mainbutton');
     this._formDiv.hidden = true;
@@ -140,4 +138,8 @@
       this._formDiv.hidden = true;
     }
   };
+
+  hide() {
+    this._element.getElementsByTagName('div')[0].hidden = true;
+  }
 };

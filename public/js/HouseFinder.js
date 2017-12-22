@@ -1,5 +1,5 @@
-;class HouseFinder {
-  constructor(element, options = {}) {
+class HouseFinder {
+  constructor(element, options = {}, controller) {
     this._element = element;
     this.render();
     this.initialize();
@@ -68,6 +68,7 @@
 
     this._toogleButton.onclick = () => {
       this._formDiv.hidden = !this._formDiv.hidden;
+      controller.showFinder();
     }
 
     this._toogleButton.classList.add('mainbutton');
@@ -95,5 +96,9 @@
     this._cancelButton.onclick = () => {
       this._formDiv.hidden = true;
     }
-  };
+  }
+
+  hide() {
+    this._element.getElementsByTagName('div')[0].hidden = true;
+  }
 };
