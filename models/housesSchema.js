@@ -63,6 +63,11 @@ let House = {
         require: true,
         default: 'Сторм',
       },
+      tarif: {
+        type: Number,
+        require: true,
+        default: 2000,
+      },
       O: {
         type: Number,
         default: 0,
@@ -85,7 +90,11 @@ let House = {
   },
 };
 
-let housesSchema = mongoose.Schema(House);
+let options = {
+  usePushEach: true,
+};
+
+let housesSchema = mongoose.Schema(House, options);
 
 housesSchema.statics.addNewHouse = function(parameters, callback) {
   let House = this;
@@ -150,10 +159,11 @@ housesSchema.statics.deleteHouse = function(address, callback) {
   });
 };
 housesSchema.statics.addNewPeriod = function(parameters, period, callback) {
+
   let House = this;
-  this.findOne({address: parameters.address}).sort('data.month').exec((err, house) => {
+  this.findOne({address: parameters.address}).exec((err, house) => {
     if (err || !house) {
-      log.error(err);
+      log.error(err, 'Непредвиденная ошибка');
       callback(false, 'Непредвиденная ошибка');
       return;
     } else {

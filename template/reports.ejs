@@ -1,8 +1,6 @@
 <% layout('layout/page') -%>
 <% block('title', "Построение отчетов") -%>
 
-<script src="/socket.io/socket.io.js"></script>
-
 <button class="mainbutton" type="button" name="button" onclick="
   document.getElementById('resultDiv').innerHTML = '';
   document.getElementById('allHousesReportForm').hidden = 'true';
@@ -169,7 +167,7 @@
     </tr>
     <tr>
       <td>
-        Ручной ввод
+        Учесть периоды отсутствия ОДПУ
       </td>
       <td>
         <select name="useR">
@@ -313,7 +311,7 @@
     </tr>
     <tr>
       <td>
-        Ручной ввод
+        Учесть периоды отсутствия ОДПУ
       </td>
       <td>
         <select name="useR">
@@ -446,7 +444,7 @@
     </tr>
     <tr>
       <td>
-        Ручной ввод
+        Учесть периоды отсутствия ОДПУ
       </td>
       <td>
         <select name="useR">

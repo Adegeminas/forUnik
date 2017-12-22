@@ -146,6 +146,12 @@ module.exports = function(server) {
         socket.emit('allHousesResponse', result);
       });
     });
+
+    socket.on('getCatalogue', function() {
+      baseApiLogic.getCatalogue((result) => {
+        socket.emit('getCatalogueResult', result);
+      });
+    });
   });
   return io;
 };
