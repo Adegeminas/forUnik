@@ -16,6 +16,14 @@ class Cataloger {
       html += '</datalist>';
     }
 
+    if (catalogue.companies) {
+      html += '<datalist id="companiesList1">';
+      catalogue.companies.forEach((company) => {
+        html += `<option value="${company}"></option>`;
+      });
+      html += '</datalist>';
+    }
+
     this._element.innerHTML = html;
   }
 }

@@ -1,5 +1,6 @@
 class PeriodAdder {
   constructor(house) {
+    this.house = house;
     this.div = document.createElement('div');
     this.render();
     this.initialize();
@@ -67,7 +68,11 @@ class PeriodAdder {
               УК
             </td>
             <td>
-              <input type="text" name="company" value="Сторм">
+              <input
+                type="text"
+                name="company"
+                value="${this.house.data.length ? this.house.data[this.house.data.length - 1].company : ''}"
+                list="companiesList1">
             </td>
           </tr>
           <tr>
@@ -78,14 +83,28 @@ class PeriodAdder {
               <input type="text" name="O" value="">
             </td>
           </tr>
-          <tr>
-            <td>
-              Данные РЦ с вычетом ГВС
-            </td>
-            <td>
-              <input type="text" name="P" value="">
-            </td>
-          </tr>
+
+          ${ this.house.sameCounter
+            ?
+            `<tr>
+              <td>
+                Данные РЦ с вычетом ГВС
+              </td>
+              <td>
+                <input type="text" name="P" value="">
+              </td>
+            </tr>`
+            :
+            `<tr hidden="true">
+              <td>
+                Данные РЦ с вычетом ГВС
+              </td>
+              <td>
+                <input type="text" name="P" value="">
+              </td>
+            </tr>`
+          }
+
           <tr>
             <td>
               Данные ОДПУ без вычета ГВС
@@ -125,9 +144,8 @@ class PeriodAdder {
       let flag = form.querySelector('[name=O]').value.length > 0 ||
                  form.querySelector('[name=P]').value.length > 0 ||
                  form.querySelector('[name=Q]').value.length > 0 ||
-                 form.querySelector('[name=tarif]').value.length > 0 ||
                  form.querySelector('[name=R]').value.length > 0;
-      flag = flag && form.querySelector('[name=company]').value.length > 0;
+      flag = flag && (form.querySelector('[name=company]').value.length > 0) && (form.querySelector('[name=tarif]').value.length > 0);
       if (!flag) {
         alert('Заполните все поля!');
       } else {
@@ -137,16 +155,43 @@ class PeriodAdder {
           isBasic: form.querySelector('[name=isBasic]').value,
           shouldCount: form.querySelector('[name=shouldCount]').value,
           company: form.querySelector('[name=company]').value,
-          O: form.querySelector('[name=O]').value,
-          P: form.querySelector('[name=P]').value,
-          Q: form.querySelector('[name=Q]').value,
-          R: form.querySelector('[name=R]').value,
+          O: form.querySelector('[name=O]').value.replace(',','.'),
+          P: form.querySelector('[name=P]').value.replace(',','.'),
+          Q: form.querySelector('[name=Q]').value.replace(',','.'),
+          R: form.querySelector('[name=R]').value.replace(',','.'),
           tarif: form.querySelector('[name=tarif]').value,
         };
+
+
         socket.emit('addNewPeriod', {
           address: document.getElementById('address').innerHTML,
         }, newPeriod);
       }
     }
   }
+}
+
+function nextPeriod(period) {
+
+  let [month, year] = period.split('-');
+
+  switch (month) {
+    case '01':
+      return `02-${year}`;
+    case '02':
+      return `03-${year}`;
+    case '03':
+      return `04-${year}`;
+    case '04':
+      return `05-${year}`;
+    case '05':
+      return `10-${year}`;
+    case '10':
+      return `11-${year}`;
+    case '11':
+      return `12-${year}`;
+    default:
+      return `01-${(Number(year) + 1) + ''}`;
+  }
+
 }

@@ -12,7 +12,7 @@ class PeriodEditor {
     this.house.data.sort((a,b) => {
       return (
         (a.month.split('-')[1] > b.month.split('-')[1]) ||
-        (a.month.split('-')[0] > b.month.split('-')[0])
+        (a.month.split('-')[1] === b.month.split('-')[1] && a.month.split('-')[0] > b.month.split('-')[0])
       );
     }).forEach((period) => {
       this._renderPeriod(period, this.house);

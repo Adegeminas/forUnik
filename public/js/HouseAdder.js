@@ -49,7 +49,7 @@ class HouseAdder {
                 Номер дома
               </td>
               <td>
-                <input type="text" name="houseNumber" value="6">
+                <input type="text" name="houseNumber">
               </td>
             </tr>
             <tr>
@@ -57,7 +57,7 @@ class HouseAdder {
                 Площадь
               </td>
               <td>
-                <input type="text" name="square" value="1000">
+                <input type="text" name="square">
               </td>
             </tr>
             <tr>
