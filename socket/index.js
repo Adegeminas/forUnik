@@ -122,6 +122,12 @@ module.exports = function(server) {
       })
     });
 
+    socket.on('addNewPeriodAndContinue', function(house, newPeriod, options) {
+      baseApiLogic.addNewPeriod(house, newPeriod, (result, text) => {
+        socket.emit('addNewPeriodResultWithContinue', [result, text, options])
+      })
+    });
+
     socket.on('deletePeriod', function(str) {
       let [period, address] = str.split('/');
       baseApiLogic.deletePeriod(address, period, (result, text) => {
@@ -144,6 +150,12 @@ module.exports = function(server) {
     socket.on('allHousesRequest', function(request) {
       baseApiLogic.allHousesRequest(request, (result) => {
         socket.emit('allHousesResponse', result);
+      });
+    });
+
+    socket.on('getCatalogue', function() {
+      baseApiLogic.getCatalogue((result) => {
+        socket.emit('getCatalogueResult', result);
       });
     });
   });
