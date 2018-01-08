@@ -1,5 +1,6 @@
 class PeriodEditor {
-  constructor(house) {
+  constructor(house, options) {
+    this.options = options;
     this.house = house;
     this.div = document.createElement('div');
     this.render();
@@ -17,7 +18,7 @@ class PeriodEditor {
     }).forEach((period) => {
       this._renderPeriod(period, this.house);
     });
-    this._periodAdder = new PeriodAdder(this.house);
+    this._periodAdder = new PeriodAdder(this.house, this.options);
     this.div.append(this._periodAdder.div);
   }
 

@@ -13,8 +13,8 @@ let controller = {
     houseAdder.hide();
     resulter.hide();
   },
-  render: function(result) {
-    resulter.render(result);
+  render: function(result, options) {
+    resulter.render(result, options);
   },
   catalogue: {
 
@@ -72,6 +72,14 @@ socket
       let resultDiv = document.getElementById('findingResultDiv');
       if (result) {
         controller.render(result);
+      } else {
+        alert('Неудача', text);
+      }
+    })
+    .on('addNewPeriodResultWithContinue', function([result, text, options]) {
+      let resultDiv = document.getElementById('findingResultDiv');
+      if (result) {
+        controller.render(result, options);
       } else {
         alert('Неудача', text);
       }

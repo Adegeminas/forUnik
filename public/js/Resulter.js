@@ -4,7 +4,7 @@ class Resulter {
     this._house = {};
   }
 
-  render(result) {
+  render(result, options = null) {
     if (!result || !result.address) {
       this._element.innerHTML = '';
       this._houseEditor = null;
@@ -15,7 +15,7 @@ class Resulter {
     this._element.append(this._renderHeader(this._house));
     this._houseEditor = new HouseEditor(this._house);
     this._element.append(this._houseEditor.div);
-    this._periodEditor = new PeriodEditor(this._house);
+    this._periodEditor = new PeriodEditor(this._house, options);
     this._element.append(this._periodEditor.div);
   }
 

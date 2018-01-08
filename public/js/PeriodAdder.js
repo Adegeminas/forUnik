@@ -1,6 +1,7 @@
 class PeriodAdder {
-  constructor(house) {
+  constructor(house, options) {
     this.house = house;
+    this.options = options;
     this.div = document.createElement('div');
     this.render();
     this.initialize();
@@ -9,7 +10,7 @@ class PeriodAdder {
   render() {
     this.div.innerHTML = `
       <button> Добавить отчетный период </button>
-      <div hidden='true'>
+      <div ${this.options&&this.options.year ? 1 : "hidden='true'"}>
         <table>
           <tr>
             <td>
@@ -17,10 +18,10 @@ class PeriodAdder {
             </td>
             <td>
               <select name="year">
-                <option>2015</option>
-                <option>2016</option>
-                <option>2017</option>
-                <option>2018</option>
+                <option ${this.options&&this.options.year&&this.options.year=='2015' ? 'selected' : 1}>2015</option>
+                <option ${this.options&&this.options.year&&this.options.year=='2016' ? 'selected' : 1}>2016</option>
+                <option ${this.options&&this.options.year&&this.options.year=='2017' ? 'selected' : 1}>2017</option>
+                <option ${this.options&&this.options.year&&this.options.year=='2018' ? 'selected' : 1}>2018</option>
               </select>
             </td>
           </tr>
@@ -30,14 +31,14 @@ class PeriodAdder {
             </td>
             <td>
               <select name="month">
-                <option>01</option>
-                <option>02</option>
-                <option>03</option>
-                <option>04</option>
-                <option>05</option>
-                <option>10</option>
-                <option>11</option>
-                <option>12</option>
+                <option ${this.options&&this.options.month&&this.options.month=='01' ? 'selected' : 1}>01</option>
+                <option ${this.options&&this.options.month&&this.options.month=='02' ? 'selected' : 1}>02</option>
+                <option ${this.options&&this.options.month&&this.options.month=='03' ? 'selected' : 1}>03</option>
+                <option ${this.options&&this.options.month&&this.options.month=='04' ? 'selected' : 1}>04</option>
+                <option ${this.options&&this.options.month&&this.options.month=='05' ? 'selected' : 1}>05</option>
+                <option ${this.options&&this.options.month&&this.options.month=='10' ? 'selected' : 1}>10</option>
+                <option ${this.options&&this.options.month&&this.options.month=='11' ? 'selected' : 1}>11</option>
+                <option ${this.options&&this.options.month&&this.options.month=='12' ? 'selected' : 1}>12</option>
               </select>
             </td>
           </tr>
@@ -126,11 +127,15 @@ class PeriodAdder {
               Тариф
             </td>
             <td>
-              <input type="text" name="tarif" value="3000">
+              <input
+                type="text"
+                name="tarif"
+                value=${this.options&&this.options.tarif ? this.options.tarif : ''}>
             </td>
           </tr>
         </table>
       <button> Сохранить </button>
+      <button> Сохранить и перейти к следующему месяцу</button>
     </div>
     `;
   }
@@ -168,6 +173,42 @@ class PeriodAdder {
         }, newPeriod);
       }
     }
+
+    this.div.getElementsByTagName('button')[2].onclick = () => {
+      let form = this.div.getElementsByTagName('div')[0];
+      let flag = form.querySelector('[name=O]').value.length > 0 ||
+                 form.querySelector('[name=P]').value.length > 0 ||
+                 form.querySelector('[name=Q]').value.length > 0 ||
+                 form.querySelector('[name=R]').value.length > 0;
+      flag = flag && (form.querySelector('[name=company]').value.length > 0) && (form.querySelector('[name=tarif]').value.length > 0);
+      if (!flag) {
+        alert('Заполните все поля!');
+      } else {
+        // form.hidden = true;
+        let newPeriod = {
+          month: form.querySelector('[name=month]').value + '-' + form.querySelector('[name=year]').value,
+          isBasic: form.querySelector('[name=isBasic]').value,
+          shouldCount: form.querySelector('[name=shouldCount]').value,
+          company: form.querySelector('[name=company]').value,
+          O: form.querySelector('[name=O]').value.replace(',','.'),
+          P: form.querySelector('[name=P]').value.replace(',','.'),
+          Q: form.querySelector('[name=Q]').value.replace(',','.'),
+          R: form.querySelector('[name=R]').value.replace(',','.'),
+          tarif: form.querySelector('[name=tarif]').value,
+        };
+
+        let nextMonth = nextPeriod(newPeriod.month);
+
+        socket.emit('addNewPeriodAndContinue', {
+          address: document.getElementById('address').innerHTML,
+        }, newPeriod, {
+          month: nextMonth.split('-')[0],
+          year: nextMonth.split('-')[1],
+          tarif: newPeriod.tarif,
+        });
+      }
+    }
+
   }
 }
 
