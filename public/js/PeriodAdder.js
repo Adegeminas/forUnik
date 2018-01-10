@@ -48,8 +48,8 @@ class PeriodAdder {
             </td>
             <td>
               <select name="isBasic">
-                <option value="true">Нет</option>
-                <option value="false">Да</option>
+                <option ${this.options&&this.options.sold&&this.options.sold=='20' ? 'selected' : 1} value="true">Нет</option>
+                <option ${this.options&&this.options.sold&&this.options.sold=='10' ? 'selected' : 1} value="false">Да</option>
               </select>
             </td>
           </tr>
@@ -205,6 +205,7 @@ class PeriodAdder {
           month: nextMonth.split('-')[0],
           year: nextMonth.split('-')[1],
           tarif: newPeriod.tarif,
+          sold: newPeriod.isBasic=='false' ? '10' : '20',
         });
       }
     }
