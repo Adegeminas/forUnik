@@ -3,12 +3,12 @@ About: веб-сервис построения отчетов.
 Install:
 
 1. База данных:
-  - скачать и установить http://downloads.mongodb.org/win32/mongodb-win32-i386-3.2.4.zip?_ga=2.92904989.1879726599.1512539590-822070210.1512539590
-  - проверить наличие папки C:\databases после установки. Если нет - создать
+  - скачать и установить https://www.mongodb.com/dr/fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-3.6.2-signed.msi/download
+  - проверить наличие папки C:\data\db после установки. Если нет - создать
   - должен быть постоянно запущено процесс C:\Program Files\MongoDB\Server\3.4\bin\mongod.exe
 
 2. Компилятор:
-  - скачать и установить https://nodejs.org/download/release/v8.5.0/win-x64/node.exe (для x64, если что заменить на x86 в конце)
+  - скачать и установить https://nodejs.org/dist/v8.9.4/node-v8.9.4-x64.msi
 
 3. Код:
   - https://github.com/Adegeminas/forUnik/archive/master.zip - скачать, распаковать
