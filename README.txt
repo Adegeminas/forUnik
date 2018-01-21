@@ -1,6 +1,6 @@
 About: веб-сервис построения отчетов.
 
-Install:
+Install :
 
 1. База данных:
   - скачать и установить https://www.mongodb.com/dr/fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-3.6.2-signed.msi/download
