@@ -20,7 +20,7 @@ class HouseEditor {
           </tr>
           <tr>
             <td>
-              Общий счетчик
+              Общий счетчик тепла и ГВС
             </td>
             <td>
               <select name="sameCounter" style="width: 100%">

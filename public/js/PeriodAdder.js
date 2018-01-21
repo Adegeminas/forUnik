@@ -81,7 +81,7 @@ class PeriodAdder {
               Данные РЦ без вычета ГВС
             </td>
             <td>
-              <input type="text" name="O" value="">
+              <input id="focus" type="text" name="O" value="">
             </td>
           </tr>
 
@@ -114,14 +114,19 @@ class PeriodAdder {
               <input type="text" name="Q" value="">
             </td>
           </tr>
-          <tr>
-            <td>
-              Данные по нормативу
-            </td>
-            <td>
-              <input type="text" name="R" value="">
-            </td>
-          </tr>
+
+
+
+              <tr>
+                <td>
+                  Данные по нормативу (по среднему)
+                </td>
+                <td>
+                  <input type="text" name="R" value="">
+                </td>
+              </tr>
+
+
           <tr>
             <td>
               Тариф
@@ -141,6 +146,7 @@ class PeriodAdder {
   }
 
   initialize() {
+
     this.div.getElementsByTagName('button')[0].onclick = () => {
       this.div.getElementsByTagName('div')[0].hidden = !this.div.getElementsByTagName('div')[0].hidden;
     }
@@ -209,7 +215,6 @@ class PeriodAdder {
         });
       }
     }
-
   }
 }
 

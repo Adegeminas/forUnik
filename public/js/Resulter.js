@@ -17,6 +17,9 @@ class Resulter {
     this._element.append(this._houseEditor.div);
     this._periodEditor = new PeriodEditor(this._house, options);
     this._element.append(this._periodEditor.div);
+    if (document.getElementById('focus')) {
+      document.getElementById('focus').focus();
+    }
   }
 
   _renderHeader(house) {
@@ -25,7 +28,7 @@ class Resulter {
       <legend> Общие сведения </legend>
       <h4 id='address'>${house.address}</h4>
       <p> Площадь: ${house.square}. </p>
-      <p> Общий счетчик: ${house.sameCounter ? 'Да' : 'Нет'}. </p>
+      <p> Общий счетчик тепла и ГВС: ${house.sameCounter ? 'Да' : 'Нет'}. </p>
       <p> РЦ тепло: ${house.RC1}. </p>
       <p> РЦ энергосбережение: ${house.RC2}. </p>`;
     return div;
