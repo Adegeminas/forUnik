@@ -2,6 +2,12 @@ class PeriodEditor {
   constructor(house, options) {
     this.options = options;
     this.house = house;
+    this.house.data = this.house.data.sort((a,b) => {
+      return (
+        (a.month.split('-')[1] > b.month.split('-')[1]) ||
+        (a.month.split('-')[1] === b.month.split('-')[1] && a.month.split('-')[0] > b.month.split('-')[0])
+      );
+    })
     this.div = document.createElement('div');
     this.render();
     this.initialize();
@@ -20,9 +26,21 @@ class PeriodEditor {
     });
     this._periodAdder = new PeriodAdder(this.house, this.options);
     this.div.append(this._periodAdder.div);
+    this._periodChanger = new PeriodChanger(this.house, this.options);
+    this.div.append(this._periodChanger.div);
   }
 
   initialize() {
+    let editButtons = this.div.getElementsByClassName('edit-button');
+
+    if (editButtons) {
+      for (let i = 0; i < editButtons.length; i++) {
+        editButtons[i].onclick = () => {
+          this._periodAdder.hide();
+          this._periodChanger.open(this.house.data[i]);
+        }
+      }
+    }
 
   }
 
@@ -105,6 +123,9 @@ class PeriodEditor {
         ${period.tarif}
       </td>
       <td>
+        <button id = 'edit@${period.month}/${house.address}' class="edit-button">
+          Редактировать
+        </button>
         <button id = '${period.month}/${house.address}' type="button" onclick="
           socket.emit('deletePeriod', this.id);
         ">Удалить</button>

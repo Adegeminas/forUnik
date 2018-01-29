@@ -139,9 +139,9 @@ class PeriodAdder {
             </td>
           </tr>
         </table>
-      <button> Сохранить </button>
-      <button> Сохранить и перейти к следующему месяцу</button>
-    </div>
+        <button> Сохранить </button>
+        <button> Сохранить и перейти к следующему месяцу</button>
+      </div>
     `;
   }
 
@@ -149,6 +149,7 @@ class PeriodAdder {
 
     this.div.getElementsByTagName('button')[0].onclick = () => {
       this.div.getElementsByTagName('div')[0].hidden = !this.div.getElementsByTagName('div')[0].hidden;
+      
     }
     this.div.getElementsByTagName('button')[1].onclick = () => {
       let form = this.div.getElementsByTagName('div')[0];
@@ -179,7 +180,6 @@ class PeriodAdder {
         }, newPeriod);
       }
     }
-
     this.div.getElementsByTagName('button')[2].onclick = () => {
       let form = this.div.getElementsByTagName('div')[0];
       let flag = form.querySelector('[name=O]').value.length > 0 ||
@@ -215,6 +215,11 @@ class PeriodAdder {
         });
       }
     }
+
+  }
+
+  hide() {
+    this.div.getElementsByTagName('div')[0].hidden = true;
   }
 }
 

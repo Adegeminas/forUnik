@@ -64,7 +64,6 @@ socket
       }
     })
     .on('findOneHouseResult', function(result) {
-      let resultDiv = document.getElementById('findingResultDiv');
       currentHouse = result;
       controller.render(result);
     })

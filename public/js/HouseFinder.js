@@ -7,9 +7,8 @@ class HouseFinder {
 
   render() {
     this._element.innerHTML = `
-      <button> Найти дом по адресу </button>
-
-      <div>
+      <button class="mainbutton"> Найти дом по адресу </button>
+      <div hidden="true">
         <legend>Поиск дома</legend>
         <table>
           <tr>
@@ -70,10 +69,6 @@ class HouseFinder {
       this._formDiv.hidden = !this._formDiv.hidden;
       controller.showFinder();
     }
-
-    this._toogleButton.classList.add('mainbutton');
-    this._formDiv.hidden = true;
-
     this._findButton.onclick = () => {
       let form = this._formDiv;
       let flag = form.querySelector('[name=town]').value.length > 0 &&

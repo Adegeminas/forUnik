@@ -122,6 +122,12 @@ module.exports = function(server) {
       })
     });
 
+    socket.on('updatePeriod', function(address, period) {
+      baseApiLogic.updatePeriod(address, period, (result, text) => {
+        socket.emit('addNewPeriodResult', [result, text])
+      })
+    });
+
     socket.on('addNewPeriodAndContinue', function(house, newPeriod, options) {
       baseApiLogic.addNewPeriod(house, newPeriod, (result, text) => {
         socket.emit('addNewPeriodResultWithContinue', [result, text, options])
