@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import str from './test2'
 
 function TestApp() {
   return (
     <div>
-      <h1>test2</h1>
+      <h1> { str + '123555'} </h1>
+      <h2> { str + '441114' } </h2>
     </div>
   )
 }

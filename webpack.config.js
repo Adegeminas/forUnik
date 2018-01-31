@@ -1,11 +1,15 @@
 var path = require('path');
 var webpack = require('webpack');
+var CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   entry: './public/js/test',
+  plugins: [
+    new CleanWebpackPlugin(['public/js/dist']),
+  ],
   output: {
     filename: 'Test.js',
-    path: path.resolve(__dirname, 'public/js')
+    path: path.resolve(__dirname, 'public/js/dist')
   },
   module: {
          loaders: [
@@ -19,7 +23,8 @@ module.exports = {
              }
          ]
      },
-     stats: {
-         colors: true
-     },
+   stats: {
+       colors: true
+   },
+
 };
