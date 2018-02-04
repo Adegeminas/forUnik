@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import str from './test2'
+
+import HouseAdder from './HouseAdder'
 
 function TestApp() {
   return (
     <div>
-      <h1> { str + '123555'} </h1>
-      <h2> { str + '441114' } </h2>
+      <HouseAdder />
     </div>
   )
 }
