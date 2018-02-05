@@ -17,6 +17,10 @@ button {
 
 }
 
+.nffi {
+  background: pink;
+}
+
 .mainbutton {
   background-color: #1CAF50;
   padding: 15px 32px;
