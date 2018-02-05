@@ -101,6 +101,8 @@ class TestApp extends React.Component {
         />
         <HouseViewer
           house = { this.state.currentHouse }
+          updateProceed = { (request, house) => socket.emit('editHouse', request, house) }
+          deleteProceed = { (address) => socket.emit('deleteHouse', address) }
         />
       </div>
     )

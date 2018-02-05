@@ -9,6 +9,9 @@ class HouseViewer extends Component{
   constructor(props) {
     super(props);
 
+    this.updateProceed = props.updateProceed;
+    this.deleteProceed = props.deleteProceed;
+
     this.state = {
       houseEditorisOpen: false,
     }
@@ -24,6 +27,8 @@ class HouseViewer extends Component{
         />
         <HouseViewerEditor
           house = { house }
+          updateProceed = { this.updateProceed }
+          deleteProceed = { this.deleteProceed }
         />
         <HouseViewerPeriods
           house = { house }
