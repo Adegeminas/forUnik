@@ -47,7 +47,10 @@ class HouseViewerEditor extends Component{
       <div>
         <table>
           <tr>
-            <td>
+            <td
+              style = {{
+                width: 200 + 'px',
+            }}>
               Площадь
             </td>
             <td>
@@ -141,7 +144,6 @@ class HouseViewerEditor extends Component{
                this.state.RC2;
 
     if (!flag) {
-      alert('no data');
       return;
     }
 

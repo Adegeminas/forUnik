@@ -4,7 +4,7 @@ var CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
 
-  entry: './public/js/test',
+  entry: './Code-View/Entries-React/',
 
   output: {
     filename: 'Test.js',
