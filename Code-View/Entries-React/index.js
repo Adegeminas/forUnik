@@ -66,20 +66,22 @@ class TestApp extends React.Component {
         })
       })
       .on('addNewPeriodResult', function([result, text]) {
-        // let resultDiv = document.getElementById('findingResultDiv');
-        // if (result) {
-        //   controller.render(result);
-        // } else {
-        //   alert('Неудача', text);
-        // }
+        if (result) {
+          app.setState({
+            currentHouse: result,
+          })
+        } else {
+          alert('Неудача', text);
+        }
       })
       .on('addNewPeriodResultWithContinue', function([result, text, options]) {
-        // let resultDiv = document.getElementById('findingResultDiv');
-        // if (result) {
-        //   controller.render(result, options);
-        // } else {
-        //   alert('Неудача', text);
-        // }
+        if (result) {
+          app.setState({
+            currentHouse: result,
+          })
+        } else {
+          alert('Неудача', text);
+        }
       });
   }
 
@@ -103,6 +105,7 @@ class TestApp extends React.Component {
           house = { this.state.currentHouse }
           updateProceed = { (request, house) => socket.emit('editHouse', request, house) }
           deleteProceed = { (address) => socket.emit('deleteHouse', address) }
+          socket = { socket }
         />
       </div>
     )

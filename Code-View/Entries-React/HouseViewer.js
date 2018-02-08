@@ -18,7 +18,8 @@ class HouseViewer extends Component{
   }
 
   render() {
-    const { house } = this.props;
+    let { house, socket } = this.props;
+
 
     return (
       <div>
@@ -27,11 +28,12 @@ class HouseViewer extends Component{
         />
         <HouseViewerEditor
           house = { house }
-          updateProceed = { this.updateProceed }
-          deleteProceed = { this.deleteProceed }
+          updateProceed = { (request, house) => socket.emit('editHouse', request, house) }
+          deleteProceed = { (address) => socket.emit('deleteHouse', address) }
         />
         <HouseViewerPeriods
           house = { house }
+          socket = { socket }
         />
       </div>
     )
