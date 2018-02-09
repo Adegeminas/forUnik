@@ -65,7 +65,7 @@ class HouseViewerPeriods extends Component{
           { house.data.map( period => <HouseViewerPeriodsPeriod
             period = { period }
             socket = { socket }
-            address = { house.address }
+            house = { house }
           />) }
 
         </table>
@@ -81,7 +81,7 @@ class HouseViewerPeriods extends Component{
       <div>
         { body }
         { bodyWithoutPeriods }
-        <HouseViewerPeriodsAdder          
+        <HouseViewerPeriodsAdder
           house = { house }
           socket = { socket }
           isOpen = { this.state.isOpen }

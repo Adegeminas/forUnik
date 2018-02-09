@@ -1,3 +1,3 @@
 exports.get = function(req, res) {
-  res.render('test');
+  res.render('entries-react');
 };

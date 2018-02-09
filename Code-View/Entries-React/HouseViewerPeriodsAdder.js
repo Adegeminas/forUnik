@@ -25,8 +25,8 @@ class HouseViewerPeriodsAdder extends Component{
     this.initialState = lastMonth ? {
       year: nextPeriod(lastMonth).split('-')[1],
       month: nextPeriod(lastMonth).split('-')[0],
-      isBasic: lastMonth.isBasic,
-      shouldCount: lastMonth.shouldCount,
+      isBasic: String(lastMonth.isBasic),
+      shouldCount: String(lastMonth.shouldCount),
       company: lastMonth.company,
       O: "",
       P: "",
@@ -64,8 +64,8 @@ class HouseViewerPeriodsAdder extends Component{
     this.setState({
       year: nextPeriod(lastMonth.month).split('-')[1],
       month: nextPeriod(lastMonth.month).split('-')[0],
-      isBasic: lastMonth.isBasic,
-      shouldCount: lastMonth.shouldCount,
+      isBasic: String(lastMonth.isBasic),
+      shouldCount: String(lastMonth.shouldCount),
       company: lastMonth.company,
       O: "",
       P: "",
@@ -215,6 +215,7 @@ class HouseViewerPeriodsAdder extends Component{
             </td>
           </tr>
 
+        { this.state.shouldCount === 'false' ? (
           <tr>
             <td>
               Данные по среднему
@@ -229,6 +230,9 @@ class HouseViewerPeriodsAdder extends Component{
              />
             </td>
           </tr>
+        ) : null}
+
+
 
           <tr>
             <td>

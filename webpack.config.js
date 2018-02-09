@@ -7,7 +7,7 @@ module.exports = {
   entry: './Code-View/Entries-React/',
 
   output: {
-    filename: 'Test.js',
+    filename: 'Entries.js',
     path: path.resolve(__dirname, 'public/js/dist')
   },
 

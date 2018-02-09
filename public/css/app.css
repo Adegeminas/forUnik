@@ -32,6 +32,25 @@ button {
   font-weight: bold;
 }
 
+.minibutton {
+  background-color: #1CAF50;
+  padding: 3px 3px;
+  width: 80px;
+  font-size: 10px;
+}
+
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: pink;
+}
+
+.smallInput {
+  width: 74px;
+}
+
 select {
   width: 100%;
 }
