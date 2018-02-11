@@ -159,34 +159,34 @@ return html;
 }
 
 function resultToHTML(response) {
-let resultDiv = document.getElementById('resultDiv');
+  let resultDiv = document.getElementById('resultDiv');
 
-if (!response.reports.length) {
-  resultDiv.innerHTML = 'Отсутствуют базовые данные для указанного запроса';
-  return;
-}
+  if (!response.reports.length) {
+    resultDiv.innerHTML = 'Отсутствуют базовые данные для указанного запроса';
+    return;
+  }
 
-resultDiv.innerHTML = requestHeader(response);
+  resultDiv.innerHTML = requestHeader(response);
 
-response.reports.forEach((report) => {
-    let ul = document.createElement('ul');
-    ul.innerHTML = `<h3>${report[0].house.address}</h3>`;
-    ul.onclick = function() {
-      if (this.style.border) {
-        this.style.border = '';
-      } else {
-        this.style.border = '1px solid red';
-      }
-      this.childNodes.forEach((node) => {
-        node.hidden = !node.hidden;
-      })
-    };
-    report.forEach((period) => {
-      let li = document.createElement('li');
-      li.hidden = 'true';
-      li.innerHTML = oneHouseRequestResultToHTML(period);
-      ul.append(li);
-    });
-    resultDiv.append(ul);
-});
+  response.reports.forEach((report) => {
+      let ul = document.createElement('ul');
+      ul.innerHTML = `<h3>${report[0].house.address}</h3>`;
+      ul.onclick = function() {
+        if (this.style.border) {
+          this.style.border = '';
+        } else {
+          this.style.border = '1px solid red';
+        }
+        this.childNodes.forEach((node) => {
+          node.hidden = !node.hidden;
+        })
+      };
+      report.forEach((period) => {
+        let li = document.createElement('li');
+        li.hidden = 'true';
+        li.innerHTML = oneHouseRequestResultToHTML(period);
+        ul.append(li);
+      });
+      resultDiv.append(ul);
+  });
 }

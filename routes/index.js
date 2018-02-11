@@ -6,6 +6,5 @@ module.exports = function(app) {
   app.post('/login', require('./login').post);
   app.post('/logout', require('./logout').post);
   app.get('/entries', checkAuth, require('./entries-react').get);
-  app.get('/reports', checkAuth, require('./reports').get);
-  //app.get('/test', checkAuth, require('./test').get);
+  app.get('/reports', checkAuth, require('./reports-react').get);
 };
