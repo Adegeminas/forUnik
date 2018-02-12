@@ -218,7 +218,7 @@ class RequestOneHouse extends Component {
           </tr>
         </table>
         <button onClick = { this.requestProceed.bind(this) }> Рассчитать </button>
-      </div>
+      </div>;
 
     return (
       <div>
@@ -228,7 +228,7 @@ class RequestOneHouse extends Component {
         > Новый отчет по одному дому </button>
         { form }
       </div>
-    )
+    );
   }
 
   requestProceed() {
@@ -264,4 +264,4 @@ class RequestOneHouse extends Component {
   }
 }
 
-export default RequestOneHouse
+export default RequestOneHouse;

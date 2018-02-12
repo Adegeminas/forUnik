@@ -1,7 +1,7 @@
 {
   "name": "forunik",
-  "version": "1.4.0",
-  "description": "Zhe-Ke-Ha simulator",
+  "version": "1.5.0",
+  "description": "Forms for energy-economy",
   "main": "app.js",
   "scripts": {
     "prod": "start cmd /k node app.js && webpack -p",
@@ -53,5 +53,25 @@
     "url": "https://github.com/Adegeminas/forUnik/issues"
   },
   "homepage": "https://github.com/Adegeminas/forUnik#readme",
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^4.17.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true,
+      "es6": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "rules": {
+      "semi": 2,
+      "no-useless-constructor": 2
+    }
+  }
 }

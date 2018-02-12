@@ -18,7 +18,7 @@ class HouseViewerEditor extends Component{
       sameCounter: false,
       RC1: '',
       RC2: '',
-    }
+    };
 
     this.state = this.initialState;
   }
@@ -37,7 +37,7 @@ class HouseViewerEditor extends Component{
       sameCounter: house.sameCounter,
       RC1: house.RC1,
       RC2: house.RC2,
-    })
+    });
   }
 
   render() {
@@ -111,25 +111,25 @@ class HouseViewerEditor extends Component{
         <button onClick = { this.handleUpdate.bind(this) }> Сохранить </button>
         <button onClick = { this.handleOpen.bind(this) }> Отмена </button>
         <button onClick = { this.handleDelete.bind(this) }> Удалить дом </button>
-      </div>
+      </div>;
 
     const body = house &&
       <div>
         <button onClick = { this.handleOpen.bind(this) } > Редактировать дом </button>
         { editMenu }
-      </div>
+      </div>;
 
     return (
       <div>
         { body }
       </div>
-    )
+    );
   }
 
   handleOpen() {
     this.setState({
       isOpen: !this.state.isOpen,
-    })
+    });
   }
 
   handleDelete() {
@@ -158,4 +158,4 @@ class HouseViewerEditor extends Component{
   }
 }
 
-export default HouseViewerEditor
+export default HouseViewerEditor;

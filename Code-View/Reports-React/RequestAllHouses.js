@@ -152,7 +152,7 @@ class RequestAllHouses extends Component {
           </tr>
         </table>
         <button onClick = { this.requestProceed.bind(this) }> Рассчитать </button>
-      </div>
+      </div>;
 
     return (
       <div>
@@ -162,7 +162,7 @@ class RequestAllHouses extends Component {
         > Новый отчет по всем домам </button>
         { form }
       </div>
-    )
+    );
   }
 
   requestProceed() {
@@ -180,4 +180,4 @@ class RequestAllHouses extends Component {
   }
 }
 
-export default RequestAllHouses
+export default RequestAllHouses;

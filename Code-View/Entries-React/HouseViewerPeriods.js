@@ -22,7 +22,7 @@ class HouseViewerPeriods extends Component{
           (a.month.split('-')[1] > b.month.split('-')[1]) ||
           (a.month.split('-')[1] === b.month.split('-')[1] && a.month.split('-')[0] > b.month.split('-')[0])
         );
-      })
+      });
     }
 
     const body = house && (house.data.length > 0) &&
@@ -69,13 +69,13 @@ class HouseViewerPeriods extends Component{
           />) }
 
         </table>
-      </div>
+      </div>;
 
     const bodyWithoutPeriods = house && (house.data.length === 0) &&
       <div>
         <legend> Отчетные периоды </legend>
         Отчетные периоды не заполнены
-      </div>
+      </div>;
 
     return (
       <div>
@@ -88,14 +88,14 @@ class HouseViewerPeriods extends Component{
           switchOpen = { this.switchAdderOpenState.bind(this) }
         />
       </div>
-    )
+    );
   }
 
   switchAdderOpenState() {
     this.setState({
       isOpen: !this.state.isOpen,
-    })
+    });
   }
 }
 
-export default HouseViewerPeriods
+export default HouseViewerPeriods;

@@ -90,14 +90,14 @@ class HouseFinder extends Component{
        </table>
        <button onClick = { this.handleFind.bind(this) } > Найти </button>
        <button onClick = { switchOpen } > Отмена </button>
-     </div>
+     </div>;
 
     return (
       <div>
         <button className = "mainbutton" onClick = { switchOpen } > Найти дом </button>
         { form }
       </div>
-    )
+    );
   }
 
   handleFind() {

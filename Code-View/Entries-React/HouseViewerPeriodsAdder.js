@@ -72,7 +72,9 @@ class HouseViewerPeriodsAdder extends Component{
       Q: "",
       R: "",
       tarif: String(lastMonth.tarif),
-    })
+    });
+
+    if (this.textInput) this.textInput.focus();
   }
 
   render() {
@@ -80,7 +82,7 @@ class HouseViewerPeriodsAdder extends Component{
     const { house, socket, isOpen, switchOpen} = this.props;
 
     const button = house &&
-      <button onClick = { switchOpen } > Добавить отчетный период </button>
+      <button onClick = { switchOpen } > Добавить отчетный период </button>;
 
     const form = isOpen && house &&
       <div>
@@ -174,6 +176,7 @@ class HouseViewerPeriodsAdder extends Component{
             </td>
             <td>
             <input
+               ref = { input => { this.textInput = input; }}
                className = {this.state.O.length ? 'ffi' : 'sffi' }
                value = { this.state.O }
                onChange = { (event) => this.setState({
@@ -252,14 +255,14 @@ class HouseViewerPeriodsAdder extends Component{
 
         <button onClick = { this.saveProceed.bind(this) }> Сохранить </button>
         <button onClick = { this.continueProceed.bind(this) }> Сохранить и перейти к следующему месяцу</button>
-      </div>
+      </div>;
 
     return (
       <div>
         { button }
         { form }
       </div>
-    )
+    );
   }
 
   saveProceed() {
@@ -317,4 +320,4 @@ class HouseViewerPeriodsAdder extends Component{
   }
 }
 
-export default HouseViewerPeriodsAdder
+export default HouseViewerPeriodsAdder;

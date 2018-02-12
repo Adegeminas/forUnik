@@ -151,14 +151,14 @@ class HouseAdder extends Component {
          </table>
        <button onClick = { this.handleSave.bind(this) } > Сохранить </button>
        <button onClick = { switchOpen } > Отмена </button>
-     </div>
+     </div>;
 
     return (
       <div>
         <button className = "mainbutton" onClick = { switchOpen } > Добавить новый дом </button>
         { form }
       </div>
-    )
+    );
   }
 
   handleSave() {

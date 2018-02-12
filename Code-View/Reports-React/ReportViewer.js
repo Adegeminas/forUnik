@@ -17,7 +17,7 @@ function requestHeader(response) {
         <h4>Плата за энергосбережение: { response.summary.profit } рублей</h4>
       <legend>Информация по отдельным домам (нажать на дом для просмотра)</legend>
     </div>
-  )
+  );
 }
 
 function periodToHTML(period) {
@@ -45,7 +45,7 @@ function periodToHTML(period) {
         { period.R ? period.R : '---' }
       </td>
     </tr>
-  )
+  );
 }
 
 function oneHouseRequestResultToHTML(result, error) {
@@ -54,7 +54,7 @@ function oneHouseRequestResultToHTML(result, error) {
       <div>
         { error }
       </div>
-    )
+    );
   }
 
   return (
@@ -101,7 +101,7 @@ function oneHouseRequestResultToHTML(result, error) {
       <legend>Показатели при отсутствии экономии (справочно):</legend>
         <h4> Экономия: { result.realGigsEconomy.toFixed(2) } Гкал </h4>
     </div>
-  )
+  );
 }
 
 
@@ -112,7 +112,7 @@ function reportView(report) {
       <h3> { report[0].house.address } </h3>
       { report.map( period => oneHouseRequestResultToHTML(period) ) }
     </div>
-  )
+  );
 }
 
 function resultToHTML(response) {
@@ -133,7 +133,7 @@ function resultToHTML(response) {
         { requestHeader(response) }
         { response.reports.map( report => reportView(report) )}
       </div>
-    )
+    );
   }
 }
 
@@ -159,9 +159,9 @@ class ReportViewer extends Component {
       <div>
         { reportView }
       </div>
-    )
+    );
   }
 
 }
 
-export default ReportViewer
+export default ReportViewer;

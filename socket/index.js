@@ -94,50 +94,50 @@ module.exports = function(server) {
 
     socket.on('addNewHouse', function(house) {
       baseApiLogic.addNewHouse(house, (result) => {
-        socket.emit('addNewHouseResult', result)
+        socket.emit('addNewHouseResult', result);
       });
     });
 
     socket.on('deleteHouse', function(address) {
       baseApiLogic.deleteHouse(address, (result) => {
-        socket.emit('findOneHouseResult', result)
+        socket.emit('findOneHouseResult', result);
       });
     });
 
     socket.on('editHouse', function(request, house) {
       baseApiLogic.editHouse(house.address, request, (result) => {
-        socket.emit('findOneHouseResult', result)
+        socket.emit('findOneHouseResult', result);
       });
     });
 
     socket.on('findOneHouse', function(house) {
       baseApiLogic.findOneHouse(house, (result) => {
-        socket.emit('findOneHouseResult', result)
+        socket.emit('findOneHouseResult', result);
       });
     });
 
     socket.on('addNewPeriod', function(house, newPeriod) {
       baseApiLogic.addNewPeriod(house, newPeriod, (result, text) => {
-        socket.emit('addNewPeriodResult', [result, text])
-      })
+        socket.emit('addNewPeriodResult', [result, text]);
+      });
     });
 
     socket.on('updatePeriod', function(address, period) {
       baseApiLogic.updatePeriod(address, period, (result, text) => {
-        socket.emit('addNewPeriodResult', [result, text])
-      })
+        socket.emit('addNewPeriodResult', [result, text]);
+      });
     });
 
     socket.on('addNewPeriodAndContinue', function(house, newPeriod, options) {
       baseApiLogic.addNewPeriod(house, newPeriod, (result, text) => {
-        socket.emit('addNewPeriodResultWithContinue', [result, text, options])
-      })
+        socket.emit('addNewPeriodResultWithContinue', [result, text, options]);
+      });
     });
 
     socket.on('deletePeriod', function(str) {
       let [period, address] = str.split('/');
       baseApiLogic.deletePeriod(address, period, (result, text) => {
-        socket.emit('addNewPeriodResult', [result, text])
+        socket.emit('addNewPeriodResult', [result, text]);
       });
     });
 

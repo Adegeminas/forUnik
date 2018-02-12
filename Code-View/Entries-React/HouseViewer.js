@@ -14,7 +14,7 @@ class HouseViewer extends Component{
 
     this.state = {
       houseEditorisOpen: false,
-    }
+    };
   }
 
   render() {
@@ -36,8 +36,8 @@ class HouseViewer extends Component{
           socket = { socket }
         />
       </div>
-    )
+    );
   }
 }
 
-export default HouseViewer
+export default HouseViewer;

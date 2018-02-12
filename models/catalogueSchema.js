@@ -16,7 +16,7 @@ let Catalogue = {
       String
     ],
   },
-}
+};
 
 let catalogueSchema = mongoose.Schema(Catalogue, options);
 
@@ -35,7 +35,7 @@ catalogueSchema.statics.get = function(callback) {
       callback(catalogue);
     }
   });
-}
+};
 
 catalogueSchema.statics.addNewStreet = function(streetName) {
   this.findOne((err, catalogue) => {
@@ -52,7 +52,7 @@ catalogueSchema.statics.addNewStreet = function(streetName) {
       catalogue.save();
     }
   });
-}
+};
 
 catalogueSchema.statics.addCompany = function(companyName) {
   this.findOne((err, catalogue) => {
@@ -69,6 +69,6 @@ catalogueSchema.statics.addCompany = function(companyName) {
       catalogue.save();
     }
   });
-}
+};
 
 module.exports = catalogueSchema;

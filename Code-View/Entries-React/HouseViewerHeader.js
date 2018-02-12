@@ -22,14 +22,14 @@ class HouseViewerHeader extends Component{
         <p> Общий счетчик тепла и ГВС: {house.sameCounter ? 'Да' : 'Нет'} </p>
         <p> РЦ тепло: { house.RC1 } </p>
         <p> РЦ энергосбережение: { house.RC2 } </p>
-      </div>
+      </div>;
 
     return (
       <div>
         { body }
       </div>
-    )
+    );
   }
 }
 
-export default HouseViewerHeader
+export default HouseViewerHeader;

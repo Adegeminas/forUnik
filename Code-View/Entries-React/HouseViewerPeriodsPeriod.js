@@ -17,7 +17,7 @@ class HouseViewerPeriodsPeriod extends Component{
       Q: props.period.Q ? String(props.period.Q) : '',
       R: props.period.R ? String(props.period.R) : '',
       tarif: String(props.period.tarif),
-    }
+    };
 
     this.state = this.initialState;
   }
@@ -34,7 +34,7 @@ class HouseViewerPeriodsPeriod extends Component{
       Q: props.period.Q ? String(props.period.Q) : '',
       R: props.period.R ? String(props.period.R) : '',
       tarif: String(props.period.tarif),
-    }
+    };
   }
 
 
@@ -113,7 +113,7 @@ class HouseViewerPeriodsPeriod extends Component{
                      :
                        this.setState({
                          O: event.target.value,
-                       })
+                       });
                    }
                  }
                />
@@ -207,19 +207,19 @@ class HouseViewerPeriodsPeriod extends Component{
           }
         </td>
       </tr>
-    )
+    );
   }
 
   switchEditState() {
     this.setState({
       editOpen: !this.state.editOpen,
-    })
+    });
   }
 
   proceedCancel() {
     this.setState({
       editOpen: false,
-    })
+    });
   }
 
   proceedSave() {
@@ -248,9 +248,9 @@ class HouseViewerPeriodsPeriod extends Component{
 
       this.setState({
         editOpen: !this.state.editOpen,
-      })
+      });
     }
   }
 }
 
-export default HouseViewerPeriodsPeriod
+export default HouseViewerPeriodsPeriod;

@@ -163,7 +163,7 @@ class RequestCompany extends Component {
           </tr>
         </table>
         <button onClick = { this.requestProceed.bind(this) }> Рассчитать </button>
-      </div>
+      </div>;
 
     return (
       <div>
@@ -173,7 +173,7 @@ class RequestCompany extends Component {
         > Новый отчет по УК </button>
         { form }
       </div>
-    )
+    );
   }
 
   requestProceed() {
@@ -202,4 +202,4 @@ class RequestCompany extends Component {
   }
 }
 
-export default RequestCompany
+export default RequestCompany;

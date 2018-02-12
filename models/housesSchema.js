@@ -137,7 +137,7 @@ housesSchema.statics.editHouse = function(address, request, callback) {
         return;
       }
       callback(house);
-    })
+    });
   });
 };
 housesSchema.statics.deleteHouse = function(address, callback) {
@@ -188,7 +188,7 @@ housesSchema.statics.addNewPeriod = function(parameters, period, callback) {
       });
     }
   });
-}
+};
 
 housesSchema.statics.updatePeriod = function(address, period, callback) {
   let House = this;
@@ -212,7 +212,7 @@ housesSchema.statics.updatePeriod = function(address, period, callback) {
       });
     }
   });
-}
+};
 
 housesSchema.statics.findHouses = function(query, callback) {
   let House = this;
@@ -224,7 +224,7 @@ housesSchema.statics.findHouses = function(query, callback) {
       callback(houses);
     }
   });
-}
+};
 housesSchema.statics.deletePeriod = function(address, period, callback) {
   let House = this;
   this.findOne({address: address}).exec((err, house) => {

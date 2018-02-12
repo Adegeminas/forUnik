@@ -47,11 +47,4 @@ module.exports = [{
          ]
      },
   devtool: "cheap-inline-module-sourse-map",
-   // stats: {
-   //     colors: false
-   // },
-   // watch: true,
-   // plugins: [
-   //   new CleanWebpackPlugin(['public/js/dist']),
-   // ],
 }];

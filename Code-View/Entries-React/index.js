@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import HouseAdder from './HouseAdder'
-import HouseFinder from './HouseFinder'
-import Cataloger from './Cataloger'
-import HouseViewer from './HouseViewer'
+import HouseAdder from './HouseAdder';
+import HouseFinder from './HouseFinder';
+import Cataloger from './Cataloger';
+import HouseViewer from './HouseViewer';
 
 let socket = io.connect();
 
@@ -51,7 +51,7 @@ class TestApp extends React.Component {
       .on('getCatalogueResult', function(catalogue) {
         app.setState({
           catalogue: catalogue,
-        })
+        });
       })
       .on('addNewHouseResult', function(result) {
         if (result) {
@@ -63,13 +63,13 @@ class TestApp extends React.Component {
       .on('findOneHouseResult', function(result) {
         app.setState({
           currentHouse: result,
-        })
+        });
       })
       .on('addNewPeriodResult', function([result, text]) {
         if (result) {
           app.setState({
             currentHouse: result,
-          })
+          });
         } else {
           alert('Неудача', text);
         }
@@ -78,7 +78,7 @@ class TestApp extends React.Component {
         if (result) {
           app.setState({
             currentHouse: result,
-          })
+          });
         } else {
           alert('Неудача', text);
         }
@@ -108,7 +108,7 @@ class TestApp extends React.Component {
           socket = { socket }
         />
       </div>
-    )
+    );
   }
 
   switchAdderOpenState() {
@@ -116,14 +116,14 @@ class TestApp extends React.Component {
       adderOpen: !this.state.adderOpen,
       finderOpen: false,
       currentHouse: null,
-    })
+    });
   }
   switchFinderOpenState() {
     this.setState({
       adderOpen: false,
       finderOpen: !this.state.finderOpen,
       currentHouse: null,
-    })
+    });
   }
 }
 

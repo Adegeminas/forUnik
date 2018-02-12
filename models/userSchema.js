@@ -23,13 +23,13 @@ let User = {
     type: Date,
     default: Date.now,
   }
-}
+};
 
 let userSchema = mongoose.Schema(User);
 
 userSchema.methods.encryptPassword = function(password) {
   return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
-}
+};
 
 userSchema.virtual('password')
   .set(function(password) {

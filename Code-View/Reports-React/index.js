@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Cataloger from '../Entries-React/Cataloger'
-import RequestOneHouse from './RequestOneHouse'
-import RequestCompany from './RequestCompany'
-import RequestAllHouses from './RequestAllHouses'
-import ReportViewer from './ReportViewer'
+import Cataloger from '../Entries-React/Cataloger';
+import RequestOneHouse from './RequestOneHouse';
+import RequestCompany from './RequestCompany';
+import RequestAllHouses from './RequestAllHouses';
+import ReportViewer from './ReportViewer';
 
 let socket = io.connect();
 
@@ -53,26 +53,26 @@ class TestApp extends React.Component {
       .on('getCatalogueResult', function(catalogue) {
         app.setState({
           catalogue: catalogue,
-        })
+        });
       })
       .on('oneHouseResponse', function(result) {
         app.setState({
           currentResult: result,
           RequestOneHouseOpen: false,
-        })
+        });
       })
       .on('ukResponse', function(result) {
         app.setState({
           currentResult: result,
           RequestOneHouseOpen: false,
-        })
+        });
       })
       .on('allHousesResponse', function(result) {
         app.setState({
           currentResult: result,
           RequestOneHouseOpen: false,
-        })
-      })
+        });
+      });
   }
 
   render() {
@@ -101,7 +101,7 @@ class TestApp extends React.Component {
           report = { this.state.currentResult }
         />
       </div>
-    )
+    );
   }
 
   switchRequestOneHouseOpenState() {
@@ -110,7 +110,7 @@ class TestApp extends React.Component {
       RequestOneHouseOpen: !this.state.RequestOneHouseOpen,
       RequestCompanyOpen: false,
       RequestAllHousesOpen: false,
-    })
+    });
   }
   switchRequestCompanyOpenState() {
     this.setState({
@@ -118,7 +118,7 @@ class TestApp extends React.Component {
       RequestCompanyOpen: !this.state.RequestCompanyOpen,
       RequestOneHouseOpen: false,
       RequestAllHousesOpen: false,
-    })
+    });
   }
   switchRequestAllHousesOpenState() {
     this.setState({
@@ -126,7 +126,7 @@ class TestApp extends React.Component {
       RequestAllHousesOpen: !this.state.RequestAllHousesOpen,
       RequestOneHouseOpen: false,
       RequestCompanyOpen: false,
-    })
+    });
   }
 }
 
