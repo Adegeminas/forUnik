@@ -3,7 +3,6 @@ process.env.NODE_ENV = 'development';
 const config = require('./config');
 const log = require('./lib/log')(module);
 const http = require('http');
-const fs = require('fs');
 const express = require('express');
 const path = require('path');
 const HttpError = require('./error').HttpError;
