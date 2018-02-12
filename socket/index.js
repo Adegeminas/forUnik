@@ -1,18 +1,15 @@
-var log = require('../lib/log')(module);
-var async = require('async');
-var config = require('../config');
-var util = require('util');
-var connect = require('connect');
-var cookie = require('cookie');
-var sessionStore = require('../lib/sessionStore');
-var User = require('../lib/mongoose').models.users;
-var HttpError = require('../error').HttpError;
-var cookieParser = require('cookie-parser');
-var baseApiLogic = require('../lib/baseApiLogic');
+const async = require('async');
+const config = require('../config');
+const cookie = require('cookie');
+const sessionStore = require('../lib/sessionStore');
+const User = require('../lib/mongoose').models.users;
+const HttpError = require('../error').HttpError;
+const cookieParser = require('cookie-parser');
+const baseApiLogic = require('../lib/baseApiLogic');
 
 function loadSession(sid, callback) {
   sessionStore.load(sid, function(err, session) {
-    if (arguments.length == 0) {
+    if (arguments.length === 0) {
       return callback(null, null);
     } else {
       return callback(null, session);

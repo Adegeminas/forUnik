@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 
 class RequestCompany extends Component {
-
   constructor(props) {
     super(props);
 
@@ -14,24 +12,41 @@ class RequestCompany extends Component {
       endMonth: '12',
       kotel: 'false',
       method: 'РЦ',
-      useR: 'false',
+      useR: 'false'
     };
 
     this.state = this.initialState;
   }
 
+  requestProceed() {
+    if (this.state.company.length > 0) {
+      const request = {
+        company: this.state.company,
+        startPeriod: this.state.startMonth + '-' + this.state.startYear,
+        endPeriod: this.state.endMonth + '-' + this.state.endYear,
+        kotel: this.state.kotel,
+        method: this.state.method,
+        useR: this.state.useR,
+        header: 'Управляющая компания: ' + this.state.company
+      };
+
+      this.props.socket.emit('ukRequest', request);
+      this.props.switchOpen();
+    }
+  }
+
   render() {
-    const { isOpen, switchOpen, socket } = this.props;
+    const { isOpen, switchOpen } = this.props;
     const form = isOpen &&
       <div>
         <h3>Управляющая компания:</h3>
         <input
-           list = "companiesList1"
-           className = { this.state.company.length ? 'ffi' : 'nffi' }
-           value = { this.state.company }
-           onChange = { (event) => this.setState({
-             company: event.target.value,
-           }) }
+          list = 'companiesList1'
+          className = { this.state.company.length ? 'ffi' : 'nffi' }
+          value = { this.state.company }
+          onChange = { (event) => this.setState({
+            company: event.target.value
+          }) }
         />
 
         <h3> Отчетный период </h3>
@@ -42,11 +57,12 @@ class RequestCompany extends Component {
               Год
             </td>
             <td>
-            <select
-              value = { this.state.startYear }
-              onChange = { (event) => this.setState({
-                startYear: event.target.value,
-              })}>
+              <select
+                value = { this.state.startYear }
+                onChange = { (event) => this.setState({
+                  startYear: event.target.value
+                })}
+              >
                 <option>2015</option>
                 <option>2016</option>
                 <option>2017</option>
@@ -59,11 +75,12 @@ class RequestCompany extends Component {
               Месяц
             </td>
             <td>
-            <select
-              value = { this.state.startMonth }
-              onChange = { (event) => this.setState({
-                startMonth: event.target.value,
-              })}>
+              <select
+                value = { this.state.startMonth }
+                onChange = { (event) => this.setState({
+                  startMonth: event.target.value
+                })}
+              >
                 <option>01</option>
                 <option>02</option>
                 <option>03</option>
@@ -81,11 +98,12 @@ class RequestCompany extends Component {
               Год
             </td>
             <td>
-            <select
-              value = { this.state.endYear }
-              onChange = { (event) => this.setState({
-                endYear: event.target.value,
-              })}>
+              <select
+                value = { this.state.endYear }
+                onChange = { (event) => this.setState({
+                  endYear: event.target.value
+                })}
+              >
                 <option>2018</option>
                 <option>2017</option>
                 <option>2016</option>
@@ -98,11 +116,12 @@ class RequestCompany extends Component {
               Месяц
             </td>
             <td>
-            <select
-              value = { this.state.endMonth }
-              onChange = { (event) => this.setState({
-                endMonth: event.target.value,
-              })}>
+              <select
+                value = { this.state.endMonth }
+                onChange = { (event) => this.setState({
+                  endMonth: event.target.value
+                })}
+              >
                 <option>01</option>
                 <option>02</option>
                 <option>03</option>
@@ -121,13 +140,14 @@ class RequestCompany extends Component {
               Котловой метод
             </td>
             <td>
-            <select
-              value = { this.state.kotel }
-              onChange = { (event) => this.setState({
-                kotel: event.target.value,
-              })}>
-                <option value="false">Нет</option>
-                <option value="true">Да</option>
+              <select
+                value = { this.state.kotel }
+                onChange = { (event) => this.setState({
+                  kotel: event.target.value
+                })}
+              >
+                <option value = 'false'>Нет</option>
+                <option value = 'true'>Да</option>
               </select>
             </td>
           </tr>
@@ -136,11 +156,12 @@ class RequestCompany extends Component {
               Показания
             </td>
             <td>
-            <select
-              value = { this.state.method }
-              onChange = { (event) => this.setState({
-                method: event.target.value,
-              })}>
+              <select
+                value = { this.state.method }
+                onChange = { (event) => this.setState({
+                  method: event.target.value
+                })}
+              >
                 <option>РЦ</option>
                 <option>ОДПУ</option>
               </select>
@@ -151,13 +172,14 @@ class RequestCompany extends Component {
               Учесть периоды отсутствия ОДПУ
             </td>
             <td>
-            <select
-              value = { this.state.useR }
-              onChange = { (event) => this.setState({
-                useR: event.target.value,
-              })}>
-                <option value="true">Да</option>
-                <option value="false">Нет</option>
+              <select
+                value = { this.state.useR }
+                onChange = { (event) => this.setState({
+                  useR: event.target.value
+                })}
+              >
+                <option value='true'>Да</option>
+                <option value='false'>Нет</option>
               </select>
             </td>
           </tr>
@@ -168,37 +190,12 @@ class RequestCompany extends Component {
     return (
       <div>
         <button
-          className = "mainbutton"
+          className = 'mainbutton'
           onClick = { switchOpen }
         > Новый отчет по УК </button>
         { form }
       </div>
     );
-  }
-
-  requestProceed() {
-
-    let flag = this.state.company.length > 0;
-
-    if (!flag) {
-
-      alert('Заполните все поля!');
-
-    } else {
-
-      let request = {
-        company: this.state.company,
-        startPeriod: this.state.startMonth + '-' + this.state.startYear,
-        endPeriod: this.state.endMonth + '-' + this.state.endYear,
-        kotel: this.state.kotel,
-        method: this.state.method,
-        useR: this.state.useR,
-        header: 'Управляющая компания: ' + this.state.company,
-      };
-
-      this.props.socket.emit('ukRequest', request);
-      this.props.switchOpen();
-    }
   }
 }
 

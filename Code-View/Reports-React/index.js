@@ -6,77 +6,98 @@ import RequestCompany from './RequestCompany';
 import RequestAllHouses from './RequestAllHouses';
 import ReportViewer from './ReportViewer';
 
-let socket = io.connect();
-
 class TestApp extends React.Component {
   constructor(props) {
     super(props);
 
-    let { socket } = props;
-    let app = this;
+    const { socket } = props;
+    const app = this;
 
     this.state = {
       currentResult: null,
       catalogue: null,
       RequestOneHouseOpen: false,
       RequestCompanyOpen: false,
-      RequestAllHousesOpen: false,
+      RequestAllHousesOpen: false
     };
 
     socket
-      .on('connect', function() {
+      .on('connect', () => {
         socket.emit('getCatalogue');
       })
-      .on('initConnection', function(handshake) {
+      .on('initConnection', (handshake) => {
         socket.handshake = handshake;
         if (!socket.handshake.user) {
-          location.href = "/";
+          location.href = '/';
           return;
         }
       })
-      .on('disconnect', function() {
-        location.href = "/";
-       })
-      .on('logout', function(text) {
-        if (text) alert(text);
-        location.href = "/";
+      .on('disconnect', () => {
+        location.href = '/';
       })
-      .on('error', function(reason) {
-        if (reason == "handshake unauthorized") {
-          alert("вы вышли из сайта");
+      .on('logout', () => {
+        // if (text) alert(text);
+        location.href = '/';
+      })
+      .on('error', (reason) => {
+        if (reason === 'handshake unauthorized') {
+          // alert('вы вышли из сайта');
         } else {
-          setTimeout(function() {
+          setTimeout(() => {
             socket.socket.connect();
           }, 500);
         }
       })
-      .on('getCatalogueResult', function(catalogue) {
+      .on('getCatalogueResult', (cat) => {
         app.setState({
-          catalogue: catalogue,
+          catalogue: cat
         });
       })
-      .on('oneHouseResponse', function(result) {
+      .on('oneHouseResponse', (result) => {
         app.setState({
           currentResult: result,
-          RequestOneHouseOpen: false,
+          RequestOneHouseOpen: false
         });
       })
-      .on('ukResponse', function(result) {
+      .on('ukResponse', (result) => {
         app.setState({
           currentResult: result,
-          RequestOneHouseOpen: false,
+          RequestOneHouseOpen: false
         });
       })
-      .on('allHousesResponse', function(result) {
+      .on('allHousesResponse', (result) => {
         app.setState({
           currentResult: result,
-          RequestOneHouseOpen: false,
+          RequestOneHouseOpen: false
         });
       });
   }
+  switchRequestOneHouseOpenState() {
+    this.setState({
+      currentResult: null,
+      RequestOneHouseOpen: !this.state.RequestOneHouseOpen,
+      RequestCompanyOpen: false,
+      RequestAllHousesOpen: false
+    });
+  }
+  switchRequestCompanyOpenState() {
+    this.setState({
+      currentResult: null,
+      RequestCompanyOpen: !this.state.RequestCompanyOpen,
+      RequestOneHouseOpen: false,
+      RequestAllHousesOpen: false
+    });
+  }
+  switchRequestAllHousesOpenState() {
+    this.setState({
+      currentResult: null,
+      RequestAllHousesOpen: !this.state.RequestAllHousesOpen,
+      RequestOneHouseOpen: false,
+      RequestCompanyOpen: false
+    });
+  }
 
   render() {
-
     return (
       <div>
         <Cataloger
@@ -103,32 +124,9 @@ class TestApp extends React.Component {
       </div>
     );
   }
-
-  switchRequestOneHouseOpenState() {
-    this.setState({
-      currentResult: null,
-      RequestOneHouseOpen: !this.state.RequestOneHouseOpen,
-      RequestCompanyOpen: false,
-      RequestAllHousesOpen: false,
-    });
-  }
-  switchRequestCompanyOpenState() {
-    this.setState({
-      currentResult: null,
-      RequestCompanyOpen: !this.state.RequestCompanyOpen,
-      RequestOneHouseOpen: false,
-      RequestAllHousesOpen: false,
-    });
-  }
-  switchRequestAllHousesOpenState() {
-    this.setState({
-      currentResult: null,
-      RequestAllHousesOpen: !this.state.RequestAllHousesOpen,
-      RequestOneHouseOpen: false,
-      RequestCompanyOpen: false,
-    });
-  }
 }
+
+const socket = io.connect();
 
 ReactDOM.render(
   <TestApp socket = { socket } />,

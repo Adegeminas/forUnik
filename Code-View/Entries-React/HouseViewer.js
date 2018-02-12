@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import HouseViewerHeader from './HouseViewerHeader';
 import HouseViewerEditor from './HouseViewerEditor';
 import HouseViewerPeriods from './HouseViewerPeriods';
 
-class HouseViewer extends Component{
-
+class HouseViewer extends Component {
   constructor(props) {
     super(props);
 
@@ -13,13 +11,12 @@ class HouseViewer extends Component{
     this.deleteProceed = props.deleteProceed;
 
     this.state = {
-      houseEditorisOpen: false,
+      houseEditorisOpen: false
     };
   }
 
   render() {
-    let { house, socket } = this.props;
-
+    const { house, socket } = this.props;
 
     return (
       <div>
@@ -28,7 +25,7 @@ class HouseViewer extends Component{
         />
         <HouseViewerEditor
           house = { house }
-          updateProceed = { (request, house) => socket.emit('editHouse', request, house) }
+          updateProceed = { (request, houseForEdit) => socket.emit('editHouse', request, houseForEdit) }
           deleteProceed = { (address) => socket.emit('deleteHouse', address) }
         />
         <HouseViewerPeriods

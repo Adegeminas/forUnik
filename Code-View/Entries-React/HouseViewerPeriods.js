@@ -1,23 +1,27 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import HouseViewerPeriodsPeriod from './HouseViewerPeriodsPeriod';
 import HouseViewerPeriodsAdder from './HouseViewerPeriodsAdder';
 
-class HouseViewerPeriods extends Component{
-
+class HouseViewerPeriods extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isOpen: false,
+      isOpen: false
     };
   }
 
+  switchAdderOpenState() {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  }
+
   render() {
-    let { house, socket } = this.props;
+    const { house, socket } = this.props;
 
     if (house) {
-      house.data = house.data.sort((a,b) => {
+      house.data = house.data.sort((a, b) => {
         return (
           (a.month.split('-')[1] > b.month.split('-')[1]) ||
           (a.month.split('-')[1] === b.month.split('-')[1] && a.month.split('-')[0] > b.month.split('-')[0])
@@ -62,11 +66,12 @@ class HouseViewerPeriods extends Component{
             </td>
           </tr>
 
-          { house.data.map( period => <HouseViewerPeriodsPeriod
-            period = { period }
-            socket = { socket }
-            house = { house }
-          />) }
+          { house.data.map(period => (
+            <HouseViewerPeriodsPeriod
+              period = { period }
+              socket = { socket }
+              house = { house }
+            />))}
 
         </table>
       </div>;
@@ -89,12 +94,6 @@ class HouseViewerPeriods extends Component{
         />
       </div>
     );
-  }
-
-  switchAdderOpenState() {
-    this.setState({
-      isOpen: !this.state.isOpen,
-    });
   }
 }
 

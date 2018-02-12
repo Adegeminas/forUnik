@@ -1,8 +1,6 @@
-var path = require('path');
-var webpack = require('webpack');
-var CleanWebpackPlugin = require('clean-webpack-plugin');
+const path = require('path');
 
-module.exports = [{
+module.exports = [ {
 
   entry: './Code-View/Entries-React/',
 
@@ -12,19 +10,18 @@ module.exports = [{
   },
 
   module: {
-         loaders: [
-             {
-                 test: /\.js$/,
-                 loader: 'babel-loader',
-                 exclude: /node_modules/,
-                 query: {
-                     presets: ['es2015', 'stage-0', 'react'],
-                 }
-             }
-         ]
-     },
-  devtool: "cheap-inline-module-sourse-map",
-
+    loaders: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        query: {
+          presets: ['es2015', 'stage-0', 'react']
+        }
+      }
+    ]
+  },
+  devtool: 'cheap-inline-module-sourse-map'
 }, {
 
   entry: './Code-View/Reports-React/',
@@ -35,16 +32,16 @@ module.exports = [{
   },
 
   module: {
-         loaders: [
-             {
-                 test: /\.js$/,
-                 loader: 'babel-loader',
-                 exclude: /node_modules/,
-                 query: {
-                     presets: ['es2015', 'stage-0', 'react'],
-                 }
-             }
-         ]
-     },
-  devtool: "cheap-inline-module-sourse-map",
-}];
+    loaders: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        query: {
+          presets: ['es2015', 'stage-0', 'react']
+        }
+      }
+    ]
+  },
+  devtool: 'cheap-inline-module-sourse-map'
+} ];

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 
 function nextPeriod(period) {
-  let [month, year] = period.split('-');
+  const [month, year] = period.split('-');
+
   switch (month) {
     case '01': return `02-${year}`;
     case '02': return `03-${year}`;
@@ -15,8 +15,7 @@ function nextPeriod(period) {
   }
 }
 
-class HouseViewerPeriodsAdder extends Component{
-
+class HouseViewerPeriodsAdder extends Component {
   constructor(props) {
     super(props);
 
@@ -28,34 +27,34 @@ class HouseViewerPeriodsAdder extends Component{
       isBasic: String(lastMonth.isBasic),
       shouldCount: String(lastMonth.shouldCount),
       company: lastMonth.company,
-      O: "",
-      P: "",
-      Q: "",
-      R: "",
-      tarif: lastMonth.tarif,
+      O: '',
+      P: '',
+      Q: '',
+      R: '',
+      tarif: lastMonth.tarif
     } : {
       year: '2015',
       month: '01',
-      isBasic: "false",
-      shouldCount: "false",
-      company: "",
-      O: "",
-      P: "",
-      Q: "",
-      R: "",
-      tarif: "",
+      isBasic: 'false',
+      shouldCount: 'false',
+      company: '',
+      O: '',
+      P: '',
+      Q: '',
+      R: '',
+      tarif: ''
     };
 
     this.state = this.initialState;
   }
 
   componentWillReceiveProps(props) {
-    if ( props.house  && !props.house.data.length) {
+    if (props.house  && !props.house.data.length) {
       this.setState(this.initialState);
       return;
     }
 
-    if ( !props.house  || !props.house.data.length) {
+    if (!props.house  || !props.house.data.length) {
       return;
     }
 
@@ -67,19 +66,71 @@ class HouseViewerPeriodsAdder extends Component{
       isBasic: String(lastMonth.isBasic),
       shouldCount: String(lastMonth.shouldCount),
       company: lastMonth.company,
-      O: "",
-      P: "",
-      Q: "",
-      R: "",
-      tarif: String(lastMonth.tarif),
+      O: '',
+      P: '',
+      Q: '',
+      R: '',
+      tarif: String(lastMonth.tarif)
     });
 
     if (this.textInput) this.textInput.focus();
   }
 
-  render() {
+  saveProceed() {
+    const flag =
+      (this.state.O.length ||
+      this.state.P.length ||
+      this.state.Q.length ||
+      this.state.R.length) &&
+      this.state.company.length &&
+      this.state.tarif.length;
 
-    const { house, socket, isOpen, switchOpen} = this.props;
+    if (flag) {
+      const newPeriod = {
+        month: this.state.month + '-' + this.state.year,
+        isBasic: this.state.isBasic,
+        shouldCount: this.state.shouldCount,
+        company: this.state.company,
+        O: this.state.O.replace(',', '.'),
+        P: this.state.P.replace(',', '.'),
+        Q: this.state.Q.replace(',', '.'),
+        R: this.state.R.replace(',', '.'),
+        tarif: this.state.tarif.replace(',', '.')
+      };
+
+      this.props.socket.emit('addNewPeriod', this.props.house, newPeriod);
+      this.props.switchOpen();
+    }
+  }
+
+  continueProceed() {
+    const flag =
+      (this.state.O.length ||
+      this.state.P.length ||
+      this.state.Q.length ||
+      this.state.R.length) &&
+      this.state.company.length &&
+      this.state.tarif.length;
+
+    if (flag) {
+      const newPeriod = {
+        month: this.state.month + '-' + this.state.year,
+        isBasic: this.state.isBasic,
+        shouldCount: this.state.shouldCount,
+        company: this.state.company,
+        O: this.state.O.replace(',', '.'),
+        P: this.state.P.replace(',', '.'),
+        Q: this.state.Q.replace(',', '.'),
+        R: this.state.R.replace(',', '.'),
+        tarif: this.state.tarif.replace(',', '.')
+      };
+
+      this.props.socket.emit('addNewPeriodAndContinue', this.props.house, newPeriod);
+    }
+  }
+
+  render() {
+    const { house, isOpen, switchOpen} = this.props;
 
     const button = house &&
       <button onClick = { switchOpen } > Добавить отчетный период </button>;
@@ -92,11 +143,12 @@ class HouseViewerPeriodsAdder extends Component{
             <td style= {{ width: 300 + 'px' }} > Год </td>
             <td style= {{ width: 150 + 'px' }} >
               <select
-                style = {{ width: 100 +'%' }}
+                style = {{ width: 100 + '%' }}
                 value = { this.state.year }
                 onChange = { (event) => this.setState({
-                  year: event.target.value,
-                })}>
+                  year: event.target.value
+                })}
+              >
                 <option>2015</option>
                 <option>2016</option>
                 <option>2017</option>
@@ -112,8 +164,9 @@ class HouseViewerPeriodsAdder extends Component{
               <select
                 value = { this.state.month }
                 onChange = { (event) => this.setState({
-                  month: event.target.value,
-                })}>
+                  month: event.target.value
+                })}
+              >
                 <option>01</option>
                 <option>02</option>
                 <option>03</option>
@@ -130,13 +183,14 @@ class HouseViewerPeriodsAdder extends Component{
               Продано энергосбережение
             </td>
             <td>
-              <select name="isBasic"
+              <select name='isBasic'
                 value = { this.state.isBasic }
                 onChange = { (event) => this.setState({
-                  isBasic: event.target.value,
-                })}>
-                  <option value="true">Нет</option>
-                  <option value="false">Да</option>
+                  isBasic: event.target.value
+                })}
+              >
+                <option value = 'true'> Нет </option>
+                <option value = 'false'> Да </option>
               </select>
             </td>
           </tr>
@@ -145,13 +199,14 @@ class HouseViewerPeriodsAdder extends Component{
               Прибор учета работал
             </td>
             <td>
-              <select name="shouldCount"
+              <select name='shouldCount'
                 value = { this.state.shouldCount }
                 onChange = { (event) => this.setState({
-                  shouldCount: event.target.value,
-                })}>
-                  <option value="true">Да</option>
-                  <option value="false">Нет</option>
+                  shouldCount: event.target.value
+                })}
+              >
+                <option value = 'true'> Да </option>
+                <option value = 'false'> Нет </option>
               </select>
             </td>
           </tr>
@@ -161,13 +216,13 @@ class HouseViewerPeriodsAdder extends Component{
             </td>
             <td>
               <input
-                 list="companiesList1"
-                 className = {this.state.company.length ? 'ffi' : 'nffi' }
-                 value = { this.state.company }
-                 onChange = { (event) => this.setState({
-                   company: event.target.value,
-                 }) }
-               />
+                list='companiesList1'
+                className = {this.state.company.length ? 'ffi' : 'nffi' }
+                value = { this.state.company }
+                onChange = { (event) => this.setState({
+                  company: event.target.value
+                }) }
+              />
             </td>
           </tr>
           <tr>
@@ -175,30 +230,32 @@ class HouseViewerPeriodsAdder extends Component{
               { house.sameCounter ? 'Данные РЦ без вычета ГВС' : 'Данные РЦ' }
             </td>
             <td>
-            <input
-               ref = { input => { this.textInput = input; }}
-               className = {this.state.O.length ? 'ffi' : 'sffi' }
-               value = { this.state.O }
-               onChange = { (event) => this.setState({
-                 O: event.target.value,
-               }) }
-             />
+              <input
+                ref = { input => {
+                  this.textInput = input;
+                }}
+                className = {this.state.O.length ? 'ffi' : 'sffi' }
+                value = { this.state.O }
+                onChange = { (event) => this.setState({
+                  O: event.target.value
+                }) }
+              />
             </td>
           </tr>
 
-        { house.sameCounter ? (
+          { house.sameCounter ? (
             <tr>
               <td>
                 Данные РЦ с вычетом ГВС
               </td>
               <td>
-              <input
-                 className = {this.state.P.length ? 'ffi' : 'sffi' }
-                 value = { this.state.P }
-                 onChange = { (event) => this.setState({
-                   P: event.target.value,
-                 }) }
-               />
+                <input
+                  className = {this.state.P.length ? 'ffi' : 'sffi' }
+                  value = { this.state.P }
+                  onChange = { (event) => this.setState({
+                    P: event.target.value
+                  }) }
+                />
               </td>
             </tr>
           ) : null}
@@ -208,47 +265,45 @@ class HouseViewerPeriodsAdder extends Component{
               Данные ОДПУ без вычета ГВС
             </td>
             <td>
-            <input
-               className = {this.state.Q.length ? 'ffi' : 'sffi' }
-               value = { this.state.Q }
-               onChange = { (event) => this.setState({
-                 Q: event.target.value,
-               }) }
-             />
+              <input
+                className = {this.state.Q.length ? 'ffi' : 'sffi' }
+                value = { this.state.Q }
+                onChange = { (event) => this.setState({
+                  Q: event.target.value
+                }) }
+              />
             </td>
           </tr>
 
-        { this.state.shouldCount === 'false' ? (
-          <tr>
-            <td>
-              Данные по среднему
-            </td>
-            <td>
-            <input
-               className = {this.state.R.length ? 'ffi' : 'sffi' }
-               value = { this.state.R }
-               onChange = { (event) => this.setState({
-                 R: event.target.value,
-               }) }
-             />
-            </td>
-          </tr>
-        ) : null}
-
-
+          { this.state.shouldCount === 'false' ? (
+            <tr>
+              <td>
+                Данные по среднему
+              </td>
+              <td>
+                <input
+                  className = {this.state.R.length ? 'ffi' : 'sffi' }
+                  value = { this.state.R }
+                  onChange = { (event) => this.setState({
+                    R: event.target.value
+                  }) }
+                />
+              </td>
+            </tr>
+          ) : null}
 
           <tr>
             <td>
               Тариф
             </td>
             <td>
-            <input
-               className = {this.state.tarif.length ? 'ffi' : 'nffi' }
-               value = { this.state.tarif }
-               onChange = { (event) => this.setState({
-                 tarif: event.target.value,
-               }) }
-             />
+              <input
+                className = {this.state.tarif.length ? 'ffi' : 'nffi' }
+                value = { this.state.tarif }
+                onChange = { (event) => this.setState({
+                  tarif: event.target.value
+                }) }
+              />
             </td>
           </tr>
         </table>
@@ -263,60 +318,6 @@ class HouseViewerPeriodsAdder extends Component{
         { form }
       </div>
     );
-  }
-
-  saveProceed() {
-    const flag =
-      (this.state.O.length ||
-      this.state.P.length ||
-      this.state.Q.length ||
-      this.state.R.length) &&
-      this.state.company.length &&
-      this.state.tarif.length;
-
-    if (flag) {
-      let newPeriod = {
-        month: this.state.month + '-' + this.state.year,
-        isBasic: this.state.isBasic,
-        shouldCount: this.state.shouldCount,
-        company: this.state.company,
-        O: this.state.O.replace(',','.'),
-        P: this.state.P.replace(',','.'),
-        Q: this.state.Q.replace(',','.'),
-        R: this.state.R.replace(',','.'),
-        tarif: this.state.tarif.replace(',','.'),
-      };
-
-      this.props.socket.emit('addNewPeriod', this.props.house, newPeriod);
-
-      this.props.switchOpen();
-    }
-  }
-
-  continueProceed() {
-    const flag =
-      (this.state.O.length ||
-      this.state.P.length ||
-      this.state.Q.length ||
-      this.state.R.length) &&
-      this.state.company.length &&
-      this.state.tarif.length;
-
-    if (flag) {
-      let newPeriod = {
-        month: this.state.month + '-' + this.state.year,
-        isBasic: this.state.isBasic,
-        shouldCount: this.state.shouldCount,
-        company: this.state.company,
-        O: this.state.O.replace(',','.'),
-        P: this.state.P.replace(',','.'),
-        Q: this.state.Q.replace(',','.'),
-        R: this.state.R.replace(',','.'),
-        tarif: this.state.tarif.replace(',','.'),
-      };
-
-      this.props.socket.emit('addNewPeriodAndContinue', this.props.house, newPeriod);
-    }
   }
 }
 

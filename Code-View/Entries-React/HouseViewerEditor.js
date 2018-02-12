@@ -1,12 +1,8 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 
-class HouseViewerEditor extends Component{
-
+class HouseViewerEditor extends Component {
   constructor(props) {
     super(props);
-
-    let house = props.house;
 
     this.updateProceed = props.updateProceed;
     this.deleteProceed = props.deleteProceed;
@@ -17,27 +13,59 @@ class HouseViewerEditor extends Component{
       square: 0,
       sameCounter: false,
       RC1: '',
-      RC2: '',
+      RC2: ''
     };
 
     this.state = this.initialState;
   }
 
   componentWillReceiveProps(nextProps) {
-    if ( !nextProps.house ) {
+    if (!nextProps.house) {
       this.setState(this.initialState);
       return;
     }
 
-    let { house } = nextProps;
+    const { house } = nextProps;
 
     this.setState({
       house: house,
       square: house.square,
       sameCounter: house.sameCounter,
       RC1: house.RC1,
-      RC2: house.RC2,
+      RC2: house.RC2
     });
+  }
+
+  handleOpen() {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  }
+
+  handleDelete() {
+    if (confirm('Это действие удалит дом со всеми отчетными периодами. Вы уверены?')) {
+      this.deleteProceed(this.state.house.address);
+    }
+  }
+
+  handleUpdate() {
+    const flag = this.state.square &&
+               this.state.RC1 &&
+               this.state.RC2;
+
+    if (!flag) {
+      return;
+    }
+
+    const request = {
+      square: this.state.square,
+      sameCounter: this.state.sameCounter,
+      RC1: this.state.RC1,
+      RC2: this.state.RC2
+    };
+
+    this.updateProceed(request, this.state.house);
+    this.setState(this.initialState);
   }
 
   render() {
@@ -49,8 +77,9 @@ class HouseViewerEditor extends Component{
           <tr>
             <td
               style = {{
-                width: 200 + 'px',
-            }}>
+                width: 200 + 'px'
+              }}
+            >
               Площадь
             </td>
             <td>
@@ -58,7 +87,7 @@ class HouseViewerEditor extends Component{
                 className = { this.state.square ? 'ffi' : 'nffi' }
                 value = { this.state.square }
                 onChange = { (event) => this.setState({
-                  square: event.target.value,
+                  square: event.target.value
                 }) }
               />
             </td>
@@ -69,13 +98,14 @@ class HouseViewerEditor extends Component{
             </td>
             <td>
               <select
-                 style = {{ width: 100 + '%' }}
-                 value = { this.state.sameCounter }
-                 onChange = { (event) => this.setState({
-                   sameCounter: event.target.value,
-               })}>
-                 <option value="false">Нет</option>
-                 <option value="true">Да</option>
+                style = {{ width: 100 + '%' }}
+                value = { this.state.sameCounter }
+                onChange = { (event) => this.setState({
+                  sameCounter: event.target.value
+                })}
+              >
+                <option value = 'false'>Нет</option>
+                <option value = 'true'>Да</option>
               </select>
             </td>
           </tr>
@@ -88,7 +118,7 @@ class HouseViewerEditor extends Component{
                 className = { this.state.RC1.length ? 'ffi' : 'nffi' }
                 value = { this.state.RC1 }
                 onChange = { (event) => this.setState({
-                  RC1: event.target.value,
+                  RC1: event.target.value
                 }) }
               />
             </td>
@@ -102,7 +132,7 @@ class HouseViewerEditor extends Component{
                 className = { this.state.RC2.length ? 'ffi' : 'nffi' }
                 value = { this.state.RC2 }
                 onChange = { (event) => this.setState({
-                  RC2: event.target.value,
+                  RC2: event.target.value
                 }) }
               />
             </td>
@@ -124,37 +154,6 @@ class HouseViewerEditor extends Component{
         { body }
       </div>
     );
-  }
-
-  handleOpen() {
-    this.setState({
-      isOpen: !this.state.isOpen,
-    });
-  }
-
-  handleDelete() {
-    if (confirm('Это действие удалит дом со всеми отчетными периодами. Вы уверены?')) {
-      this.deleteProceed(this.state.house.address);
-    }
-  }
-
-  handleUpdate() {
-    let flag = this.state.square &&
-               this.state.RC1 &&
-               this.state.RC2;
-
-    if (!flag) {
-      return;
-    }
-
-    let request = {
-      square: this.state.square,
-      sameCounter: this.state.sameCounter,
-      RC1: this.state.RC1,
-      RC2: this.state.RC2,
-    };
-    this.updateProceed(request, this.state.house);
-    this.setState(this.initialState);
   }
 }
 
