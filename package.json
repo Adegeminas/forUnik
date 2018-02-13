@@ -1,6 +1,6 @@
 {
   "name": "forunik",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Forms for energy-economy",
   "main": "app.js",
   "scripts": {
@@ -134,7 +134,7 @@
       "block-scoped-var": 2,
       "complexity": [
         2,
-        40
+        80
       ],
       "curly": [
         2,
@@ -215,7 +215,7 @@
       "no-undef-init": 2,
       "no-undef": 2,
       "no-unused-vars": 2,
-      "callback-return": 2,
+      "callback-return": 0,
       "no-mixed-requires": 2,
       "no-path-concat": 2,
       "no-sync": 2,
@@ -260,7 +260,7 @@
         "never"
       ],
       "eol-last": 2,
-      "func-names": 1,
+      "func-names": 0,
       "func-style": [
         2,
         "declaration"

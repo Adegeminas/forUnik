@@ -7,14 +7,15 @@ class HouseViewerPeriodsPeriod extends Component {
     this.initialState = {
       editOpen: false,
       sameCounter: props.house.sameCounter,
-      isBasic:  String(props.period.isBasic),
+      savingWasntSold:  String(props.period.savingWasntSold),
       shouldCount: String(props.period.shouldCount),
       company: props.period.company,
       O: props.period.O ? String(props.period.O) : '',
       P: props.period.P ? String(props.period.P) : '',
       Q: props.period.Q ? String(props.period.Q) : '',
       R: props.period.R ? String(props.period.R) : '',
-      tarif: String(props.period.tarif)
+      tarif: String(props.period.tarif),
+      basicMonths: String(props.period.basicMonths) || ''
     };
 
     this.state = this.initialState;
@@ -24,14 +25,15 @@ class HouseViewerPeriodsPeriod extends Component {
     this.setState({
       editOpen: false,
       sameCounter: props.house.sameCounter,
-      isBasic:  String(props.period.isBasic),
+      savingWasntSold:  String(props.period.savingWasntSold),
       shouldCount: String(props.period.shouldCount),
       company: props.period.company,
       O: props.period.O ? String(props.period.O) : '',
       P: props.period.P ? String(props.period.P) : '',
       Q: props.period.Q ? String(props.period.Q) : '',
       R: props.period.R ? String(props.period.R) : '',
-      tarif: String(props.period.tarif)
+      tarif: String(props.period.tarif),
+      basicMonths: String(props.period.basicMonths) || ''
     });
   }
 
@@ -54,19 +56,21 @@ class HouseViewerPeriodsPeriod extends Component {
       this.state.Q.length ||
       this.state.R.length) &&
       this.state.company.length &&
-      this.state.tarif.length;
+      this.state.tarif.length &&
+      this.state.basicMonths.length;
 
     if (flag) {
       const newPeriod = {
         month: this.props.period.month,
-        isBasic: this.state.isBasic,
+        savingWasntSold: this.state.savingWasntSold,
         shouldCount: this.state.shouldCount,
         company: this.state.company,
         O: this.state.O.replace(',', '.'),
         P: this.state.P.replace(',', '.'),
         Q: this.state.Q.replace(',', '.'),
         R: this.state.R.replace(',', '.'),
-        tarif: this.state.tarif.replace(',', '.')
+        tarif: this.state.tarif.replace(',', '.'),
+        basicMonths: this.state.basicMonths
       };
 
       this.props.socket.emit('updatePeriod', this.props.house.address, newPeriod);
@@ -89,16 +93,16 @@ class HouseViewerPeriodsPeriod extends Component {
           { this.state.editOpen ?
             <select
               className = { 'smallInput' }
-              name='isBasic'
-              value = { this.state.isBasic }
+              name='savingWasntSold'
+              value = { this.state.savingWasntSold }
               onChange = { (event) => this.setState({
-                isBasic: event.target.value
+                savingWasntSold: event.target.value
               })}
             >
               <option value='true'>Нет</option>
               <option value='false'>Да</option>
             </select> :
-            period.isBasic ? 'Нет' : 'Да'
+            period.savingWasntSold ? 'Нет' : 'Да'
           }
         </td>
         <td>
@@ -195,6 +199,19 @@ class HouseViewerPeriodsPeriod extends Component {
               }) }
             /> :
             period.tarif
+          }
+        </td>
+        <td>
+          { this.state.editOpen ?
+            <input
+              list = 'basicVariants'
+              className = {this.state.basicMonths.length ? 'ffi smallInput' : 'nffi smallInput' }
+              value = { this.state.basicMonths }
+              onChange = { (event) => this.setState({
+                basicMonths: event.target.value
+              }) }
+            /> :
+            period.basicMonths
           }
         </td>
         <td>

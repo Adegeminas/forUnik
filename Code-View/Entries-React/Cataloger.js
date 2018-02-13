@@ -11,11 +11,24 @@ class Cataloger extends Component {
       <datalist id='companiesList1'>
         { catalogue.companies.map((company) => <option value = { company } > { company } </option>) }
       </datalist>;
+    const variants = true &&
+      <datalist id='basicVariants'>
+        <option>Предыдущий год</option>
+        <option>Предыдущие 2 года</option>
+        <option>Предыдущие 3 года</option>
+        <option>2015</option>
+        <option>2015,2016</option>
+        <option>2016</option>
+        <option>2016,2017</option>
+        <option>2017</option>
+        <option>2015,2016,2017</option>
+      </datalist>;
 
     return (
       <div>
         { streets }
         { companies }
+        { variants }
       </div>
     );
   }

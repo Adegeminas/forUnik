@@ -62,6 +62,9 @@ class HouseViewerPeriods extends Component {
               Тариф
             </td>
             <td>
+              Базовые месяцы
+            </td>
+            <td>
               Действия
             </td>
           </tr>
