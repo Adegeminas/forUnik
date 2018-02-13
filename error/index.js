@@ -18,6 +18,7 @@ exports.HttpError = HttpError;
 
 
 function AuthError(message) {
+
   Error.apply(this, arguments);
   Error.captureStackTrace(this, AuthError);
 

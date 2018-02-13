@@ -1,18 +1,15 @@
-var log = require('../lib/log')(module);
-var async = require('async');
-var config = require('../config');
-var util = require('util');
-var connect = require('connect');
-var cookie = require('cookie');
-var sessionStore = require('../lib/sessionStore');
-var User = require('../lib/mongoose').models.users;
-var HttpError = require('../error').HttpError;
-var cookieParser = require('cookie-parser');
-var baseApiLogic = require('../lib/baseApiLogic');
+const async = require('async');
+const config = require('../config');
+const cookie = require('cookie');
+const sessionStore = require('../lib/sessionStore');
+const User = require('../lib/mongoose').models.users;
+const HttpError = require('../error').HttpError;
+const cookieParser = require('cookie-parser');
+const baseApiLogic = require('../lib/baseApiLogic');
 
 function loadSession(sid, callback) {
   sessionStore.load(sid, function(err, session) {
-    if (arguments.length == 0) {
+    if (arguments.length === 0) {
       return callback(null, null);
     } else {
       return callback(null, session);
@@ -94,50 +91,50 @@ module.exports = function(server) {
 
     socket.on('addNewHouse', function(house) {
       baseApiLogic.addNewHouse(house, (result) => {
-        socket.emit('addNewHouseResult', result)
+        socket.emit('addNewHouseResult', result);
       });
     });
 
     socket.on('deleteHouse', function(address) {
       baseApiLogic.deleteHouse(address, (result) => {
-        socket.emit('findOneHouseResult', result)
+        socket.emit('findOneHouseResult', result);
       });
     });
 
     socket.on('editHouse', function(request, house) {
       baseApiLogic.editHouse(house.address, request, (result) => {
-        socket.emit('findOneHouseResult', result)
+        socket.emit('findOneHouseResult', result);
       });
     });
 
     socket.on('findOneHouse', function(house) {
       baseApiLogic.findOneHouse(house, (result) => {
-        socket.emit('findOneHouseResult', result)
+        socket.emit('findOneHouseResult', result);
       });
     });
 
     socket.on('addNewPeriod', function(house, newPeriod) {
       baseApiLogic.addNewPeriod(house, newPeriod, (result, text) => {
-        socket.emit('addNewPeriodResult', [result, text])
-      })
+        socket.emit('addNewPeriodResult', [result, text]);
+      });
     });
 
     socket.on('updatePeriod', function(address, period) {
       baseApiLogic.updatePeriod(address, period, (result, text) => {
-        socket.emit('addNewPeriodResult', [result, text])
-      })
+        socket.emit('addNewPeriodResult', [result, text]);
+      });
     });
 
     socket.on('addNewPeriodAndContinue', function(house, newPeriod, options) {
       baseApiLogic.addNewPeriod(house, newPeriod, (result, text) => {
-        socket.emit('addNewPeriodResultWithContinue', [result, text, options])
-      })
+        socket.emit('addNewPeriodResultWithContinue', [result, text, options]);
+      });
     });
 
     socket.on('deletePeriod', function(str) {
       let [period, address] = str.split('/');
       baseApiLogic.deletePeriod(address, period, (result, text) => {
-        socket.emit('addNewPeriodResult', [result, text])
+        socket.emit('addNewPeriodResult', [result, text]);
       });
     });
 

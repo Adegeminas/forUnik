@@ -1,27 +1,72 @@
 body {
-  background: #0E0E0E;
-  color: #dddddd;
+  /* background: #0E0E0E; */
+  /* color: #dddddd; */
 }
 
 button {
-    background-color: orange; /* Green */
-    border: none;
-    color: black;
-    padding: 8px 14px;
-    margin: 8px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 9px
+  /* background-color: orange; /* Green */ */
+  border: none;
+  color: black;
+  padding: 8px 14px;
+  margin: 8px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 9px;
+}
 
+.nffi {
+  background: #E75480;
+}
+
+.sffi {
+  background: pink;
 }
 
 .mainbutton {
-  background-color: #1CAF50;
+  /* background-color: #1CAF50; */
   padding: 15px 32px;
   width: 300px;
   font-weight: bold;
+}
+
+.minibutton {
+  /* background-color: #1CAF50; */
+  padding: 3px 3px;
+  width: 80px;
+  font-size: 10px;
+}
+
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: pink;
+}
+
+.smallInput {
+  width: 74px;
+}
+
+.footer-hr {
+  border: none;
+  /* background-color: #A19889; */
+  background-color: black;
+  height: 1px;
+}
+.footer-p {
+  text-align: center;
+  /* color: #A19889; */
+}
+.footer-a {
+  /* color: #A19889; */
+  text-align: center;
+}
+
+legend {
+  color: black;
 }
 
 select {
@@ -31,8 +76,9 @@ select {
 td {
   width: 120px;
   padding: 2px;
-  border: 1px solid white;
+  border: 1px solid black;
   text-align: center;
+  font-weight: bold;
 }
 
 .inputName {
@@ -40,14 +86,16 @@ td {
 }
 
 .navbar {
-  background: #0E0E0E;
+  /* background: #0E0E0E; */
   border: 1px solid #A19889;
+  /* border: 1px solid black; */
+  font-weight: bold;
 }
 .container {
   font-display: auto;
 }
 .container-navigation {
-  z-index: 50;
+  /* z-index: 50; */
   height: 5%;
 }
 .container-footer {
