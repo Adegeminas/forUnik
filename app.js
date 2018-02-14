@@ -6,9 +6,10 @@ const http = require('http');
 const express = require('express');
 const path = require('path');
 const HttpError = require('./error').HttpError;
-const app = express();
 const errorHandler = require('errorhandler');
 const sessionStore = require('./lib/sessionStore');
+
+const app = express();
 
 app.engine('ejs', require('ejs-locals'));
 app.set('views', path.join(__dirname, '\\template'));

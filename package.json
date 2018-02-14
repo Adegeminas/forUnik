@@ -203,7 +203,7 @@
         2,
         "always"
       ],
-      "prefer-arrow-callback": 2,
+      "prefer-arrow-callback": 0,
       "prefer-const": 2,
       "prefer-spread": 2,
       "prefer-template": 0,
