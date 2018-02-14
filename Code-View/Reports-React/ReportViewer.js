@@ -15,6 +15,12 @@ function requestHeader(response) {
       <h4>Суммарная экономия: { response.summary.gigsEconomy } Гкал</h4>
       <h4>Суммарная экономия: { response.summary.rublesEconomy } рублей</h4>
       <h4>Плата за энергосбережение: { response.summary.profit } рублей</h4>
+
+      { response.fileName ?
+        <a download href = { response.fileName }><h2> Скачать отчет </h2></a> :
+        null
+      }
+
       <legend>Информация по отдельным домам (нажать на дом для просмотра)</legend>
     </div>
   );
@@ -24,7 +30,6 @@ function resultToHTML(response) {
   if (!response) {
     return null;
   }
-
 
   if (!response.reports || !response.reports.length) {
     return (
