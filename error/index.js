@@ -1,13 +1,12 @@
-var path = require('path');
-var util = require('util');
-var http = require('http');
+const util = require('util');
+const http = require('http');
 
 function HttpError(status, message) {
   Error.apply(this, arguments);
   Error.captureStackTrace(this, HttpError);
 
   this.status = status;
-  this.message = message || http.STATUS_CODES[status] || "Error";
+  this.message = message || http.STATUS_CODES[status] || 'Error';
 }
 
 util.inherits(HttpError, Error);
@@ -18,7 +17,6 @@ exports.HttpError = HttpError;
 
 
 function AuthError(message) {
-
   Error.apply(this, arguments);
   Error.captureStackTrace(this, AuthError);
 
