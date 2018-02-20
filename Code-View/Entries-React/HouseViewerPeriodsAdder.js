@@ -181,7 +181,9 @@ class HouseViewerPeriodsAdder extends Component {
               <select name='shouldCount'
                 value = { this.state.shouldCount }
                 onChange = { (event) => this.setState({
-                  shouldCount: event.target.value
+                  shouldCount: event.target.value,
+                  R: '',
+                  Q: ''
                 })}
               >
                 <option value = 'true'> Да </option>
@@ -239,20 +241,23 @@ class HouseViewerPeriodsAdder extends Component {
             </tr>
           ) : null}
 
-          <tr>
-            <td>
-              Данные ОДПУ без вычета ГВС
-            </td>
-            <td>
-              <input
-                className = {this.state.Q.length ? 'ffi' : 'sffi' }
-                value = { this.state.Q }
-                onChange = { (event) => this.setState({
-                  Q: event.target.value
-                }) }
-              />
-            </td>
-          </tr>
+          { this.state.shouldCount === 'true' ? (
+            <tr>
+              <td>
+                Данные ОДПУ без вычета ГВС
+              </td>
+              <td>
+                <input
+                  className = {this.state.Q.length ? 'ffi' : 'sffi' }
+                  value = { this.state.Q }
+                  onChange = { (event) => this.setState({
+                    Q: event.target.value,
+                    R: ''
+                  }) }
+                />
+              </td>
+            </tr>
+          ) : null }
 
           { this.state.shouldCount === 'false' ? (
             <tr>
@@ -264,12 +269,13 @@ class HouseViewerPeriodsAdder extends Component {
                   className = {this.state.R.length ? 'ffi' : 'sffi' }
                   value = { this.state.R }
                   onChange = { (event) => this.setState({
+                    Q: '',
                     R: event.target.value
                   }) }
                 />
               </td>
             </tr>
-          ) : null}
+          ) : null }
 
           <tr>
             <td>

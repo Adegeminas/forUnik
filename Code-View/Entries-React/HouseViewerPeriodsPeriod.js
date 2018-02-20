@@ -112,7 +112,9 @@ class HouseViewerPeriodsPeriod extends Component {
               name='shouldCount'
               value = { this.state.shouldCount }
               onChange = { (event) => this.setState({
-                shouldCount: event.target.value
+                shouldCount: event.target.value,
+                R: '',
+                Q: ''
               })}
             >
               <option value='true'>Да</option>
@@ -166,15 +168,16 @@ class HouseViewerPeriodsPeriod extends Component {
           }
         </td>
         <td>
-          { this.state.editOpen ?
+          { this.state.editOpen && (this.state.shouldCount === 'true') ?
             <input
               className = {this.state.Q.length ? 'ffi smallInput' : 'sffi smallInput' }
               value = { this.state.Q }
               onChange = { (event) => this.setState({
-                Q: event.target.value
+                Q: event.target.value,
+                R: ''
               }) }
             /> :
-            period.Q ? period.Q : '---'
+            (this.state.shouldCount === 'true') && period.Q ? period.Q : '---'
           }
         </td>
         <td>
@@ -183,10 +186,11 @@ class HouseViewerPeriodsPeriod extends Component {
               className = {this.state.R.length ? 'ffi smallInput' : 'sffi smallInput' }
               value = { this.state.R }
               onChange = { (event) => this.setState({
-                R: event.target.value
+                R: event.target.value,
+                Q: ''
               }) }
             /> :
-            period.R ? period.R : '---'
+            (this.state.shouldCount === 'false') && period.R ? period.R : '---'
           }
         </td>
         <td>
