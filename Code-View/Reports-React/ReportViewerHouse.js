@@ -76,6 +76,7 @@ function oneHouseRequestResultToHTML(result, error) {
       <legend>Результаты энергосбережения:</legend>
       <h4>Контрольное значение потребления: { result.basicAmount.toFixed(2) } Гкал</h4>
       <h4>Отчетное значение потребления: { result.purposeAmount.toFixed(2) } Гкал</h4>
+      <h4>Тариф: { result.purposeMonth.tarif } рублей/Гкал</h4>
 
       <h4>
         Экономия составила:

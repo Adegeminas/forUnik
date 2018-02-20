@@ -94,16 +94,37 @@ class TestApp extends React.Component {
         <Cataloger
           catalogue = { this.state.catalogue }
         />
-        <HouseAdder
-          isOpen = { this.state.adderOpen }
-          switchOpen = { this.switchAdderOpenState.bind(this) }
-          proceed = { (house) => socket.emit('createHouse', house) }
-        />
-        <HouseFinder
-          isOpen = { this.state.finderOpen }
-          switchOpen = { this.switchFinderOpenState.bind(this) }
-          proceed = { (house) => socket.emit('readHouse', house) }
-        />
+        <table style = {{width: '100%' }}>
+          <tr className = 'noalign'>
+            <td className = 'rightSidePanel'>
+              <HouseAdder
+                isOpen = { this.state.adderOpen }
+                switchOpen = { this.switchAdderOpenState.bind(this) }
+                proceed = { (house) => socket.emit('createHouse', house) }
+              />
+              <HouseFinder
+                isOpen = { this.state.finderOpen }
+                switchOpen = { this.switchFinderOpenState.bind(this) }
+                proceed = { (house) => socket.emit('readHouse', house) }
+              />
+            </td>
+
+            <td className = 'rightSidePanel'>
+              Aside 123213412341234123412341234123
+              Aside 123213412341234123412341234123
+              Aside 123213412341234123412341234123
+              Aside 123213412341234123412341234123
+              Aside 123213412341234123412341234123
+              Aside 123213412341234123412341234123
+              Aside 123213412341234123412341234123
+              Aside 123213412341234123412341234123
+              Aside 123213412341234123412341234123
+              Aside 123213412341234123412341234123
+              Aside 123213412341234123412341234123
+            </td>
+          </tr>
+        </table>
+
         <HouseViewer
           house = { this.state.currentHouse }
           updateProceed = { (request, house) => socket.emit('updateHouse', request, house) }

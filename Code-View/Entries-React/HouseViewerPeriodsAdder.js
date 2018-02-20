@@ -86,7 +86,7 @@ class HouseViewerPeriodsAdder extends Component {
       this.state.Q.length ||
       this.state.R.length) &&
       this.state.company.length &&
-      this.state.tarif.length &&
+      (this.state.savingWasntSold === 'true' || this.state.tarif.length) &&
       this.state.basicMonths.length;
 
     if (flag) {
@@ -99,7 +99,7 @@ class HouseViewerPeriodsAdder extends Component {
         P: this.state.P.replace(',', '.'),
         Q: this.state.Q.replace(',', '.'),
         R: this.state.R.replace(',', '.'),
-        tarif: this.state.tarif.replace(',', '.'),
+        tarif: this.state.savingWasntSold === 'true' ? 0 : this.state.tarif.replace(',', '.'),
         basicMonths: this.state.basicMonths
       };
 
@@ -165,7 +165,8 @@ class HouseViewerPeriodsAdder extends Component {
               <select name='savingWasntSold'
                 value = { this.state.savingWasntSold }
                 onChange = { (event) => this.setState({
-                  savingWasntSold: event.target.value
+                  savingWasntSold: event.target.value,
+                  tarif: event.target.value === 'true' ? '0' : this.state.tarif
                 })}
               >
                 <option value = 'true'> Нет </option>
@@ -277,20 +278,22 @@ class HouseViewerPeriodsAdder extends Component {
             </tr>
           ) : null }
 
-          <tr>
-            <td>
-              Тариф
-            </td>
-            <td>
-              <input
-                className = {this.state.tarif.length ? 'ffi' : 'nffi' }
-                value = { this.state.tarif }
-                onChange = { (event) => this.setState({
-                  tarif: event.target.value
-                }) }
-              />
-            </td>
-          </tr>
+          { this.state.savingWasntSold === 'false' ? (
+            <tr>
+              <td>
+                Тариф
+              </td>
+              <td>
+                <input
+                  className = {this.state.tarif.length && this.state.tarif !== '0' ? 'ffi' : 'nffi' }
+                  value = { this.state.tarif }
+                  onChange = { (event) => this.setState({
+                    tarif: event.target.value
+                  }) }
+                />
+              </td>
+            </tr>
+          ) : null }
 
           <tr>
             <td>
