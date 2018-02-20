@@ -25,7 +25,7 @@ class HouseViewer extends Component {
         />
         <HouseViewerEditor
           house = { house }
-          updateProceed = { (request, houseForEdit) => socket.emit('editHouse', request, houseForEdit) }
+          updateProceed = { (request, houseForEdit) => socket.emit('updateHouse', request, houseForEdit) }
           deleteProceed = { (address) => socket.emit('deleteHouse', address) }
         />
         <HouseViewerPeriods

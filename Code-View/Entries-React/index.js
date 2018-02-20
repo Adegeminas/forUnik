@@ -5,87 +5,90 @@ import HouseFinder from './HouseFinder';
 import Cataloger from './Cataloger';
 import HouseViewer from './HouseViewer';
 
-let socket = io.connect();
-
 class TestApp extends React.Component {
   constructor(props) {
     super(props);
 
-    let { socket } = props;
-    let app = this;
+    const { socket } = props;
+    const app = this;
 
     this.state = {
       adderOpen: false,
       finderOpen: false,
       catalogue: null,
-      currentHouse: null,
+      currentHouse: null
     };
 
     socket
-      .on('connect', function() {
+      .on('connect', function () {
         socket.emit('getCatalogue');
       })
-      .on('initConnection', function(handshake) {
+      .on('initConnection', function (handshake) {
         socket.handshake = handshake;
         if (!socket.handshake.user) {
-          location.href = "/";
+          location.href = '/';
           return;
         }
       })
-      .on('disconnect', function() {
-        location.href = "/";
-       })
-      .on('logout', function(text) {
-        if (text) alert(text);
-        location.href = "/";
+      .on('disconnect', function () {
+        location.href = '/';
       })
-      .on('error', function(reason) {
-        if (reason == "handshake unauthorized") {
-          alert("вы вышли из сайта");
+      .on('logout', function () {
+        location.href = '/';
+      })
+      .on('error', function (reason) {
+        if (reason === 'handshake unauthorized') {
+          // alert('вы вышли из сайта');
         } else {
-          setTimeout(function() {
+          setTimeout(function () {
             socket.socket.connect();
           }, 500);
         }
       })
-      .on('getCatalogueResult', function(catalogue) {
+      .on('getCatalogueResult', function (_catalogue) {
         app.setState({
-          catalogue: catalogue,
+          catalogue: _catalogue
         });
       })
-      .on('addNewHouseResult', function(result) {
+      .on('createHouseResult', function (result) {
         if (result) {
           socket.emit('getCatalogue');
         } else {
-          alert('Неудача');
+          // alert('Неудача');
         }
       })
-      .on('findOneHouseResult', function(result) {
+      .on('readHouseResult', function (result) {
         app.setState({
-          currentHouse: result,
+          currentHouse: result
         });
       })
-      .on('addNewPeriodResult', function([result, text]) {
+      .on('createPeriodResult', function ([ result ]) {
         if (result) {
           app.setState({
-            currentHouse: result,
+            currentHouse: result
           });
-        } else {
-          alert('Неудача', text);
-        }
-      })
-      .on('addNewPeriodResultWithContinue', function([result, text, options]) {
-        if (result) {
-          app.setState({
-            currentHouse: result,
-          });
-        } else {
-          alert('Неудача', text);
         }
       });
   }
 
+  switchAdderOpenState() {
+    this.setState({
+      adderOpen: !this.state.adderOpen,
+      finderOpen: false,
+      currentHouse: null
+    });
+  }
+  switchFinderOpenState() {
+    this.setState({
+      adderOpen: false,
+      finderOpen: !this.state.finderOpen,
+      currentHouse: null
+    });
+  }
+
   render() {
+    const { socket } = this.props;
+
     return (
       <div>
         <Cataloger
@@ -94,40 +97,27 @@ class TestApp extends React.Component {
         <HouseAdder
           isOpen = { this.state.adderOpen }
           switchOpen = { this.switchAdderOpenState.bind(this) }
-          proceed = { (house) => socket.emit('addNewHouse', house) }
+          proceed = { (house) => socket.emit('createHouse', house) }
         />
         <HouseFinder
           isOpen = { this.state.finderOpen }
           switchOpen = { this.switchFinderOpenState.bind(this) }
-          proceed = { (house) => socket.emit('findOneHouse', house) }
+          proceed = { (house) => socket.emit('readHouse', house) }
         />
         <HouseViewer
           house = { this.state.currentHouse }
-          updateProceed = { (request, house) => socket.emit('editHouse', request, house) }
+          updateProceed = { (request, house) => socket.emit('updateHouse', request, house) }
           deleteProceed = { (address) => socket.emit('deleteHouse', address) }
           socket = { socket }
         />
       </div>
     );
   }
-
-  switchAdderOpenState() {
-    this.setState({
-      adderOpen: !this.state.adderOpen,
-      finderOpen: false,
-      currentHouse: null,
-    });
-  }
-  switchFinderOpenState() {
-    this.setState({
-      adderOpen: false,
-      finderOpen: !this.state.finderOpen,
-      currentHouse: null,
-    });
-  }
 }
 
+const _socket = io.connect();
+
 ReactDOM.render(
-  <TestApp socket = { socket } />,
+  <TestApp socket = { _socket } />,
   document.getElementById('root')
 );

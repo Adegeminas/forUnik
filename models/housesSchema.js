@@ -98,7 +98,7 @@ const options = {
 
 const housesSchema = mongoose.Schema(House, options);
 
-housesSchema.statics.addNewHouse = function (parameters, callback) {
+housesSchema.statics.createHouse = function (parameters, callback) {
   const newHouse = new this(parameters);
 
   newHouse.save((err) => {
@@ -111,7 +111,7 @@ housesSchema.statics.addNewHouse = function (parameters, callback) {
   });
 };
 
-housesSchema.statics.findOneHouse = function (parameters, callback) {
+housesSchema.statics.readHouse = function (parameters, callback) {
   this.findOne({address: parameters.address}, (err, house) => {
     if (err || !house) {
       log.error(err);
@@ -122,7 +122,7 @@ housesSchema.statics.findOneHouse = function (parameters, callback) {
   });
 };
 
-housesSchema.statics.editHouse = function (_address, request, callback) {
+housesSchema.statics.updateHouse = function (_address, request, callback) {
   this.findOne({address: _address}, (err, house) => {
     if (err || !house) {
       log.error(err);
@@ -161,7 +161,7 @@ housesSchema.statics.deleteHouse = function (_address, callback) {
   });
 };
 
-housesSchema.statics.addNewPeriod = function (parameters, period, callback) {
+housesSchema.statics.createPeriod = function (parameters, period, callback) {
   this.findOne({address: parameters.address}).exec((err, house) => {
     if (err || !house) {
       log.error(err, 'Непредвиденная ошибка');

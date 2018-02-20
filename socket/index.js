@@ -98,45 +98,51 @@ module.exports = function (server) {
   io.sockets.on('connection', function (socket) {
     socket.emit('initConnection', socket.handshake);
 
-    socket.on('addNewHouse', function (house) {
-      baseApiLogic.addNewHouse(house, (result) => {
-        socket.emit('addNewHouseResult', result);
+    // LIBS REQUEST
+
+    socket.on('getCatalogue', function () {
+      baseApiLogic.getCatalogue((result) => {
+        socket.emit('getCatalogueResult', result);
+      });
+    });
+
+    // CRUD HOUSE
+
+    socket.on('createHouse', function (house) {
+      baseApiLogic.createHouse(house, (result) => {
+        socket.emit('createHouseResult', result);
+      });
+    });
+
+    socket.on('readHouse', function (house) {
+      baseApiLogic.readHouse(house, (result) => {
+        socket.emit('readHouseResult', result);
+      });
+    });
+
+    socket.on('updateHouse', function (request, house) {
+      baseApiLogic.updateHouse(house.address, request, (result) => {
+        socket.emit('readHouseResult', result);
       });
     });
 
     socket.on('deleteHouse', function (address) {
       baseApiLogic.deleteHouse(address, (result) => {
-        socket.emit('findOneHouseResult', result);
+        socket.emit('readHouseResult', result);
       });
     });
 
-    socket.on('editHouse', function (request, house) {
-      baseApiLogic.editHouse(house.address, request, (result) => {
-        socket.emit('findOneHouseResult', result);
+    // CRUD PERIOD
+
+    socket.on('createPeriod', function (house, newPeriod) {
+      baseApiLogic.createPeriod(house, newPeriod, (result, text) => {
+        socket.emit('createPeriodResult', [result, text]);
       });
     });
 
-    socket.on('findOneHouse', function (house) {
-      baseApiLogic.findOneHouse(house, (result) => {
-        socket.emit('findOneHouseResult', result);
-      });
-    });
-
-    socket.on('addNewPeriod', function (house, newPeriod) {
-      baseApiLogic.addNewPeriod(house, newPeriod, (result, text) => {
-        socket.emit('addNewPeriodResult', [result, text]);
-      });
-    });
-
-    socket.on('updatePeriod', function (address, period) {
-      baseApiLogic.updatePeriod(address, period, (result, text) => {
-        socket.emit('addNewPeriodResult', [result, text]);
-      });
-    });
-
-    socket.on('addNewPeriodAndContinue', function (house, newPeriod, options) {
-      baseApiLogic.addNewPeriod(house, newPeriod, (result, text) => {
-        socket.emit('addNewPeriodResultWithContinue', [result, text, options]);
+    socket.on('updatePeriod', function (address, newPeriod) {
+      baseApiLogic.updatePeriod(address, newPeriod, (result, text) => {
+        socket.emit('createPeriodResult', [result, text]);
       });
     });
 
@@ -144,9 +150,11 @@ module.exports = function (server) {
       const [period, address] = str.split('/');
 
       baseApiLogic.deletePeriod(address, period, (result, text) => {
-        socket.emit('addNewPeriodResult', [result, text]);
+        socket.emit('createPeriodResult', [result, text]);
       });
     });
+
+    // REPORTS REQUEST
 
     socket.on('oneHouseRequest', function (request) {
       baseApiLogic.oneHouseRequest(request, (result) => {
@@ -163,12 +171,6 @@ module.exports = function (server) {
     socket.on('allHousesRequest', function (request) {
       baseApiLogic.allHousesRequest(request, (result) => {
         socket.emit('allHousesResponse', result);
-      });
-    });
-
-    socket.on('getCatalogue', function () {
-      baseApiLogic.getCatalogue((result) => {
-        socket.emit('getCatalogueResult', result);
       });
     });
   });

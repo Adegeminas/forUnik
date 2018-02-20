@@ -79,7 +79,7 @@ class HouseViewerPeriodsAdder extends Component {
     if (this.textInput) this.textInput.focus();
   }
 
-  saveProceed() {
+  saveProceed(needContinue) {
     const flag =
       (this.state.O.length ||
       this.state.P.length ||
@@ -103,36 +103,8 @@ class HouseViewerPeriodsAdder extends Component {
         basicMonths: this.state.basicMonths
       };
 
-      this.props.socket.emit('addNewPeriod', this.props.house, newPeriod);
-      this.props.switchOpen();
-    }
-  }
-
-  continueProceed() {
-    const flag =
-      (this.state.O.length ||
-      this.state.P.length ||
-      this.state.Q.length ||
-      this.state.R.length) &&
-      this.state.company.length &&
-      this.state.tarif.length &&
-      this.state.basicMonths.length;
-
-    if (flag) {
-      const newPeriod = {
-        month: this.state.month + '-' + this.state.year,
-        savingWasntSold: this.state.savingWasntSold,
-        shouldCount: this.state.shouldCount,
-        company: this.state.company,
-        O: this.state.O.replace(',', '.'),
-        P: this.state.P.replace(',', '.'),
-        Q: this.state.Q.replace(',', '.'),
-        R: this.state.R.replace(',', '.'),
-        tarif: this.state.tarif.replace(',', '.'),
-        basicMonths: this.state.basicMonths
-      };
-
-      this.props.socket.emit('addNewPeriodAndContinue', this.props.house, newPeriod);
+      this.props.socket.emit('createPeriod', this.props.house, newPeriod);
+      if (!needContinue) this.props.switchOpen();
     }
   }
 
@@ -331,8 +303,8 @@ class HouseViewerPeriodsAdder extends Component {
           </tr>
         </table>
 
-        <button onClick = { this.saveProceed.bind(this) }> Сохранить </button>
-        <button onClick = { this.continueProceed.bind(this) }> Сохранить и перейти к следующему месяцу</button>
+        <button onClick = { this.saveProceed.bind(this, false) }> Сохранить </button>
+        <button onClick = { this.saveProceed.bind(this, true) }> Сохранить и перейти к следующему месяцу</button>
       </div>;
 
     return (

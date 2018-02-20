@@ -98,6 +98,8 @@ class TestApp extends React.Component {
   }
 
   render() {
+    const { socket } = this.props;
+
     return (
       <div>
         <Cataloger
@@ -126,9 +128,9 @@ class TestApp extends React.Component {
   }
 }
 
-const socket = io.connect();
+const _socket = io.connect();
 
 ReactDOM.render(
-  <TestApp socket = { socket } />,
+  <TestApp socket = { _socket } />,
   document.getElementById('root')
 );

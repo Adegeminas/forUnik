@@ -58,7 +58,7 @@ class HouseViewerEditor extends Component {
     }
 
     const request = {
-      square: this.state.square,
+      square: String(this.state.square).replace(',', '.'),
       sameCounter: this.state.sameCounter,
       RC1: this.state.RC1,
       RC2: this.state.RC2
