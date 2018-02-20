@@ -30,10 +30,11 @@ class HouseAdder extends Component {
     if (flag) {
       const house = {
         address: this.state.town + ',' +
+        address: this.state.town.replace(',', '^') + ',' +
                  this.state.streetType + ',' +
-                 this.state.streetName + ',' +
-                 this.state.houseNumber,
-        square: this.state.square,
+                 this.state.streetName.replace(',', '^') + ',' +
+                 this.state.houseNumber.replace(',', '^'),
+        square: this.state.square.replace(',', '.'),
         sameCounter: this.state.sameCounter,
         RC1: this.state.RC1,
         RC2: this.state.RC2
