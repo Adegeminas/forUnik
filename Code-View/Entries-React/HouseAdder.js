@@ -29,7 +29,6 @@ class HouseAdder extends Component {
 
     if (flag) {
       const house = {
-        address: this.state.town + ',' +
         address: this.state.town.replace(',', '^') + ',' +
                  this.state.streetType + ',' +
                  this.state.streetName.replace(',', '^') + ',' +
