@@ -50,12 +50,8 @@ class TestApp extends React.Component {
           catalogue: _catalogue
         });
       })
-      .on('createHouseResult', function (result) {
-        if (result) {
-          socket.emit('getCatalogue');
-        } else {
-          // alert('Неудача');
-        }
+      .on('createHouseResult', function (/* result */) {
+        socket.emit('getCatalogue');
       })
       .on('readHouseResult', function (result) {
         app.setState({
@@ -68,6 +64,7 @@ class TestApp extends React.Component {
             currentHouse: result
           });
         }
+        socket.emit('getCatalogue');
       });
   }
 
@@ -94,37 +91,16 @@ class TestApp extends React.Component {
         <Cataloger
           catalogue = { this.state.catalogue }
         />
-        <table style = {{width: '100%' }}>
-          <tr className = 'noalign'>
-            <td className = 'rightSidePanel'>
-              <HouseAdder
-                isOpen = { this.state.adderOpen }
-                switchOpen = { this.switchAdderOpenState.bind(this) }
-                proceed = { (house) => socket.emit('createHouse', house) }
-              />
-              <HouseFinder
-                isOpen = { this.state.finderOpen }
-                switchOpen = { this.switchFinderOpenState.bind(this) }
-                proceed = { (house) => socket.emit('readHouse', house) }
-              />
-            </td>
-
-            <td className = 'rightSidePanel'>
-              Aside 123213412341234123412341234123
-              Aside 123213412341234123412341234123
-              Aside 123213412341234123412341234123
-              Aside 123213412341234123412341234123
-              Aside 123213412341234123412341234123
-              Aside 123213412341234123412341234123
-              Aside 123213412341234123412341234123
-              Aside 123213412341234123412341234123
-              Aside 123213412341234123412341234123
-              Aside 123213412341234123412341234123
-              Aside 123213412341234123412341234123
-            </td>
-          </tr>
-        </table>
-
+        <HouseAdder
+          isOpen = { this.state.adderOpen }
+          switchOpen = { this.switchAdderOpenState.bind(this) }
+          proceed = { (house) => socket.emit('createHouse', house) }
+        />
+        <HouseFinder
+          isOpen = { this.state.finderOpen }
+          switchOpen = { this.switchFinderOpenState.bind(this) }
+          proceed = { (house) => socket.emit('readHouse', house) }
+        />
         <HouseViewer
           house = { this.state.currentHouse }
           updateProceed = { (request, house) => socket.emit('updateHouse', request, house) }
