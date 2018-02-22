@@ -5,14 +5,14 @@ class BaseViewer extends Component {
     super(props);
 
     this.state = {
-      someprop: false
+      isOpen: false
     };
   }
 
   render() {
     const { clickProceed } = this.props;
 
-    const housesView = this.props.houses &&
+    const housesView = this.state.isOpen && this.props.houses &&
       <div>
         <table>
         <tr>
@@ -42,6 +42,13 @@ class BaseViewer extends Component {
 
     return (
       <div>
+        <button onClick = { () => {
+          this.setState({
+            isOpen: !this.state.isOpen
+          })
+        }}>
+          Показать/скрыть
+        </button>
         { housesView }
       </div>
     );
