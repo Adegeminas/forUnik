@@ -14,15 +14,30 @@ class BaseViewer extends Component {
 
     const housesView = this.props.houses &&
       <div>
+        <table>
+        <tr>
+          <td>
+            Адрес дома
+          </td>
+          <td>
+            Последний заполненный месяц
+          </td>
+        </tr>
         {
           this.props.houses.map((house) =>
             (
-              <b onClick = { clickProceed(house) } >
-                {' <' + house.address.split(',')[2] + ' ' + house.address.split(',')[3] + '> '}
-              </b>
+              <tr onClick = { clickProceed(house) }>
+                <td>
+                    { house.address.split(',')[2] + ' ' + house.address.split(',')[3] }
+                </td>
+                <td>
+                    { house.data.length > 0 ? house.data[0].month : '---' }
+                </td>
+              </tr>
             )
           )
         }
+        </table>
       </div>;
 
     return (
