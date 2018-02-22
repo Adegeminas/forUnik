@@ -1,72 +1,74 @@
-var log = require('../lib/log')(module);
-var mongoose = require('mongoose');
-var crypto = require('crypto');
-var util = require('util');
-var async = require('async');
-var AuthError = require('../error').AuthError;
+const log = require('../lib/log')(module);
+const mongoose = require('mongoose');
+const crypto = require('crypto');
+const async = require('async');
+const AuthError = require('../error').AuthError;
 
-let User = {
+const User = {
   username: {
     type: String,
     unique: true,
-    required: true,
+    required: true
   },
   hashedPassword: {
     type: String,
-    required: true,
+    required: true
   },
   salt: {
     type: String,
-    required: true,
+    required: true
   },
   created: {
     type: Date,
-    default: Date.now,
+    default: Date.now
   }
 };
 
-let userSchema = mongoose.Schema(User);
+const userSchema = mongoose.Schema(User);
 
-userSchema.methods.encryptPassword = function(password) {
+userSchema.methods.encryptPassword = function (password) {
   return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
 };
 
 userSchema.virtual('password')
-  .set(function(password) {
+  .set(function (password) {
     this._plainPassword = password;
     this.hashedPassword = this.encryptPassword(password);
   })
-  .get(function() { return this._plainPassword; });
+  .get(function () {
+    return this._plainPassword;
+  });
 
-userSchema.methods.checkPassword = function(password) {
+userSchema.methods.checkPassword = function (password) {
   return this.encryptPassword(password) === this.hashedPassword;
 };
 
-userSchema.statics.authorize = function(username, password, callback) {
-  var userSchema = this;
+userSchema.statics.authorize = function (_username, _password, _callback) {
+  const _userSchema = this;
 
   async.waterfall([
-    function(callback) {
-      userSchema.findOne({username: username}, callback);
+    function (callback) {
+      _userSchema.findOne({username: _username}, callback);
     },
-    function(user, callback) {
+    function (user, callback) {
       if (user) {
-        if (user.checkPassword(password)) {
+        if (user.checkPassword(_password)) {
           log.info(user.id + ' connected ' + new Date());
           callback(null, user);
         } else {
-          callback(new AuthError("Пароль неверен"));
+          callback(new AuthError('Пароль неверен'));
         }
       } else {
-        var user = new userSchema({username: username, password: password, salt: Math.random() + ''});
-        user.save(function(err) {
+        const newUser = new _userSchema({username: _username, password: _password, salt: Math.random() + ''});
+
+        newUser.save(function (err) {
           if (err) return callback(err);
-          log.info(user.id + ' connected ' + new Date());
-          callback(null, user);
+          log.info(newUser.id + ' connected ' + new Date());
+          callback(null, newUser);
         });
       }
     }
-  ], callback);
+  ], _callback);
 };
 
 

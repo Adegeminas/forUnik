@@ -1,31 +1,31 @@
-var log = require('../lib/log')(module);
-var mongoose = require('mongoose');
+const log = require('../lib/log')(module);
+const mongoose = require('mongoose');
 
-let options = {
-  usePushEach: true,
+const options = {
+  usePushEach: true
 };
 
-let Catalogue = {
+const Catalogue = {
   streets: {
     type: [
       String
-    ],
+    ]
   },
   companies: {
     type: [
       String
-    ],
-  },
+    ]
+  }
 };
 
-let catalogueSchema = mongoose.Schema(Catalogue, options);
+const catalogueSchema = mongoose.Schema(Catalogue, options);
 
-catalogueSchema.statics.get = function(callback) {
-
+catalogueSchema.statics.get = function (callback) {
   this.findOne((err, catalogue) => {
     if (!err && !catalogue) {
-      let catalogue = new this();
-      catalogue.save();
+      const emptyCatalogue = new this();
+
+      emptyCatalogue.save();
       callback(false);
       return;
     }
@@ -37,12 +37,13 @@ catalogueSchema.statics.get = function(callback) {
   });
 };
 
-catalogueSchema.statics.addNewStreet = function(streetName) {
+catalogueSchema.statics.addNewStreet = function (streetName) {
   this.findOne((err, catalogue) => {
     if (err) {
       log.error(err);
     } else {
       let flag = true;
+
       catalogue.streets.forEach((street) => {
         if (street === streetName) {
           flag = false;
@@ -54,12 +55,13 @@ catalogueSchema.statics.addNewStreet = function(streetName) {
   });
 };
 
-catalogueSchema.statics.addCompany = function(companyName) {
+catalogueSchema.statics.addCompany = function (companyName) {
   this.findOne((err, catalogue) => {
     if (err) {
       log.error(err);
     } else {
       let flag = true;
+
       catalogue.companies.forEach((company) => {
         if (company === companyName) {
           flag = false;
