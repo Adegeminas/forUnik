@@ -47,7 +47,7 @@ class BaseViewer extends Component {
             isOpen: !this.state.isOpen
           })
         }}>
-          Показать/скрыть
+          Показать/скрыть (В процессе разработки)
         </button>
         { housesView }
       </div>
