@@ -33,46 +33,46 @@ function loadUser(session, callback) {
   });
 }
 
+function authorization(socket, callback) {
+  async.waterfall([
+    function (_callback) {
+      socket.handshake.cookies = cookie.parse(socket.handshake.headers.cookie || '');
+
+      const sidCookie = socket.handshake.cookies[config.get('session:key')];
+      const sid = cookieParser.signedCookie(sidCookie, config.get('session:secret'));
+
+      loadSession(sid, _callback);
+    },
+    function (session, _callback) {
+      if (!session) {
+        callback(new HttpError(401, 'No session'));
+        return;
+      }
+      socket.handshake.session = session;
+      loadUser(session, _callback);
+    },
+    function (user, _callback) {
+      if (!user) {
+        _callback(new HttpError(403, 'Anonymous session may not connect'));
+        return;
+      }
+
+      if (socket.handshake) socket.handshake.user = user;
+      _callback(null);
+    }
+  ], function (err) {
+    if (!err) {
+      return callback(null, true);
+    }
+    if (err instanceof HttpError) {
+      return callback(null, false);
+    }
+    callback(err);
+  });
+}
+
 module.exports = function (server) {
   const io = require('socket.io').listen(server);
-
-  function authorization(socket, callback) {
-    async.waterfall([
-      function (_callback) {
-        socket.handshake.cookies = cookie.parse(socket.handshake.headers.cookie || '');
-
-        const sidCookie = socket.handshake.cookies[config.get('session:key')];
-        const sid = cookieParser.signedCookie(sidCookie, config.get('session:secret'));
-
-        loadSession(sid, _callback);
-      },
-      function (session, _callback) {
-        if (!session) {
-          callback(new HttpError(401, 'No session'));
-          return;
-        }
-        socket.handshake.session = session;
-        loadUser(session, _callback);
-      },
-      function (user, _callback) {
-        if (!user) {
-          _callback(new HttpError(403, 'Anonymous session may not connect'));
-          return;
-        }
-
-        if (socket.handshake) socket.handshake.user = user;
-        _callback(null);
-      }
-    ], function (err) {
-      if (!err) {
-        return callback(null, true);
-      }
-      if (err instanceof HttpError) {
-        return callback(null, false);
-      }
-      callback(err);
-    });
-  }
 
   io.use(authorization);
   io.sockets.on('session:reload', function (sid) {
