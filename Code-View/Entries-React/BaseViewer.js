@@ -15,7 +15,13 @@ class BaseViewer extends Component {
     const housesView = this.props.houses &&
       <div>
         {
-          this.props.houses.map((house) => <p onClick = { clickProceed(house) } > { house.address } </p>)
+          this.props.houses.map((house) =>
+            (
+              <b onClick = { clickProceed(house) } >
+                {' <' + house.address.split(',')[2] + ' ' + house.address.split(',')[3] + '> '}
+              </b>
+            )
+          )
         }
       </div>;
 
