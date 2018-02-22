@@ -106,6 +106,14 @@ module.exports = function (server) {
       });
     });
 
+    // ALLHOUSESREQUEST
+
+    socket.on('getAllHouses', function () {
+      baseApiLogic.getAllHouses((result) => {
+        socket.emit('getAllHousesResult', result);
+      });
+    });
+
     // CRUD HOUSE
 
     socket.on('createHouse', function (house) {

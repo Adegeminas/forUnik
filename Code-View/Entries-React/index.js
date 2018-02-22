@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import HouseAdder from './HouseAdder';
 import HouseFinder from './HouseFinder';
 import Cataloger from './Cataloger';
+import BaseViewer from './BaseViewer';
 import HouseViewer from './HouseViewer';
 
 class TestApp extends React.Component {
@@ -16,12 +17,14 @@ class TestApp extends React.Component {
       adderOpen: false,
       finderOpen: false,
       catalogue: null,
-      currentHouse: null
+      currentHouse: null,
+      houses: false
     };
 
     socket
       .on('connect', function () {
         socket.emit('getCatalogue');
+        socket.emit('getAllHouses');
       })
       .on('initConnection', function (handshake) {
         socket.handshake = handshake;
@@ -50,10 +53,18 @@ class TestApp extends React.Component {
           catalogue: _catalogue
         });
       })
+      .on('getAllHousesResult', function (_houses) {
+        app.setState({
+          houses: _houses
+        });
+      })
       .on('createHouseResult', function (/* result */) {
         socket.emit('getCatalogue');
+        socket.emit('getAllHouses');
       })
       .on('readHouseResult', function (result) {
+        socket.emit('getCatalogue');
+        socket.emit('getAllHouses');
         app.setState({
           currentHouse: result
         });
@@ -65,6 +76,7 @@ class TestApp extends React.Component {
           });
         }
         socket.emit('getCatalogue');
+        socket.emit('getAllHouses');
       });
   }
 
@@ -83,6 +95,14 @@ class TestApp extends React.Component {
     });
   }
 
+  clickProceed(house) {
+    return () => {
+      this.setState({
+        currentHouse: house
+      });
+    };
+  }
+
   render() {
     const { socket } = this.props;
 
@@ -90,6 +110,10 @@ class TestApp extends React.Component {
       <div>
         <Cataloger
           catalogue = { this.state.catalogue }
+        />
+        <BaseViewer
+          clickProceed = { this.clickProceed.bind(this) }
+          houses = { this.state.houses }
         />
         <HouseAdder
           isOpen = { this.state.adderOpen }
@@ -112,7 +136,7 @@ class TestApp extends React.Component {
   }
 }
 
-const _socket = io.connect();
+const _socket = window.io.connect();
 
 ReactDOM.render(
   <TestApp socket = { _socket } />,
