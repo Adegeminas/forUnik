@@ -32,7 +32,7 @@ class HouseViewerPeriodsAdder extends Component {
       Q: '',
       R: '',
       tarif: lastMonth.tarif,
-      basicMonths: String(lastMonth.basicMonths) || ''
+      basicMonths: String(lastMonth.basicMonths) || 'Предыдущие 2 года'
     } : {
       year: '2015',
       month: '01',
@@ -295,21 +295,24 @@ class HouseViewerPeriodsAdder extends Component {
             </tr>
           ) : null }
 
-          <tr>
-            <td>
-              Базовые годы
-            </td>
-            <td>
-              <input
-                list = 'basicVariants'
-                className = {this.state.basicMonths.length ? 'ffi' : 'nffi' }
-                value = { this.state.basicMonths }
-                onChange = { (event) => this.setState({
-                  basicMonths: event.target.value
-                }) }
-              />
-            </td>
-          </tr>
+          { this.state.savingWasntSold === 'false' ? (
+            <tr>
+              <td>
+                Базовые годы
+              </td>
+              <td>
+                <input
+                  list = 'basicVariants'
+                  className = {this.state.basicMonths.length ? 'ffi' : 'nffi' }
+                  value = { this.state.basicMonths }
+                  onChange = { (event) => this.setState({
+                    basicMonths: event.target.value
+                  }) }
+                />
+              </td>
+            </tr>
+          ) : null }
+
         </table>
 
         <button onClick = { this.saveProceed.bind(this, false) }> Сохранить </button>

@@ -16,6 +16,10 @@ button {
   background: pink;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .mainbutton {
   padding: 15px 32px;
   width: 300px;

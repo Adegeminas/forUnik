@@ -18,7 +18,8 @@ class TestApp extends React.Component {
       finderOpen: false,
       catalogue: null,
       currentHouse: null,
-      houses: false
+      houses: false,
+      sortedHouses: false,
     };
 
     socket
@@ -54,8 +55,35 @@ class TestApp extends React.Component {
         });
       })
       .on('getAllHousesResult', function (_houses) {
+        let sortedHouses = {
+          noUk: [],
+        };
+
+        _houses.forEach((house) => {
+
+          if (house.data.length === 0) {
+            sortedHouses.noUk.push(house);
+            return;
+          }
+
+          let uk = house.data.sort((a, b) => {
+            return (
+              (a.month.split('-')[1] > b.month.split('-')[1]) ||
+              (a.month.split('-')[1] === b.month.split('-')[1] && a.month.split('-')[0] > b.month.split('-')[0])
+            );
+          })[house.data.length - 1].company;
+
+          if (sortedHouses[uk]) {
+            sortedHouses[uk].push(house);
+          } else {
+            sortedHouses[uk] = [ house ];
+          }
+
+        });
+
         app.setState({
-          houses: _houses
+          houses: _houses,
+          sortedHouses: sortedHouses
         });
       })
       .on('createHouseResult', function (/* result */) {
@@ -111,19 +139,16 @@ class TestApp extends React.Component {
         <Cataloger
           catalogue = { this.state.catalogue }
         />
-        <BaseViewer
-          clickProceed = { this.clickProceed.bind(this) }
-          houses = { this.state.houses }
-        />
         <HouseAdder
           isOpen = { this.state.adderOpen }
           switchOpen = { this.switchAdderOpenState.bind(this) }
           proceed = { (house) => socket.emit('createHouse', house) }
         />
-        <HouseFinder
-          isOpen = { this.state.finderOpen }
-          switchOpen = { this.switchFinderOpenState.bind(this) }
-          proceed = { (house) => socket.emit('readHouse', house) }
+        <BaseViewer
+          clickProceed = { this.clickProceed.bind(this) }
+          houses = { this.state.houses }
+          sortedHouses = { this.state.sortedHouses }
+          clickProceed = { this.clickProceed.bind(this) }
         />
         <HouseViewer
           house = { this.state.currentHouse }
@@ -142,3 +167,9 @@ ReactDOM.render(
   <TestApp socket = { _socket } />,
   document.getElementById('root')
 );
+
+// <HouseFinder
+//   isOpen = { this.state.finderOpen }
+//   switchOpen = { this.switchFinderOpenState.bind(this) }
+//   proceed = { (house) => socket.emit('readHouse', house) }
+// />

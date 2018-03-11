@@ -1,55 +1,34 @@
 import React, { Component } from 'react';
+import CompanyViewer from './CompanyViewer';
 
 class BaseViewer extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isOpen: false
+
     };
   }
 
   render() {
     const { clickProceed } = this.props;
 
-    const housesView = this.state.isOpen && this.props.houses &&
+    const sortedHousesView = this.props.sortedHouses &&
       <div>
-        <table>
-        <tr>
-          <td>
-            Адрес дома
-          </td>
-          <td>
-            Последний заполненный месяц
-          </td>
-        </tr>
         {
-          this.props.houses.map((house) =>
-            (
-              <tr onClick = { clickProceed(house) }>
-                <td>
-                    { house.address.split(',')[2] + ' ' + house.address.split(',')[3] }
-                </td>
-                <td>
-                    { house.data.length > 0 ? house.data[0].month : '---' }
-                </td>
-              </tr>
-            )
-          )
+          Object.keys(this.props.sortedHouses).map((key) => (
+            <CompanyViewer
+              companyName = { key }
+              companyHouses = { this.props.sortedHouses[key] }
+              clickProceed = { this.props.clickProceed }
+            />
+          ))
         }
-        </table>
-      </div>;
+      </div>
 
     return (
       <div>
-        <button onClick = { () => {
-          this.setState({
-            isOpen: !this.state.isOpen
-          })
-        }}>
-          Показать/скрыть (В процессе разработки)
-        </button>
-        { housesView }
+        { sortedHousesView }
       </div>
     );
   }
