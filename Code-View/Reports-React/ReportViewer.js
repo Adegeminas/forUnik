@@ -8,7 +8,7 @@ function requestHeader(response) {
       <h4> { response.header } </h4>
       <h4>Начальный период: { response.query.startPeriod } </h4>
       <h4>Конечный период: { response.query.endPeriod } </h4>
-      <h4>Метод расчета: { response.query.kotel ? 'котловой' : 'некотловой' } </h4>
+      <h4>Метод расчета: { response.query.kotel == 'true' ? 'котловой' : 'некотловой' } </h4>
       <h4>Базовые значения: { response.query.method } </h4>
       <h4>Учитывать неработающий счетчик: { response.query.useR === 'true' ? 'да' : 'нет' } </h4>
       <legend>Суммарная информация</legend>
