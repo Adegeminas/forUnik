@@ -1,7 +1,7 @@
 {
   "port": 3000,
   "mongoose": {
-    "uri": "mongodb://ds145881.mlab.com:45881/heroku_7fxrk7w6",
+    "uri": "mongodb://127.0.0.1/forUnik",
     "options": {
       "server": {
         "socketOptions": {
