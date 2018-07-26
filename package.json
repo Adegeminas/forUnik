@@ -4,6 +4,7 @@
   "description": "Forms for energy-economy",
   "main": "app.js",
   "scripts": {
+	"start": "node app.js",
     "prod": "start cmd /k node app.js && webpack -p",
     "dev": "start cmd /k node app.js && webpack -p --watch"
   },
