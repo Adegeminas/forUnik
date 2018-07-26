@@ -1,5 +1,5 @@
 {
-  "port": process.env.PORT || 3000,
+  "port": "process.env.PORT || 3000",
   "mongoose": {
     "uri": "mongodb://admin:sndoiasdibn5421535@ds145881.mlab.com:45881/heroku_7fxrk7w6",
     "options": {
