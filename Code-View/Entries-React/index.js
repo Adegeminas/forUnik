@@ -59,6 +59,9 @@ class TestApp extends React.Component {
           noUk: [],
         };
 
+		if (!_houses || !_houses.length) {
+			return;
+		}
         _houses.forEach((house) => {
 
           if (house.data.length === 0) {
