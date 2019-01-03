@@ -132,6 +132,7 @@ class HouseViewerPeriodsAdder extends Component {
                 <option>2016</option>
                 <option>2017</option>
                 <option>2018</option>
+                <option>2019</option>
               </select>
             </td>
           </tr>

@@ -22,6 +22,10 @@ class Cataloger extends Component {
         <option>2016,2017</option>
         <option>2017</option>
         <option>2015,2016,2017</option>
+        <option>2018</option>
+        <option>2017,2018</option>
+        <option>2016,2017,2018</option>
+        <option>2015,2016,2017,2018</option>
       </datalist>;
 
     return (

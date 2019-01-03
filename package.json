@@ -1,6 +1,6 @@
 {
   "name": "forunik",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Forms for energy-economy",
   "main": "app.js",
   "scripts": {

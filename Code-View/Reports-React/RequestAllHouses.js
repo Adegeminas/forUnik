@@ -7,7 +7,7 @@ class RequestAllHouses extends Component {
     this.initialState = {
       startYear: '2015',
       startMonth: '01',
-      endYear: '2018',
+      endYear: '2019',
       endMonth: '12',
       kotel: 'false',
       method: 'РЦ',
@@ -53,6 +53,7 @@ class RequestAllHouses extends Component {
                 <option>2016</option>
                 <option>2017</option>
                 <option>2018</option>
+                <option>2019</option>
               </select>
             </td>
           </tr>
@@ -90,6 +91,7 @@ class RequestAllHouses extends Component {
                   endYear: event.target.value
                 })}
               >
+                <option>2019</option>
                 <option>2018</option>
                 <option>2017</option>
                 <option>2016</option>

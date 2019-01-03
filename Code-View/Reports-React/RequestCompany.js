@@ -8,7 +8,7 @@ class RequestCompany extends Component {
       company: '',
       startYear: '2015',
       startMonth: '01',
-      endYear: '2018',
+      endYear: '2019',
       endMonth: '12',
       kotel: 'false',
       method: 'РЦ',
@@ -67,6 +67,7 @@ class RequestCompany extends Component {
                 <option>2016</option>
                 <option>2017</option>
                 <option>2018</option>
+                <option>2019</option>
               </select>
             </td>
           </tr>
@@ -104,6 +105,7 @@ class RequestCompany extends Component {
                   endYear: event.target.value
                 })}
               >
+                <option>2019</option>
                 <option>2018</option>
                 <option>2017</option>
                 <option>2016</option>
